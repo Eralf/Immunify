@@ -1,5 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+
+import { useFonts } from 'expo-font';
 
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
@@ -18,6 +21,18 @@ import NavBar from './components/NavBar';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    'NunitoSans-Light': require('./assets/fonts/NunitoSans_10pt-Light.ttf'),
+    'NunitoSans-Regular': require('./assets/fonts/NunitoSans_10pt-Regular.ttf'),
+    'NunitoSans-Medium': require('./assets/fonts/NunitoSans_10pt-Medium.ttf'),
+    'NunitoSans-SemiBold': require('./assets/fonts/NunitoSans_10pt-SemiBold.ttf'),
+    'NunitoSans-Bold': require('./assets/fonts/NunitoSans_10pt-Bold.ttf'),
+    'NunitoSans-ExtraBold': require('./assets/fonts/NunitoSans_10pt-ExtraBold.ttf'),
+    'NunitoSans-Black': require('./assets/fonts/NunitoSans_10pt-Black.ttf'),
+    'NunitoSans-Italic': require('./assets/fonts/NunitoSans_10pt-Italic.ttf'),
+  });
+
+
   return (
     <NavigationContainer>
 
@@ -37,6 +52,12 @@ export default function App() {
           name='Profile'
           component={ProfileScreen}
           options={{
+            // header: (props) => (
+            //   <View style={{ height: 60 }}>
+                
+            //   </View>
+            // ),
+
             title: 'Profile',
             headerTitleAlign: 'center',
             headerBackVisible: false,

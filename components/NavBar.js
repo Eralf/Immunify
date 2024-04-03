@@ -2,6 +2,8 @@ import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import { Colors } from '../colors';
+
 const NavBar = () => {
   const navigation = useNavigation();
 
@@ -25,7 +27,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
-    backgroundColor: '#3498DB',
+    // height: 60,
+    backgroundColor: Colors.white,
   },
   button: {
     backgroundColor: '#9999FF',

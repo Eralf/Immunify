@@ -25,6 +25,59 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "fonts": [
+      {
+        "asset": "./assets/fonts/NunitoSans_10pt-Light.ttf",
+        "fontFamily": "NunitoSans",
+        "fontWeight": "300",
+        "fontStyle": "normal"
+      },
+      {
+        "asset": "./assets/fonts/NunitoSans_10pt-Regular.ttf",
+        "fontFamily": "NunitoSans",
+        "fontWeight": "400",
+        "fontStyle": "normal"
+      },
+      {
+        "asset": "./assets/fonts/NunitoSans_10pt-Medium.ttf",
+        "fontFamily": "NunitoSans",
+        "fontWeight": "500",
+        "fontStyle": "normal"
+      },
+      {
+        "asset": "./assets/fonts/NunitoSans_10pt-SemiBold.ttf",
+        "fontFamily": "NunitoSans",
+        "fontWeight": "600",
+        "fontStyle": "normal"
+      },
+      {
+        "asset": "./assets/fonts/NunitoSans_10pt-Bold.ttf",
+        "fontFamily": "NunitoSans",
+        "fontWeight": "700",
+        "fontStyle": "normal"
+      },
+      {
+        "asset": "./assets/fonts/NunitoSans_10pt-ExtraBold.ttf",
+        "fontFamily": "NunitoSans",
+        "fontWeight": "800",
+        "fontStyle": "normal"
+      },
+      {
+        "asset": "./assets/fonts/NunitoSans_10pt-Black.ttf",
+        "fontFamily": "NunitoSans",
+        "fontWeight": "900",
+        "fontStyle": "normal"
+      },
+      {
+        "asset": "./assets/fonts/NunitoSans_10pt-Italic.ttf",
+        "fontFamily": "NunitoSans",
+        "fontWeight": "400",
+        "fontStyle": "italic"
+      }
+    ],
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
