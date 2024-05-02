@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 
 import { useFonts } from 'expo-font';
 
@@ -90,9 +90,16 @@ export default function App() {
           name='Announcements'
           component={AnnouncementsScreen}
           options={{
-            title: 'Announcements',
-            headerTitleAlign: 'center',
+            title: '  Halo, Dominick',
+            // headerTitleAlign: 'center',
             headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/mainprofile-bg.png')}
+                style={styles.profPict}
+              />
+            ), 
+            
             animation:'fade'
           }}
         />
@@ -152,4 +159,15 @@ export default function App() {
 
     </NavigationContainer>
   );
+  
 }
+const styles = StyleSheet.create({
+  profPict:{
+    width: 30, 
+    height: 30, 
+    borderRadius: 15, 
+    marginRight: 10, 
+    borderWidth:1, 
+    borderColor:'black'
+  }
+})
