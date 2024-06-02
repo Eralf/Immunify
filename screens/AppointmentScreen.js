@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -45,7 +45,7 @@ const AppointmentForm = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <Text style={styles.greeting}>Halo, Douglas</Text>
       <View style={styles.formFrame}>
         <Text style={styles.title}>Buat Janji Baru</Text>
@@ -140,16 +140,17 @@ const AppointmentForm = () => {
         <Text style={styles.checkButtonText}>Cek Vaksin Terjadwalkan Disini</Text>
       </TouchableOpacity>
       
-    </View>
+      </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollContainer: {
+    flexGrow: 1,
     padding: 20,
     backgroundColor: '#f0f8ff',
   },
+
   greeting: {
     fontSize: 18,
     fontWeight: 'bold',
