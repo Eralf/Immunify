@@ -2,24 +2,24 @@ import React, { useState } from 'react';
 import { ScrollView, View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-const VaccinationsMissedScreen = ({ navigation, route }) => {
+const VaccinationsOnGoingScreen = ({ navigation, route }) => {
   const [menu] = useState();
   return (
     <View>
       <View style={styles.pickerFrame}>
         <View style={styles.pickerContainer}>
-            <View style={styles.pickerContainerGradient}>
-            </View>
             <Picker
             mode='dropdown'
             selectedValue={menu}
             onValueChange={(itemValue) => navigation.navigate(itemValue)}
             >
+              <Picker.Item label="Berlangsung" value="VaccinationsOnGoing" style={styles.text}/>
+              <Picker.Item label="Mendatang" value="VaccinationsUpcoming" style={styles.text}/>
               <Picker.Item label="Terlewatkan" value="VaccinationsMissed" style={styles.text}/>
               <Picker.Item label="Selesai" value="VaccinationsCompleted" style={styles.text}/>
-              <Picker.Item label="Mendatang" value="VaccinationsUpcoming" style={styles.text}/>
-              <Picker.Item label="Berlangsung" value="VaccinationsOnGoing" style={styles.text}/>
             </Picker>
+            <View style={styles.pickerContainerGradient}>
+            </View>
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     width: 350,
     borderRadius: 10,
     justifyContent: 'center',
-    backgroundColor: 'rgb(244,118,118)',
+    backgroundColor: 'rgb(255,241,166)',
     // position: 'absolute',
     lineHeight: 100,
     padding: 10,
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   pickerContainerGradient:{
     width: 150,
     height: 100,
-    backgroundColor: 'rgb(239,84,84)',
+    backgroundColor: 'rgb(255,213,111)',
     borderRadius: 50,
     transform: [
       {scaleX: 2.7},
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     height: 81,
     width: 330,
     borderRadius: 10,
-    backgroundColor: 'rgb(244,118,118)',
+    backgroundColor: 'rgb(255,241,166)',
     position: 'relative',
     marginTop: 20,
     marginBottom: 16,
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   appointmentContainerGradient:{
     width: 100,
     height: 100,
-    backgroundColor: 'rgb(239,84,84)',
+    backgroundColor: 'rgb(255,213,111)',
     borderRadius: 50,
     transform: [
       {scaleX: 2.7},
@@ -171,5 +171,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VaccinationsMissedScreen;
+export default VaccinationsOnGoingScreen;
 

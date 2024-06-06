@@ -14,6 +14,7 @@ import AppointmentScreen from './screens/AppointmentScreen';
 import VaccinationsCompletedScreen from './screens/VaccinationsCompletedScreen';
 import VaccinationsMissedScreen from './screens/VaccinationsMissedScreen';
 import VaccinationsUpcomingScreen from './screens/VaccinationsUpcomingScreen';
+import VaccinationsOnGoingScreen from './screens/VaccinationsOnGoingScreen';
 import VaccineDetailsScreen from './screens/VaccineDetailsScreen';
 
 import NavBar from './components/NavBar';
@@ -138,6 +139,16 @@ export default function App() {
           component={VaccinationsUpcomingScreen}
           options={{
             title: 'Upcoming Vaccinations',
+            headerTitleAlign: 'center',
+            headerBackVisible: false,
+            animation:'fade'
+          }}
+        />
+        <Stack.Screen
+          name='VaccinationsOnGoing'
+          component={VaccinationsOnGoingScreen}
+          options={{
+            title: 'OnGoing Vaccinations',
             headerTitleAlign: 'center',
             headerBackVisible: false,
             animation:'fade'
