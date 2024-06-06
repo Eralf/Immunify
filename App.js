@@ -20,6 +20,10 @@ import NavBar from './components/NavBar';
 
 const Stack = createNativeStackNavigator();
 
+var selectedProfile = 1;
+
+var profiles_dir = './profiles.json';
+
 export default function App() {
   let [fontsLoaded] = useFonts({
     'NunitoSans-Light': require('./assets/fonts/NunitoSans_10pt-Light.ttf'),
@@ -31,6 +35,17 @@ export default function App() {
     'NunitoSans-Black': require('./assets/fonts/NunitoSans_10pt-Black.ttf'),
     'NunitoSans-Italic': require('./assets/fonts/NunitoSans_10pt-Italic.ttf'),
   });
+
+  const profiles = require(profiles_dir);
+  // console.log(profiles);
+  // fetch(profiles_dir)
+  //   .then(response => response.json())
+  //   .then(profiles => {
+  //     console.log(profiles);
+  //   })
+  //   .catch(error => {
+  //     console.error('Error fetching the JSON file:', error);
+  // });
 
 
   return (
@@ -61,8 +76,9 @@ export default function App() {
             title: 'Profile',
             headerTitleAlign: 'center',
             headerBackVisible: false,
-            animation:'fade'
+            animation:'fade',
           }}
+          initialParams={{ profile: profiles }}
         />
         <Stack.Screen
           name='Screen_3'

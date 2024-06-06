@@ -1,0 +1,10 @@
+[
+	{  
+	  "sex": ["Male", "Female"],
+	  "age": ["Day(s)", "Month(s)", "Year(s)"],
+
+	  "your_account": "Your Account",
+	  "main_parent": "Main (Parent)",
+	  "children": "Children"
+	}
+  ]

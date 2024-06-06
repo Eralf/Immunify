@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; 
 import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
 
 const Screen_3 = ({ navigation, route }) => {

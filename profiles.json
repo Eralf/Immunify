@@ -1,0 +1,47 @@
+[
+  {
+    "id": 0,
+    "name": "Steven Soeseno",
+    "picture": "",
+
+    "sex": 0, // 0 = male, 1 = female
+    "dob": [2004, 3, 22], // yyyy mm dd
+
+    "nik": "6942069420666666",
+
+    "parent": [],
+    "children": [],
+
+    "role": 1 // 0 = parent, 1 = child
+  },
+  {
+    "id": 1,
+    "name": "Joshua Pieter Oroh",
+    "picture": "",
+
+    "sex": 0,
+    "dob": [2005, 9, 11],
+
+    "nik": "1234567891011121",
+
+    "parent": [],
+    "children": [],
+
+    "role": 1
+  },
+  {
+    "id": 2,
+    "name": "Dominick",
+    "picture": "",
+
+    "sex": 0,
+    "dob": [2005, 9, 11],
+
+    "nik": "00000000000000",
+
+    "parent": [],
+    "children": [],
+
+    "role": 0
+  }
+]
