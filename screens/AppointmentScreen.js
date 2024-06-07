@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { ScrollView, View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { db } from '../firebasecfg';
-import { collection, addDoc } from "firebase/firestore";
+import { collection, doc, setDoc, addDoc } from "firebase/firestore";
+import { useAppointments, AppointmentsProvider } from '../AppointmentsContext';
+
 
 const AppointmentForm = () => {
   const [vaccineType, setVaccineType] = useState('');
@@ -14,7 +17,6 @@ const AppointmentForm = () => {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [parentName, setParentName] = useState('');
   const [childName, setChildName] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
 
   const locations = [
     "Location 1",
@@ -34,7 +36,7 @@ const AppointmentForm = () => {
     setTime(currentTime);
   };
 
-  const submitConfirm = () => {
+  function submitConfirm () {
     addDoc(collection(db, "appointments"), {
       vaccineType: vaccineType,
       location: location,
@@ -44,21 +46,10 @@ const AppointmentForm = () => {
       childName: childName,
     }).then(() => {
       console.log('Appointment added successfully');
-      setModalVisible(true);
-      setVaccineType('');
-      setLocation('');
-      setDate(new Date());
-      setTime(new Date());
-      setParentName('');
-      setChildName('');
-      setTimeout(() => {
-        setModalVisible(false);
-      }, 2000);
     }).catch((error) => {
       console.error('Error adding appointment: ', error);
     });
   };
-
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <Text style={styles.greeting}>Halo, Douglas</Text>
@@ -77,7 +68,7 @@ const AppointmentForm = () => {
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={location}
-            onValueChange={(itemValue) => setLocation(itemValue)}
+            onValueChange={(itemValue, itemIndex) => setLocation(itemValue)}
           >
             <Picker.Item label="Pilih Lokasi Vaksinasi" value="" />
             {locations.map((loc, index) => (
@@ -153,19 +144,6 @@ const AppointmentForm = () => {
       <TouchableOpacity style={styles.checkButton}>
         <Text style={styles.checkButtonText}>Cek Vaksin Terjadwalkan Disini</Text>
       </TouchableOpacity>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.modalView}>
-          <Text style={styles.modalText}>Appointment Created Successfully!</Text>
-        </View>
-      </Modal>
     </ScrollView>
   );
 };
@@ -176,6 +154,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f0f8ff',
   },
+
   greeting: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -222,6 +201,7 @@ const styles = StyleSheet.create({
   TimeInput: {
     flex: 1,
   },
+
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -239,7 +219,7 @@ const styles = StyleSheet.create({
   },
   checkButton: {
     marginTop: 40,
-    padding: 20,
+    padding: 50,
     backgroundColor: '#87cefa',
     borderRadius: 10,
     alignItems: 'center',
@@ -261,24 +241,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center',
     backgroundColor: '#fff',
-  },
-  modalView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
   },
 });
 

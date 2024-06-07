@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
-const appointments = [
-  { id: 1, title: 'Hepatitis A', name: 'Joshua Andrew P', date: '22 May 2024', location: 'Rumah Sakit Carolus', details: 'Full details here...' },
-  { id: 2, title: 'Hepatitis B', name: 'Joshua Andrew P', date: '20 Jun 2024', location: 'Rumah Sakit Carolus', details: 'Full details here...' },
-  { id: 3, title: 'Booster Pfizer', name: 'Joshua Andrew P', date: '22 May 2024', location: 'Rumah Sakit Carolus', details: 'Full details here...' },
-  { id: 4, title: 'Cacar Air', name: 'Joshua Andrew P', date: '22 May 2024', location: 'Rumah Sakit Carolus', details: 'Full details here...' }
-];
+import { useAppointments } from '../AppointmentsContext';
 
 const AppointmentListScreen = () => {
+  const { appointments } = useAppointments();
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -27,30 +22,35 @@ const AppointmentListScreen = () => {
     <View style={styles.container}>
       <Text style={styles.header}>Vaksin Terjadwalkan</Text>
       <ScrollView>
-        {appointments.map(appointment => (
-          <TouchableOpacity key={appointment.id} style={styles.appointment} onPress={() => openModal(appointment)}>
-            <View style={styles.appointmentContent}>
-              <View style={styles.appointmentText}>
-                <Text style={styles.title}>{appointment.title}</Text>
-                <Text style={styles.detailText}><Text style={styles.label}>Nama      :</Text> {appointment.name}</Text>
-                <Text style={styles.detailText}><Text style={styles.label}>Tanggal  :</Text> {appointment.date}</Text>
-                <Text style={styles.detailText}><Text style={styles.label}>Lokasi     :</Text> {appointment.location}</Text>
+        {appointments.map(appointment => {
+          const appointmentDate = new Date(appointment.date); // Ensure it's a Date object
+          const appointmentTime = new Date(appointment.time); // Ensure it's a Date object
+
+          return (
+            <TouchableOpacity key={appointment.id} style={styles.appointment} onPress={() => openModal(appointment)}>
+              <View style={styles.appointmentContent}>
+                <View style={styles.appointmentText}>
+                  <Text style={styles.title}>{appointment.vaccineType}</Text>
+                  <Text style={styles.detailText}><Text style={styles.label}>Nama      :</Text> {appointment.childName}</Text>
+                  <Text style={styles.detailText}><Text style={styles.label}>Tanggal  :</Text> {appointmentDate.toLocaleDateString()}</Text>
+                  <Text style={styles.detailText}><Text style={styles.label}>Lokasi     :</Text> {appointment.location}</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={24} color="black" />
               </View>
-              <Ionicons name="chevron-forward" size={24} color="black" />
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
 
       {selectedAppointment && (
         <Modal visible={modalVisible} animationType="slide" transparent={true}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>{selectedAppointment.title}</Text>
+              <Text style={styles.modalTitle}>{selectedAppointment.vaccineType}</Text>
               <View style={styles.detailContainer}>
                 <View style={styles.detailRow}>
                   <Text style={styles.modalLabel}>Nama Penerima Vaksin:</Text>
-                  <Text style={styles.modalText}>{selectedAppointment.name}</Text>
+                  <Text style={styles.modalText}>{selectedAppointment.childName}</Text>
                 </View>
                 <View style={styles.detailRow}>
                   <Text style={styles.modalLabel}>Tanggal Lahir:</Text>
@@ -62,15 +62,15 @@ const AppointmentListScreen = () => {
                 </View>
                 <View style={styles.detailRow}>
                   <Text style={styles.modalLabel}>Nama Orangtua:</Text>
-                  <Text style={styles.modalText}>Theofilus Tasman</Text>
+                  <Text style={styles.modalText}>{selectedAppointment.parentName}</Text>
                 </View>
                 <View style={styles.detailRow}>
                   <Text style={styles.modalLabel}>Tanggal Pengambilan Vaksin:</Text>
-                  <Text style={styles.modalText}>{selectedAppointment.date}</Text>
+                  <Text style={styles.modalText}>{new Date(selectedAppointment.date).toLocaleDateString()}</Text>
                 </View>
                 <View style={styles.detailRow}>
                   <Text style={styles.modalLabel}>Waktu Vaksin:</Text>
-                  <Text style={styles.modalText}>Pukul 11.00 WIB</Text>
+                  <Text style={styles.modalText}>{new Date(selectedAppointment.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
                 </View>
                 <View style={styles.detailRow}>
                   <Text style={styles.modalLabel}>Lokasi Vaksinasi:</Text>
@@ -102,7 +102,7 @@ const AppointmentListScreen = () => {
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
