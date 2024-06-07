@@ -25,7 +25,7 @@ const AnnouncementsScreen = ({ navigation, route }) => {
       
       {/* <View> */}
       <ScrollView>
-        <View style = {styles.wrapAnnounce}>
+      <TouchableOpacity style = {styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsMissed')}>
           <View style = {styles.wrapStatus}>
             <View style={styles.terlewatkan}>
               <Text >Terlewatkan</Text>
@@ -37,10 +37,10 @@ const AnnouncementsScreen = ({ navigation, route }) => {
             <Text style = {styles.time}> 1h</Text>
           </View>
           
-        </View>
+        </TouchableOpacity>
         <View style = {styles.horizontalLine}></View>
 
-        <View style = {styles.wrapAnnounce}>
+        <TouchableOpacity style = {styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsUpcoming')}>
           <View style = {styles.wrapStatus}>
             <View style={styles.mendatang}>
               <Text >Mendatang</Text>
@@ -52,10 +52,10 @@ const AnnouncementsScreen = ({ navigation, route }) => {
             <Text style = {styles.time}> 1h</Text>
           </View>
           
-        </View>
+        </TouchableOpacity>
         <View style = {styles.horizontalLine}></View>
 
-        <View style = {styles.wrapAnnounce}>
+        <TouchableOpacity style = {styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
           <View style = {styles.wrapStatus}>
             <View style={styles.selesai}>
               <Text >Selesai</Text>
@@ -67,10 +67,10 @@ const AnnouncementsScreen = ({ navigation, route }) => {
             <Text style = {styles.time}> 1h</Text>
           </View>
           
-        </View>
+        </TouchableOpacity>
         <View style = {styles.horizontalLine}></View>
 
-        <View style = {styles.wrapAnnounce}>
+        <TouchableOpacity style = {styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsOnGoing')}>
           <View style = {styles.wrapStatus}>
             <View style={styles.berlangsung}>
               <Text >Berlangsung</Text>
@@ -82,7 +82,7 @@ const AnnouncementsScreen = ({ navigation, route }) => {
             <Text style = {styles.time}> 1h</Text>
           </View>
           
-        </View>
+        </TouchableOpacity>
         <View style = {styles.horizontalLine}></View>
       </ScrollView>
       {/* </View> */}
