@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFonts } from 'expo-font';
 
 import HomeScreen from './screens/HomeScreen';
@@ -40,127 +41,223 @@ export default function App() {
 
   return (
     <AppointmentsProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name='Home'
-            component={HomeScreen}
-            options={{
-              title: 'Home',
-              headerTitleAlign: 'center',
-              headerBackVisible: false,
-              animation: 'fade', // other options: slide_from_right, left, slide_from_bottom, slide_from_top
-            }}
-          />
-          <Stack.Screen
-            name='Profile'
-            component={ProfileScreen}
-            options={{
-              title: 'Profile',
-              headerTitleAlign: 'center',
-              headerBackVisible: false,
-              animation:'fade',
-            }}
-            initialParams={{ profile: profiles }}
-          />
-          <Stack.Screen
-            name='Screen_3'
-            component={Screen_3}
-            options={{
-              title: 'Screen 3',
-              headerTitleAlign: 'center',
-              headerBackVisible: false,
-              animation:'fade'
-            }}
-          />
-          <Stack.Screen
-            name='Login'
-            component={LoginScreen}
-            options={{
-              title: 'Login',
-              headerTitleAlign: 'center',
-              headerBackVisible: false,
-              animation:'fade'
-            }}
-          />
-          <Stack.Screen
-            name='Announcements'
-            component={AnnouncementsScreen}
-            options={{
-              title: '  Halo, Dominick',
-              headerBackVisible: false,
-              headerLeft: () => (
-                <Image
-                  source={require('./assets/mainprofile-bg.png')}
-                  style={styles.profPict}
-                />
-              ), 
-              animation:'fade'
-            }}
-          />
-          <Stack.Screen
-            name='Appointment'
-            component={AppointmentScreen}
-            options={{
-              title: 'Appointment',
-              headerTitleAlign: 'center',
-              headerBackVisible: false,
-              animation:'fade'
-            }}
-          />
-          <Stack.Screen
-            name='VaccinationsCompleted'
-            component={VaccinationsCompletedScreen}
-            options={{
-              title: 'Completed Vaccinations',
-              headerTitleAlign: 'center',
-              headerBackVisible: false,
-              animation:'fade'
-            }}
-          />
-          <Stack.Screen
-            name='VaccinationsMissed'
-            component={VaccinationsMissedScreen}
-            options={{
-              title: 'Missed Vaccinations',
-              headerTitleAlign: 'center',
-              headerBackVisible: false,
-              animation:'fade'
-            }}
-          />
-          <Stack.Screen
-            name='VaccinationsUpcoming'
-            component={VaccinationsUpcomingScreen}
-            options={{
-              title: 'Upcoming Vaccinations',
-              headerTitleAlign: 'center',
-              headerBackVisible: false,
-              animation:'fade'
-            }}
-          />
-          <Stack.Screen
-            name='VaccinationsOnGoing'
-            component={VaccinationsOnGoingScreen}
-            options={{
-              title: 'OnGoing Vaccinations',
-              headerTitleAlign: 'center',
-              headerBackVisible: false,
-              animation:'fade'
-            }}
-          />
-          <Stack.Screen
-            name='VaccineDetails'
-            component={VaccineDetailsScreen}
-            options={{
-              title: 'Vaccine Details',
-              headerTitleAlign: 'center',
-              headerBackVisible: false,
-              animation:'fade'
-            }}
-          />
-        </Stack.Navigator>
-        <NavBar />
-      </NavigationContainer>
+    <NavigationContainer>
+
+      <Stack.Navigator >
+
+        <Stack.Screen
+          name='Home'
+          component={HomeScreen}
+          options={{
+            title: 'Halo, Dominick',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation: 'fade', // other options: slide_from_right, left, slide_from_bottom, slide_from_top
+          }}
+        />
+        <Stack.Screen
+          name='Profile'
+          component={ProfileScreen}
+          options={{
+            // header: (props) => (
+            //   <View style={{ height: 60 }}>
+                
+            //   </View>
+            // ),
+
+            title: 'Profile',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade',
+          }}
+          initialParams={{ profile: profiles }}
+        />
+        <Stack.Screen
+          name='Screen_3'
+          component={Screen_3}
+          options={{
+            title: 'Screen 3',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade'
+          }}
+        />
+
+        
+        <Stack.Screen
+          name='Login'
+          component={LoginScreen}
+          options={{
+            title: 'Login',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade'
+          }}
+        />
+        <Stack.Screen
+          name='Announcements'
+          component={AnnouncementsScreen}
+          options={{
+            title: '  Halo, Dominick',
+            // headerTitleAlign: 'center',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade'
+          }}
+        />
+        <Stack.Screen
+          name='Appointment'
+          component={AppointmentScreen}
+          options={{
+            title: 'Appointment',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade'
+          }}
+        />
+        <Stack.Screen
+          name='VaccinationsCompleted'
+          component={VaccinationsCompletedScreen}
+          options={{
+            title: 'Completed Vaccinations',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade'
+          }}
+        />
+        <Stack.Screen
+          name='VaccinationsMissed'
+          component={VaccinationsMissedScreen}
+          options={{
+            title: 'Missed Vaccinations',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade'
+          }}
+        />
+        <Stack.Screen
+          name='VaccinationsUpcoming'
+          component={VaccinationsUpcomingScreen}
+          options={{
+            title: 'Upcoming Vaccinations',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade'
+          }}
+        />
+        <Stack.Screen
+          name='VaccinationsOnGoing'
+          component={VaccinationsOnGoingScreen}
+          options={{
+            title: 'OnGoing Vaccinations',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade'
+          }}
+        />
+        <Stack.Screen
+          name='VaccineDetails'
+          component={VaccineDetailsScreen}
+          options={{
+            title: 'Vaccine Details',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade'
+          }}
+        />
+      </Stack.Navigator>
+
+      <NavBar/>
+
+    </NavigationContainer>
     </AppointmentsProvider>
   );
 }
