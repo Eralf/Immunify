@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, TextInput, StyleSheet, TouchableOpacity, Modal, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { db } from '../firebasecfg';
-import { collection, doc, setDoc, addDoc } from "firebase/firestore";
-import { useAppointments, AppointmentsProvider } from '../AppointmentsContext';
-
+import { collection, addDoc } from "firebase/firestore";
 
 const AppointmentForm = () => {
   const [vaccineType, setVaccineType] = useState('');
@@ -17,6 +14,7 @@ const AppointmentForm = () => {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [parentName, setParentName] = useState('');
   const [childName, setChildName] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   const locations = [
     "Location 1",
@@ -36,20 +34,30 @@ const AppointmentForm = () => {
     setTime(currentTime);
   };
 
-  function submitConfirm () {
+  const combineDateAndTime = (date, time) => {
+    const combined = new Date(date);
+    combined.setHours(time.getHours());
+    combined.setMinutes(time.getMinutes());
+    combined.setSeconds(time.getSeconds());
+    return combined;
+  };
+
+  const submitConfirm = () => {
+    const combinedDateTime = combineDateAndTime(date, time);
     addDoc(collection(db, "appointments"), {
       vaccineType: vaccineType,
       location: location,
-      date: date,
-      time: time,
+      dateTime: combinedDateTime,
       parentName: parentName,
       childName: childName,
     }).then(() => {
       console.log('Appointment added successfully');
+      setModalVisible(true);
     }).catch((error) => {
       console.error('Error adding appointment: ', error);
     });
   };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <Text style={styles.greeting}>Halo, Douglas</Text>
@@ -144,6 +152,27 @@ const AppointmentForm = () => {
       <TouchableOpacity style={styles.checkButton}>
         <Text style={styles.checkButtonText}>Cek Vaksin Terjadwalkan Disini</Text>
       </TouchableOpacity>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Janji berhasil dibuat!</Text>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -154,7 +183,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f0f8ff',
   },
-
   greeting: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -201,7 +229,6 @@ const styles = StyleSheet.create({
   TimeInput: {
     flex: 1,
   },
-
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -241,6 +268,44 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center',
     backgroundColor: '#fff',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
 
