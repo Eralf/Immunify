@@ -20,6 +20,8 @@ import RegisterScreen from './screens/LoginScreen2';
 
 import NavBar from './components/NavBar';
 import { AppointmentsProvider } from './AppointmentsContext'; // Import the AppointmentsProvider
+import { CompletedAppointmentsProvider } from './CompletedAppointmentsContext';
+import { MissedAppointmentsProvider } from './MissedAppointmentsContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +44,8 @@ export default function App() {
 
   return (
     <AppointmentsProvider>
+    <CompletedAppointmentsProvider>
+    <MissedAppointmentsProvider>
     <NavigationContainer>
 
       <Stack.Navigator >
@@ -276,6 +280,8 @@ export default function App() {
       <NavBar/>
 
     </NavigationContainer>
+    </MissedAppointmentsProvider>
+    </CompletedAppointmentsProvider>
     </AppointmentsProvider>
   );
 }
