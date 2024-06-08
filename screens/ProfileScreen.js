@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, Button, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Button, TouchableOpacity, Image, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const English = require('../languages/English.json');
@@ -12,6 +12,7 @@ const pfp_main_temp = '../assets/mainpfptemp.png';
 const pfp_parent_temp = '../assets/parentpfptemp.jpg';
 
 var selectedProfile_index = 1;
+var parentProfile_index = 2;
 
 const margin_outside = 17;
 const margin_inside = 12;
@@ -19,7 +20,7 @@ const margin_inside = 12;
 const boxWidth = Dimensions.get('window').width - 2*margin_outside;
 
 const height_mainProfileCard = 136;
-const height_yourAccountCard = 320;
+const height_yourAccountCard = 360;
 
 const br_bigCard = 10; // border radius
 
@@ -27,6 +28,7 @@ const ProfileScreen = ({ route }) => {
 
   const { profile } = route.params;
   const selectedProfile = profile[selectedProfile_index];
+  const parentProfile = profile[parentProfile_index];
 
   var pfp_main = pfp_main_temp;
   var pfp_parent = pfp_parent_temp;
@@ -167,34 +169,35 @@ const ProfileScreen = ({ route }) => {
             position: 'absolute',
             height: height_mainProfileCard-2*margin_inside,
             width: boxWidth-90 - 3*margin_inside,
+            top: 48,
             left: 90+2*margin_inside,
-            backgroundColor: 'purple',
+            // backgroundColor: 'purple',
           }}>
 
             <Text numberOfLines={1} ellipsizeMode="tail" style={{
               fontFamily: 'NunitoSans-Bold',
               fontSize: 20,
-              color: 'white',
+              color: 'black',
               
               marginTop: 4,
             }}>
-              {selectedProfile.name}
+              {parentProfile.name}
             </Text>
 
             <Text style={{
               fontFamily: 'NunitoSans-SemiBold',
               fontSize: 16,
-              color: 'white',
+              color: 'black',
             }}>
-              {English[0].sex[selectedProfile.sex]}
+              {English[0].sex[parentProfile.sex]}
             </Text>
 
             <Text style={{
               fontFamily: 'NunitoSans-SemiBold',
               fontSize: 16,
-              color: 'white',
+              color: 'black',
             }}>
-              7 Months
+              42 Years
             </Text>
 
             <Text style={{
@@ -203,9 +206,9 @@ const ProfileScreen = ({ route }) => {
 
               fontFamily: 'NunitoSans-SemiBold',
               fontSize: 14,
-              color: 'white',
+              color: 'black',
             }}>
-              NIK - {selectedProfile.nik}
+              NIK - {parentProfile.nik}
             </Text>
 
           </View>
@@ -227,7 +230,7 @@ const ProfileScreen = ({ route }) => {
           justifyContent: 'baseline',
 
           backgroundColor: 'pink',
-          borderRadius: 20
+          borderRadius: br_bigCard
         }}>
           
           <Text numberOfLines={1} ellipsizeMode="tail" style={{
@@ -242,12 +245,57 @@ const ProfileScreen = ({ route }) => {
             {English[0].children}
           </Text>
 
+          <ScrollView horizontal={true} style={{
+            width: boxWidth,
+            height: height_yourAccountCard-174-2*margin_inside,
+            top: 48
+          }}>
+            <ChildCard child={selectedProfile}/>
+            <ChildCard child={selectedProfile}/>
+            <ChildCard child={selectedProfile}/>
+            <ChildCard child={selectedProfile}/>
+            <ChildCard child={selectedProfile}/>
+            <ChildCard child={selectedProfile}/>
+            <ChildCard child={selectedProfile}/>
+          </ScrollView>
+
         </View>
         
 
 
       </View>
 
+    </View>
+  );
+}
+
+const ChildCard = ({child}) => {
+  return (
+    <View style={{
+      width: 70,
+      height: 100,
+      backgroundColor: 'purple',
+      marginLeft: margin_inside,
+      alignItems: 'center',
+    }}>
+      <Image source = {require(pfp_main_temp)} style={{
+        width: 50,
+        height: 50,
+        borderRadius: br_bigCard,
+
+        position: 'absolute',
+        top: 0
+      }}/>
+      <Text style={{
+        fontFamily: 'NunitoSans-Bold',
+        fontSize: 12,
+        color: 'black',
+        position: 'absolute',
+        textAlign: 'center',
+        bottom: 0
+      }}>
+        {child.name}
+      </Text>
     </View>
   );
 }

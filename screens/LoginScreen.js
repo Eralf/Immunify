@@ -1,11 +1,43 @@
 import React from 'react';
-import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Button, TouchableOpacity, StyleSheet,Image, ImageBackground } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-const LoginScreen = ({ navigation, route }) => {
+const LoginScreen = ({navigation, route }) => {
   return (
     <View style={styles.container}>
+      <LinearGradient
+          colors={['#FFFFFF', '#CFF0FF']}
+          style={styles.background}
+      />
+      
+      <ImageBackground>
+        <Image source = {require('../assets/cloud1.png')} style ={styles.cloud1}/>
+        <Image source = {require('../assets/cloud2.png')} style ={styles.cloud2}/>
+        <Image source = {require('../assets/cloud3.png')} style ={styles.cloud3}/>
+      </ImageBackground>
 
-      <Text style={styles.text}>Login Screen</Text>
+      
+      <View style = {styles.container1}>
+        <Text style={styles.text}>Selamat Datang di</Text>
+        <Text style={styles.title}>Immunify</Text>
+        <Text style={styles.description}>Atur vaksin mu dari satu aplikasi</Text>
+
+        <TouchableOpacity style = {styles.buttonContainer}>   
+          <Text style = {styles.buttonText}>Daftar</Text>
+        </TouchableOpacity>
+
+        <View  style = {styles.container2}>
+          <Text style = {styles.container2.text1}>Sudah punya akun?</Text>
+          <TouchableOpacity>
+           <Text style = {styles.container2.text2}>Masuk</Text>
+          </TouchableOpacity>
+            
+          
+        </View>
+
+        <Image source = {require('../assets/growth.png')} style ={styles.image}/> 
+      </View>
 
     </View>
   );
@@ -15,23 +47,90 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+
+  },
+  container1: {
+    paddingTop: 250,
+    flex: 0.5,
+    alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  button: {
+  container2: {
     alignItems: 'center',
-    backgroundColor: '#9999FF',
-    padding: 10,
+    flexDirection: 'row',
+      text1: {
+        color: '#867F7F',
+        fontSize: 15,
+        fontWeight: 'bold',
+        margin: 5,
+      },
+      text2: {
+        color: '#01A2FF',
+        fontSize: 15,
+        fontWeight: 'bold',
+      }
+  },
+  text: {
+    marginTop: 50,
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  title: {
+    fontSize: 35,
+    color: '#01A2FF',
+    fontWeight: 'bold'
+  },
+  description: {
+    fontSize: 15,
+    color: '#01A2FF',
+    marginBottom: 100,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#A9E5FF',
     margin: 5,
-    borderRadius: 5
+    borderRadius: 50,
+    width: 200,
+    height: 50
   },
   buttonText: {
-    color: '#fff',
+    color: '#000000',
     fontWeight: 'bold',
+    fontSize: 25,
+  },
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: -40,
+    height: 700,
+  },
+  image:{
+    height: 230, 
+    width: 230,
+  },
+  cloud1: {
+    position: 'absolute',
+    top: 0,
+    height: 80,
+    left: 100,
+    resizeMode: 'contain'
+  },
+  cloud2: {
+    position: 'absolute',
+    right: 100,
+    height: 100,
+    width: 100,
+    top: 10,
+  },
+  cloud3: {
+    position: 'absolute',
+    left: 95,
+    height: 150,
+    width: 100,
+    top: 180,
+    resizeMode: 'contain',
   }
 });
 
