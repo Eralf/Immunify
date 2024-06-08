@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, Button, TouchableOpacity, StyleSheet,Image, ImageBackground } from 'react-native';
+import { View, Text, Button, TouchableOpacity, StyleSheet,Image, ImageBackground, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
+const dw = Dimensions.get('window').width
+const dh = Dimensions.get('window').height
 const LoginScreen = ({navigation, route }) => {
   return (
     <View style={styles.container}>
@@ -47,7 +49,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-
   },
   container1: {
     paddingTop: 250,
@@ -105,6 +106,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: -40,
     height: 700,
+    width: dw
   },
   image:{
     height: 230, 
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     height: 80,
-    left: 100,
+    right: (dw/-2) - 15,
     resizeMode: 'contain'
   },
   cloud2: {
@@ -126,13 +128,11 @@ const styles = StyleSheet.create({
   },
   cloud3: {
     position: 'absolute',
-    left: 95,
+    right: (dw/-2) - 15,
     height: 150,
     width: 100,
     top: 180,
     resizeMode: 'contain',
   }
 });
-
 export default LoginScreen;
-
