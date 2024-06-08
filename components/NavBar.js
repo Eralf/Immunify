@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     alignItems : 'center',
   },
   text:{
-    fontFamily: 'NunitoSans',
+    fontFamily: 'NunitoSans-Medium',
     textAlign: 'center',
     fontSize: 10,
   }
