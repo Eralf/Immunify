@@ -25,74 +25,31 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
             </Picker>
         </View>
       </View>
-      <ScrollView>
-          {completedAppointments.map(appointment => {
-            const appointmentDate = new Date(appointment.date); // Ensure it's a Date object
-            const appointmentTime = new Date(appointment.time); // Ensure it's a Date object
-
-            return (
-              <View key={appointment.id}>
-                <Text>{appointment.childName}</Text>
-              </View>
-            );
-          })}
-        </ScrollView>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.appointmentContainer}>
-          <View style={styles.appointmentLine}>
-          </View>
-          <Text style={styles.appointmentText}>
-            Hepatitis B
-          </Text>
-          <Text style={styles.appointmentText}>
-            11/02/2022
-          </Text>
-          <View style={styles.appointmentContainerGradient}>
-          </View>
-          <View style={styles.infoIconContainer}>
-            <Foundation name="info" size={24} color="black" style={styles.infoIcon}/>
-          </View>
-        </View>
-        <View style={styles.appointmentContainer}>
-          <View style={styles.appointmentLine}>
-          </View>
-          <Text style={styles.appointmentText}>
-            Polio
-          </Text>
-          <Text style={styles.appointmentText}>
-            12/03/2022
-          </Text>
-          <View style={styles.appointmentContainerGradient}>
-          </View>
-          <View style={styles.infoIconContainer}>
-            <Foundation name="info" size={24} color="black" style={styles.infoIcon}/>
-          </View>
-        </View>
-        <View style={styles.appointmentContainer}>
-          <View style={styles.appointmentLine}>
-          </View>
-          <Text style={styles.appointmentText}>
-            BCG
-          </Text>
-          <Text style={styles.appointmentText}>
-            12/05/2022
-          </Text>
-          <View style={styles.appointmentContainerGradient}>
-          </View>
-          <View style={styles.infoIconContainer}>
-            <Foundation name="info" size={24} color="black" style={styles.infoIcon}/>
-          </View>
-        </View>
-        <View style={styles.appointmentContainer}>
-          <View style={styles.appointmentLine}>
-          </View>
-          <View style={styles.appointmentContainerGradient}>
-          </View>
-          <View style={styles.infoIconContainer}>
-            <Foundation name="info" size={24} color="black" style={styles.infoIcon}/>
-          </View>
-        </View>
-        <View></View>
+          {completedAppointments.map(appointment => {
+            let appointmentDate;
+          if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
+            // Firestore Timestamp object
+            appointmentDate = new Date(appointment.date.seconds * 1000);
+          } else {
+            // Attempt to parse it directly
+            appointmentDate = new Date(appointment.date);
+          }
+            const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            {/* const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); */}
+                return (
+                  <TouchableOpacity key={appointment.id} style={styles.appointmentContainer}>
+                    <View style={styles.appointmentLine}></View>
+                    <Text style={styles.appointmentText}>{appointment.childName}, {appointment.vaccineType}</Text>
+                    {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
+                    <Text style={styles.appointmentText}>{formattedDate}</Text>
+                    <View style={styles.appointmentContainerGradient}></View>
+                    <View style={styles.infoIconContainer}>
+                      <Foundation name="info" size={24} color="black" style={styles.infoIcon}></Foundation>
+                    </View>
+                  </TouchableOpacity>
+                );
+          })}
       </ScrollView>
     </View>
   );
@@ -111,13 +68,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 17,
-    fontWeight: 'light',
+    fontFamily: 'NunitoSans-Light',
     marginBottom: 16,
-    // textAlign:'right',
   },
   appointmentText: {
     fontSize: 20,
-    fontWeight: 'light',
+    fontFamily: 'NunitoSans-Light',
     marginBottom: 4,
     left:25,
     top:3,

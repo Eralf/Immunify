@@ -97,13 +97,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 17,
-    fontWeight: 'light',
+    fontFamily: 'NunitoSans-Light',
     marginBottom: 16,
-    // textAlign:'right',
   },
   appointmentText: {
     fontSize: 20,
-    fontWeight: 'light',
+    fontFamily: 'NunitoSans-Light',
     marginBottom: 4,
     left:25,
     top:3,
