@@ -3,6 +3,10 @@ import { ScrollView, View, Text, TextInput, Button, StyleSheet, TouchableOpacity
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { db } from '../firebasecfg';
+import { collection, doc, setDoc, addDoc } from "firebase/firestore";
+import { useAppointments, AppointmentsProvider } from '../AppointmentsContext';
+
 
 const AppointmentForm = () => {
   const [vaccineType, setVaccineType] = useState('');
@@ -13,13 +17,13 @@ const AppointmentForm = () => {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [parentName, setParentName] = useState('');
   const [childName, setChildName] = useState('');
-  // Define locations array
+
   const locations = [
     "Location 1",
     "Location 2",
     "Location 3",
-    // Add more locations as needed
   ];
+
   const onDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(false);
@@ -32,18 +36,20 @@ const AppointmentForm = () => {
     setTime(currentTime);
   };
 
-  const handleConfirm = () => {
-    // Handle the form submission
-    console.log({
-      vaccineType,
-      location,
-      date,
-      time,
-      parentName,
-      childName,
+  function submitConfirm () {
+    addDoc(collection(db, "appointments"), {
+      vaccineType: vaccineType,
+      location: location,
+      date: date,
+      time: time,
+      parentName: parentName,
+      childName: childName,
+    }).then(() => {
+      console.log('Appointment added successfully');
+    }).catch((error) => {
+      console.error('Error adding appointment: ', error);
     });
   };
-
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <Text style={styles.greeting}>Halo, Douglas</Text>
@@ -70,7 +76,6 @@ const AppointmentForm = () => {
             ))}
           </Picker>
         </View>
-
 
         <View style={styles.dateTimeContainer}>
           <View style={styles.dateInput}>
@@ -131,7 +136,7 @@ const AppointmentForm = () => {
         />
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
+          <TouchableOpacity style={styles.confirmButton} onPress={submitConfirm}>
             <Text style={styles.confirmButtonText}>Konfirmasi</Text>
           </TouchableOpacity>
         </View>
@@ -139,8 +144,7 @@ const AppointmentForm = () => {
       <TouchableOpacity style={styles.checkButton}>
         <Text style={styles.checkButtonText}>Cek Vaksin Terjadwalkan Disini</Text>
       </TouchableOpacity>
-      
-      </ScrollView>
+    </ScrollView>
   );
 };
 

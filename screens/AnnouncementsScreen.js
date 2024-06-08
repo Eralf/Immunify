@@ -8,7 +8,7 @@ const AnnouncementsScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style = {styles.container}>
 
-      <Text style = {styles.text}>Announcements</Text>
+      <Text style = {styles.text}>Notifikasi</Text>
 
       <View style = {styles.horizontalLine}></View>
       <View style={styles.navigatesContainer}>
@@ -25,7 +25,7 @@ const AnnouncementsScreen = ({ navigation, route }) => {
       
       {/* <View> */}
       <ScrollView>
-        <View style = {styles.wrapAnnounce}>
+      <TouchableOpacity style = {styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsMissed')}>
           <View style = {styles.wrapStatus}>
             <View style={styles.terlewatkan}>
               <Text >Terlewatkan</Text>
@@ -34,55 +34,55 @@ const AnnouncementsScreen = ({ navigation, route }) => {
           </View>
           <View style = {styles.wrapInfoTime}>
             <Text style = {styles.information}>Anda melewatkan vaksin C Tanggal 18 September 2010. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>
-            <Text style = {styles.time}> 1 day ago</Text>
+            <Text style = {styles.time}> 1h</Text>
           </View>
           
-        </View>
+        </TouchableOpacity>
         <View style = {styles.horizontalLine}></View>
 
-        <View style = {styles.wrapAnnounce}>
+        <TouchableOpacity style = {styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsUpcoming')}>
           <View style = {styles.wrapStatus}>
-            <View style={styles.terlewatkan}>
-              <Text >Terlewatkan</Text>
+            <View style={styles.mendatang}>
+              <Text >Mendatang</Text>
             </View>
             <View style={styles.redDot}></View>
           </View>
           <View style = {styles.wrapInfoTime}>
-            <Text style = {styles.information}>Anda melewatkan vaksin C Tanggal 18 September 2010. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>
-            <Text style = {styles.time}> 1 day ago</Text>
+            <Text style = {styles.information}>Anda perlu mengambil vaksin C pada Tanggal 18 Oktober 2050.  <Text style={styles.boldText}>Klik untuk Cek!</Text></Text>
+            <Text style = {styles.time}> 1h</Text>
           </View>
           
-        </View>
+        </TouchableOpacity>
         <View style = {styles.horizontalLine}></View>
 
-        <View style = {styles.wrapAnnounce}>
+        <TouchableOpacity style = {styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
           <View style = {styles.wrapStatus}>
-            <View style={styles.terlewatkan}>
-              <Text >Terlewatkan</Text>
+            <View style={styles.selesai}>
+              <Text >Selesai</Text>
             </View>
             <View style={styles.redDot}></View>
           </View>
           <View style = {styles.wrapInfoTime}>
-            <Text style = {styles.information}>Anda melewatkan vaksin C Tanggal 18 September 2010. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>
-            <Text style = {styles.time}> 1 day ago</Text>
+            <Text style = {styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin C Tahap Pertama.  <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>
+            <Text style = {styles.time}> 1h</Text>
           </View>
           
-        </View>
+        </TouchableOpacity>
         <View style = {styles.horizontalLine}></View>
 
-        <View style = {styles.wrapAnnounce}>
+        <TouchableOpacity style = {styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsOnGoing')}>
           <View style = {styles.wrapStatus}>
-            <View style={styles.terlewatkan}>
-              <Text >Terlewatkan</Text>
+            <View style={styles.berlangsung}>
+              <Text >Berlangsung</Text>
             </View>
             <View style={styles.redDot}></View>
           </View>
           <View style = {styles.wrapInfoTime}>
-            <Text style = {styles.information}>Anda melewatkan vaksin C Tanggal 18 September 2010. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>
-            <Text style = {styles.time}> 1 day ago</Text>
+            <Text style = {styles.information}>Anda telah membuat janji untuk vaksin C Tahap Pertama pada Tanggal 20 September 2050.  <Text style={styles.boldText}>Klik untuk Cek!</Text></Text>
+            <Text style = {styles.time}> 1h</Text>
           </View>
           
-        </View>
+        </TouchableOpacity>
         <View style = {styles.horizontalLine}></View>
       </ScrollView>
       {/* </View> */}
@@ -148,10 +148,43 @@ const styles = StyleSheet.create({
     
     borderRadius:15
   },
+  mendatang:{
+    fontFamily: 'NunitoSans-SemiBold',
+    fontSize:14,
+    backgroundColor: '#84D9FE',
+    padding:10,
+    width:110,
+    alignItems:'center',
+    justifyContent:'center',
+    
+    borderRadius:15
+  },
+  selesai:{
+    fontFamily: 'NunitoSans-SemiBold',
+    fontSize:14,
+    backgroundColor: '#3BDC02',
+    padding:10,
+    width:110,
+    alignItems:'center',
+    justifyContent:'center',
+    
+    borderRadius:15
+  },
+  berlangsung:{
+    fontFamily: 'NunitoSans-SemiBold',
+    fontSize:14,
+    backgroundColor: '#FFC965',
+    padding:10,
+    width:110,
+    alignItems:'center',
+    justifyContent:'center',
+    
+    borderRadius:15
+  },
   redDot:{
     backgroundColor: '#FF0000',
-    width:20,
-    height:20,
+    width:15,
+    height:15,
     borderRadius:10
   },
   wrapAnnounce:{

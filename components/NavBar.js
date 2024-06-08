@@ -1,23 +1,47 @@
-import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-
+import React, { useState } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../colors';
 
 const NavBar = () => {
+  
+  // const route = useRoute();
   const navigation = useNavigation();
 
+
+  // const getIconColor = (routeName) => {
+  //   return route.name === routeName ? Colors.blue : Colors.black;
+  // };
+
+  // const getTextStyle = (routeName) => {
+  //   return {
+  //     color: route.name === routeName ? Colors.blue : Colors.black,
+  //     fontFamily: 'NunitoSans',
+  //     textAlign: 'center',
+  //     fontSize: 10,
+  //   };
+  // };
+
   return (
+    
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
-        <Text style={styles.text}>Home</Text>
-      </TouchableOpacity>
+
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Screen_3')}>
-        <Text style={styles.text}>Screen 3</Text>
+        <Ionicons name="calendar" size={24} color = {Colors.black} />
+        <Text  style={styles.text}>Tanggal Vaksin</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+        <Ionicons name="home" size={24} color = {Colors.black} />
+        <Text  style={styles.text}>Home</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile')}>
-        <Text style={styles.text}>Profile</Text>
+        <Ionicons name="person" size={24} color = {Colors.black}/>
+        <Text  style={styles.text}>Profile</Text>
       </TouchableOpacity>
+
     </View>
   );
 };
@@ -25,20 +49,20 @@ const NavBar = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
-    // height: 60,
+    justifyContent: 'center',
     backgroundColor: Colors.white,
+    alignItems: 'center',
+    height: 70,
   },
   button: {
-    backgroundColor: '#9999FF',
-    padding: 15,
-    borderRadius: 5,
+    flex : 1,
+    alignItems : 'center',
   },
-  text: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
+  text:{
+    fontFamily: 'NunitoSans',
+    textAlign: 'center',
+    fontSize: 10,
+  }
 });
 
 export default NavBar;

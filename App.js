@@ -1,13 +1,13 @@
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
-
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFonts } from 'expo-font';
 
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import Screen_3 from './screens/Screen_3';
-
 import LoginScreen from './screens/LoginScreen';
 import AnnouncementsScreen from './screens/AnnouncementsScreen';
 import AppointmentScreen from './screens/AppointmentScreen';
@@ -18,11 +18,11 @@ import VaccinationsOnGoingScreen from './screens/VaccinationsOnGoingScreen';
 import VaccineDetailsScreen from './screens/VaccineDetailsScreen';
 
 import NavBar from './components/NavBar';
+import { AppointmentsProvider } from './AppointmentsContext'; // Import the AppointmentsProvider
 
 const Stack = createNativeStackNavigator();
 
 var selectedProfile = 1;
-
 var profiles_dir = './profiles.json';
 
 export default function App() {
@@ -38,18 +38,9 @@ export default function App() {
   });
 
   const profiles = require(profiles_dir);
-  // console.log(profiles);
-  // fetch(profiles_dir)
-  //   .then(response => response.json())
-  //   .then(profiles => {
-  //     console.log(profiles);
-  //   })
-  //   .catch(error => {
-  //     console.error('Error fetching the JSON file:', error);
-  // });
-
 
   return (
+    <AppointmentsProvider>
     <NavigationContainer>
 
       <Stack.Navigator >
@@ -58,9 +49,17 @@ export default function App() {
           name='Home'
           component={HomeScreen}
           options={{
-            title: 'Home',
-            headerTitleAlign: 'center',
+            title: 'Halo, Dominick',
             headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
             animation: 'fade', // other options: slide_from_right, left, slide_from_bottom, slide_from_top
           }}
         />
@@ -75,8 +74,16 @@ export default function App() {
             // ),
 
             title: 'Profile',
-            headerTitleAlign: 'center',
             headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
             animation:'fade',
           }}
           initialParams={{ profile: profiles }}
@@ -86,8 +93,16 @@ export default function App() {
           component={Screen_3}
           options={{
             title: 'Screen 3',
-            headerTitleAlign: 'center',
             headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
             animation:'fade'
           }}
         />
@@ -98,8 +113,16 @@ export default function App() {
           component={LoginScreen}
           options={{
             title: 'Login',
-            headerTitleAlign: 'center',
             headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
             animation:'fade'
           }}
         />
@@ -112,11 +135,13 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/mainprofile-bg.png')}
+                source={require('./assets/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
-            
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
             animation:'fade'
           }}
         />
@@ -125,8 +150,16 @@ export default function App() {
           component={AppointmentScreen}
           options={{
             title: 'Appointment',
-            headerTitleAlign: 'center',
             headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
             animation:'fade'
           }}
         />
@@ -135,8 +168,16 @@ export default function App() {
           component={VaccinationsCompletedScreen}
           options={{
             title: 'Completed Vaccinations',
-            headerTitleAlign: 'center',
             headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
             animation:'fade'
           }}
         />
@@ -145,8 +186,16 @@ export default function App() {
           component={VaccinationsMissedScreen}
           options={{
             title: 'Missed Vaccinations',
-            headerTitleAlign: 'center',
             headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
             animation:'fade'
           }}
         />
@@ -155,8 +204,16 @@ export default function App() {
           component={VaccinationsUpcomingScreen}
           options={{
             title: 'Upcoming Vaccinations',
-            headerTitleAlign: 'center',
             headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
             animation:'fade'
           }}
         />
@@ -165,8 +222,16 @@ export default function App() {
           component={VaccinationsOnGoingScreen}
           options={{
             title: 'OnGoing Vaccinations',
-            headerTitleAlign: 'center',
             headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
             animation:'fade'
           }}
         />
@@ -175,8 +240,16 @@ export default function App() {
           component={VaccineDetailsScreen}
           options={{
             title: 'Vaccine Details',
-            headerTitleAlign: 'center',
             headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
             animation:'fade'
           }}
         />
@@ -185,16 +258,17 @@ export default function App() {
       <NavBar/>
 
     </NavigationContainer>
+    </AppointmentsProvider>
   );
-  
 }
+
 const styles = StyleSheet.create({
-  profPict:{
+  profPict: {
     width: 30, 
     height: 30, 
     borderRadius: 15, 
     marginRight: 10, 
-    borderWidth:1, 
-    borderColor:'black'
+    borderWidth: 1, 
+    borderColor: 'black'
   }
-})
+});
