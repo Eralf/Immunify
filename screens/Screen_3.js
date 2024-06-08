@@ -23,17 +23,33 @@ const AppointmentListScreen = () => {
       <Text style={styles.header}>Vaksin Terjadwalkan</Text>
       <ScrollView>
         {appointments.map(appointment => {
-          const appointmentDate = new Date(appointment.date); // Ensure it's a Date object
-          const appointmentTime = new Date(appointment.time); // Ensure it's a Date object
+          // Debugging statement to check the dateTime field
+          console.log('Raw dateTime from Firestore:', appointment.dateTime);
+
+          // Assuming the dateTime field is a single timestamp in Firestore
+          let appointmentDateTime;
+          if (appointment.dateTime && typeof appointment.dateTime === 'object' && 'seconds' in appointment.dateTime) {
+            // Firestore Timestamp object
+            appointmentDateTime = new Date(appointment.dateTime.seconds * 1000);
+          } else {
+            // Attempt to parse it directly
+            appointmentDateTime = new Date(appointment.dateTime);
+          }
+
+          console.log('Parsed Date:', appointmentDateTime);
+
+          const formattedDate = appointmentDateTime.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+          const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
           return (
             <TouchableOpacity key={appointment.id} style={styles.appointment} onPress={() => openModal(appointment)}>
               <View style={styles.appointmentContent}>
                 <View style={styles.appointmentText}>
                   <Text style={styles.title}>{appointment.vaccineType}</Text>
-                  <Text style={styles.detailText}><Text style={styles.label}>Nama      :</Text> {appointment.childName}</Text>
-                  <Text style={styles.detailText}><Text style={styles.label}>Tanggal  :</Text> {appointmentDate.toLocaleDateString()}</Text>
-                  <Text style={styles.detailText}><Text style={styles.label}>Lokasi     :</Text> {appointment.location}</Text>
+                  <Text style={styles.detailText}><Text style={styles.label}>Nama:</Text> {appointment.childName}</Text>
+                  <Text style={styles.detailText}><Text style={styles.label}>Tanggal:</Text> {formattedDate}</Text>
+                  <Text style={styles.detailText}><Text style={styles.label}>Waktu:</Text> {formattedTime}</Text>
+                  <Text style={styles.detailText}><Text style={styles.label}>Lokasi:</Text> {appointment.location}</Text>
                 </View>
                 <Ionicons name="chevron-forward" size={24} color="black" />
               </View>
@@ -66,11 +82,11 @@ const AppointmentListScreen = () => {
                 </View>
                 <View style={styles.detailRow}>
                   <Text style={styles.modalLabel}>Tanggal Pengambilan Vaksin:</Text>
-                  <Text style={styles.modalText}>{new Date(selectedAppointment.date).toLocaleDateString()}</Text>
+                  <Text style={styles.modalText}>{new Date(selectedAppointment.dateTime.seconds * 1000).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</Text>
                 </View>
                 <View style={styles.detailRow}>
                   <Text style={styles.modalLabel}>Waktu Vaksin:</Text>
-                  <Text style={styles.modalText}>{new Date(selectedAppointment.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+                  <Text style={styles.modalText}>{new Date(selectedAppointment.dateTime.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
                 </View>
                 <View style={styles.detailRow}>
                   <Text style={styles.modalLabel}>Lokasi Vaksinasi:</Text>
@@ -78,7 +94,7 @@ const AppointmentListScreen = () => {
                 </View>
                 <View style={styles.detailRow}>
                   <Text style={styles.modalLabel}>Jenis Vaksin:</Text>
-                  <Text style={styles.modalText}>AVAXIM® 160</Text>
+                  <Text style={styles.modalText}>{selectedAppointment.vaccineType}</Text>
                 </View>
               </View>
               
