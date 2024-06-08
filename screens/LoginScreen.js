@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
     right: 0,
     top: -40,
     height: 700,
-    width: dw
   },
   image:{
     height: 230, 
