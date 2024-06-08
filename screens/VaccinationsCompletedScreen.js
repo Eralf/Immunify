@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { ScrollView, View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { Foundation } from '@expo/vector-icons';
+import { useCompletedAppointments } from '../CompletedAppointmentsContext';
 
 const VaccinationsCompletedScreen = ({ navigation, route }) => {
   const [menu] = useState();
+  const {completedAppointments} = useCompletedAppointments();
   return (
     <View>
       <View style={styles.pickerFrame}>
@@ -22,6 +25,18 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
             </Picker>
         </View>
       </View>
+      <ScrollView>
+          {completedAppointments.map(appointment => {
+            const appointmentDate = new Date(appointment.date); // Ensure it's a Date object
+            const appointmentTime = new Date(appointment.time); // Ensure it's a Date object
+
+            return (
+              <View key={appointment.id}>
+                <Text>{appointment.childName}</Text>
+              </View>
+            );
+          })}
+        </ScrollView>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.appointmentContainer}>
           <View style={styles.appointmentLine}>
@@ -33,6 +48,9 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
             11/02/2022
           </Text>
           <View style={styles.appointmentContainerGradient}>
+          </View>
+          <View style={styles.infoIconContainer}>
+            <Foundation name="info" size={24} color="black" style={styles.infoIcon}/>
           </View>
         </View>
         <View style={styles.appointmentContainer}>
@@ -46,6 +64,9 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
           </Text>
           <View style={styles.appointmentContainerGradient}>
           </View>
+          <View style={styles.infoIconContainer}>
+            <Foundation name="info" size={24} color="black" style={styles.infoIcon}/>
+          </View>
         </View>
         <View style={styles.appointmentContainer}>
           <View style={styles.appointmentLine}>
@@ -58,11 +79,17 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
           </Text>
           <View style={styles.appointmentContainerGradient}>
           </View>
+          <View style={styles.infoIconContainer}>
+            <Foundation name="info" size={24} color="black" style={styles.infoIcon}/>
+          </View>
         </View>
         <View style={styles.appointmentContainer}>
           <View style={styles.appointmentLine}>
           </View>
           <View style={styles.appointmentContainerGradient}>
+          </View>
+          <View style={styles.infoIconContainer}>
+            <Foundation name="info" size={24} color="black" style={styles.infoIcon}/>
           </View>
         </View>
         <View></View>
@@ -168,6 +195,22 @@ const styles = StyleSheet.create({
     height:62,
     position:'absolute',
     left:10,
+  },
+  infoIconContainer:{
+    width:18,
+    height:16,
+    borderRadius:8,
+    right:15,
+    position:'absolute',
+    backgroundColor:'rgb(255,255,255)',
+    zindex:2,
+    justifyContent:'center',
+    alignItems:'center',
+    alignContent:'center',
+  },
+  infoIcon:{
+    position:'absolute',
+    zIndex:10,
   },
 });
 

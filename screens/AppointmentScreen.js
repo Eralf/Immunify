@@ -4,8 +4,10 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { db } from '../firebasecfg';
 import { collection, addDoc } from "firebase/firestore";
+import { useNavigation } from '@react-navigation/native';
 
 const AppointmentForm = () => {
+  const navigation = useNavigation();
   const [vaccineType, setVaccineType] = useState('');
   const [location, setLocation] = useState('');
   const [date, setDate] = useState(new Date());
@@ -149,7 +151,7 @@ const AppointmentForm = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity style={styles.checkButton}>
+      <TouchableOpacity style={styles.checkButton} onPress={() => navigation.navigate('Screen_3')}>
         <Text style={styles.checkButtonText}>Cek Vaksin Terjadwalkan Disini</Text>
       </TouchableOpacity>
 
@@ -297,6 +299,8 @@ const styles = StyleSheet.create({
   },
   buttonClose: {
     backgroundColor: '#2196F3',
+    width: 80,
+    borderRadius: 20,
   },
   textStyle: {
     color: 'white',
