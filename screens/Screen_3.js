@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAppointments } from '../AppointmentsContext';
 
 const AppointmentListScreen = () => {
-  const { appointments } = useAppointments();
+  const { appointments, deleteAppointment } = useAppointments();
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -18,26 +18,24 @@ const AppointmentListScreen = () => {
     setSelectedAppointment(null);
   };
 
+  const handleDelete = async (appointmentId) => {
+    await deleteAppointment(appointmentId);
+    closeModal();
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Vaksin Terjadwalkan</Text>
       <ScrollView>
         {appointments.map(appointment => {
-          // Debugging statement to check the dateTime field
           console.log('Raw dateTime from Firestore:', appointment.dateTime);
-
-          // Assuming the dateTime field is a single timestamp in Firestore
           let appointmentDateTime;
           if (appointment.dateTime && typeof appointment.dateTime === 'object' && 'seconds' in appointment.dateTime) {
-            // Firestore Timestamp object
             appointmentDateTime = new Date(appointment.dateTime.seconds * 1000);
           } else {
-            // Attempt to parse it directly
             appointmentDateTime = new Date(appointment.dateTime);
           }
-
           console.log('Parsed Date:', appointmentDateTime);
-
           const formattedDate = appointmentDateTime.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
           const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -97,15 +95,9 @@ const AppointmentListScreen = () => {
                   <Text style={styles.modalText}>{selectedAppointment.vaccineType}</Text>
                 </View>
               </View>
-              
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.button, styles.rescheduleButton]} onPress={() => { /* handle reschedule */ }}>
-                  <Text style={styles.buttonText}>Jadwalkan Ulang Janji</Text>
-                </TouchableOpacity>
-              </View>
 
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={closeModal}>
+                <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => handleDelete(selectedAppointment.id)}>
                   <Text style={styles.buttonText}>Batalkan</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={closeModal}>

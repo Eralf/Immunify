@@ -25,7 +25,7 @@ const LoginScreen = ({navigation, route }) => {
         <Text style={styles.title}>Immunify</Text>
         <Text style={styles.description}>Atur vaksin mu dari satu aplikasi</Text>
 
-        <TouchableOpacity style = {styles.buttonContainer}>   
+        <TouchableOpacity style = {styles.buttonContainer} onPress={() => navigation.navigate('RegisterScreen')}>   
           <Text style = {styles.buttonText}>Daftar</Text>
         </TouchableOpacity>
 
@@ -104,8 +104,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    top: -40,
-    height: 700,
+    top: (dh/-2) + 435,
+    height: dh*3,
   },
   image:{
     height: 230, 
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   cloud2: {
     position: 'absolute',
-    right: 100,
+    right: (dw/-10) + 150,
     height: 100,
     width: 100,
     top: 10,

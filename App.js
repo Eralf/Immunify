@@ -16,6 +16,7 @@ import VaccinationsMissedScreen from './screens/VaccinationsMissedScreen';
 import VaccinationsUpcomingScreen from './screens/VaccinationsUpcomingScreen';
 import VaccinationsOnGoingScreen from './screens/VaccinationsOnGoingScreen';
 import VaccineDetailsScreen from './screens/VaccineDetailsScreen';
+import RegisterScreen from './screens/LoginScreen2';
 
 import NavBar from './components/NavBar';
 import { AppointmentsProvider } from './AppointmentsContext'; // Import the AppointmentsProvider
@@ -128,6 +129,43 @@ export default function App() {
                   animation:'fade'
                 }}
               />
+<<<<<<< HEAD
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation: 'fade', // other options: slide_from_right, left, slide_from_bottom, slide_from_top
+          }}
+        />
+        <Stack.Screen
+          name='RegisterScreen'
+          component={RegisterScreen}
+          options={{
+            title: 'RegisterScreen',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade',
+          }}
+          initialParams={{ profile: profiles }}
+        />
+        <Stack.Screen
+          name='Profile'
+          component={ProfileScreen}
+          options={{
+            // header: (props) => (
+            //   <View style={{ height: 60 }}>
+                
+            //   </View>
+            // ),
+=======
               <Stack.Screen
                 name='Announcements'
                 component={AnnouncementsScreen}
@@ -256,6 +294,7 @@ export default function App() {
                 }}
               />
             </Stack.Navigator>
+>>>>>>> f1c7a546fda8ddd03373016044044c658753376d
 
             <NavBar/>
 
