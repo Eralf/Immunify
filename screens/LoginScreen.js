@@ -17,6 +17,7 @@ const LoginScreen = ({navigation, route }) => {
         <Image source = {require('../assets/cloud1.png')} style ={styles.cloud1}/>
         <Image source = {require('../assets/cloud2.png')} style ={styles.cloud2}/>
         <Image source = {require('../assets/cloud3.png')} style ={styles.cloud3}/>
+        {/* <Image source = {require('../assets/cloud4.png')} style ={styles.cloud4}/> */}
       </ImageBackground>
 
       
@@ -31,7 +32,7 @@ const LoginScreen = ({navigation, route }) => {
 
         <View  style = {styles.container2}>
           <Text style = {styles.container2.text1}>Sudah punya akun?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('EnterScreen')}>
            <Text style = {styles.container2.text2}>Masuk</Text>
           </TouchableOpacity>
             
@@ -104,8 +105,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    top: (dh/-2) + 435,
-    height: dh*3,
+    top: 0,
+    height: dh,
   },
   image:{
     height: 230, 
@@ -132,6 +133,6 @@ const styles = StyleSheet.create({
     width: 100,
     top: 180,
     resizeMode: 'contain',
-  }
+  },
 });
 export default LoginScreen;
