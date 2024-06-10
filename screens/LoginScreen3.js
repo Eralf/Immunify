@@ -1,5 +1,5 @@
 import React,  { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions, ImageBackground} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Checkbox from 'expo-checkbox';
 
@@ -10,8 +10,12 @@ const RegisterScreen = ({ navigation, route }) => {
   const [isChecked,setChecked] = useState(false);
   return (
     
+    
+
+
     <View style={styles.container}>
-      <LinearGradient
+
+     <LinearGradient
         colors={['#FFFFFF', '#CFF0FF']}
         style={styles.background}
       />
@@ -32,19 +36,13 @@ const RegisterScreen = ({ navigation, route }) => {
         </View>
         
 
-        <TextInput placeholder="Enter your name" style={styles.input} />
-        <TextInput placeholder="Enter Email" style={styles.input} />
+        <TextInput placeholder="Enter Username or Email" style={styles.input} />
         <TextInput placeholder="Enter password" style={styles.input} secureTextEntry />
 
-        <View style={styles.checkboxContainer}>
-          <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked}/>
-          <Text style={styles.checkboxText}>Saya setuju dengan Syarat dan Ketentuan yang berlaku</Text>
-        </View>
-
         <TouchableOpacity style = {styles.buttonContainer} onPress={() => navigation.navigate('RegisterScreen')}>   
-          <Text style = {styles.buttonText}>Daftar</Text>
+          <Text style = {styles.buttonText}>Masuk</Text>
         </TouchableOpacity>
-
+        <Image source={require('../assets/cloud4.png')} style={styles.cloud4} />
         <Image source={require('../assets/new-beginnings.png')} style={styles.image} />
       </View>
     </View>
@@ -72,7 +70,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#A9E5FF',
     borderRadius: 50,
     width: 200,
-    height: 50
+    height: 50,
+    marginTop:20,
   },
   buttonText: {
     color: '#000000',
@@ -128,35 +127,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginBottom: 20,
     elevation: 3,
-    
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 1,
-    borderColor: '#000',
-    marginRight: 10,
-  },
-  checkboxText: {
-    fontSize: 14,
-  },
-  registerButton: {
-    backgroundColor: '#01A2FF',
-    borderRadius: 25,
-    padding: 15,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  registerButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    height: 35,
   },
   image: {
     width: 230,
@@ -170,6 +141,15 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     height: dh,
+  },
+  cloud4: {
+    flex:1,
+    position: 'absolute',
+    // right: (dw/-2) - 15,
+    height: 150,
+    width: 100,
+    top: (dh/3) + 200,
+    resizeMode: 'contain',
   },
 });
 
