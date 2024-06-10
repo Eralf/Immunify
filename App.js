@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFonts } from 'expo-font';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
@@ -16,9 +18,14 @@ import VaccinationsMissedScreen from './screens/VaccinationsMissedScreen';
 import VaccinationsUpcomingScreen from './screens/VaccinationsUpcomingScreen';
 import VaccinationsOnGoingScreen from './screens/VaccinationsOnGoingScreen';
 import VaccineDetailsScreen from './screens/VaccineDetailsScreen';
+import RegisterScreen from './screens/LoginScreen2';
+import EnterScreen from './screens/LoginScreen3';
 
 import NavBar from './components/NavBar';
 import { AppointmentsProvider } from './AppointmentsContext'; // Import the AppointmentsProvider
+import { CompletedAppointmentsProvider } from './CompletedAppointmentsContext';
+import { MissedAppointmentsProvider } from './MissedAppointmentsContext';
+import {ImageViewer} from './ImageViewer';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,23 +33,57 @@ var selectedProfile = 1;
 var profiles_dir = './profiles.json';
 
 export default function App() {
-  let [fontsLoaded] = useFonts({
-    'NunitoSans-Light': require('./assets/fonts/NunitoSans_10pt-Light.ttf'),
-    'NunitoSans-Regular': require('./assets/fonts/NunitoSans_10pt-Regular.ttf'),
-    'NunitoSans-Medium': require('./assets/fonts/NunitoSans_10pt-Medium.ttf'),
-    'NunitoSans-SemiBold': require('./assets/fonts/NunitoSans_10pt-SemiBold.ttf'),
-    'NunitoSans-Bold': require('./assets/fonts/NunitoSans_10pt-Bold.ttf'),
-    'NunitoSans-ExtraBold': require('./assets/fonts/NunitoSans_10pt-ExtraBold.ttf'),
-    'NunitoSans-Black': require('./assets/fonts/NunitoSans_10pt-Black.ttf'),
-    'NunitoSans-Italic': require('./assets/fonts/NunitoSans_10pt-Italic.ttf'),
-  });
+  // let [fontsLoaded] = useFonts({
+  //   'NunitoSans-Light': require('./assets/fonts/NunitoSans_10pt-Light.ttf'),
+  //   'NunitoSans-Regular': require('./assets/fonts/NunitoSans_10pt-Regular.ttf'),
+  //   'NunitoSans-Medium': require('./assets/fonts/NunitoSans_10pt-Medium.ttf'),
+  //   'NunitoSans-SemiBold': require('./assets/fonts/NunitoSans_10pt-SemiBold.ttf'),
+  //   'NunitoSans-Bold': require('./assets/fonts/NunitoSans_10pt-Bold.ttf'),
+  //   'NunitoSans-ExtraBold': require('./assets/fonts/NunitoSans_10pt-ExtraBold.ttf'),
+  //   'NunitoSans-Black': require('./assets/fonts/NunitoSans_10pt-Black.ttf'),
+  //   'NunitoSans-Italic': require('./assets/fonts/NunitoSans_10pt-Italic.ttf'),
+  // });
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+    useEffect(() => {
+      async function loadResourcesAndDataAsync() {
+        try {
+          await Font.loadAsync({
+              'NunitoSans-Light': require('./assets/fonts/NunitoSans_10pt-Light.ttf'),
+              'NunitoSans-Regular': require('./assets/fonts/NunitoSans_10pt-Regular.ttf'),
+              'NunitoSans-Medium': require('./assets/fonts/NunitoSans_10pt-Medium.ttf'),
+              'NunitoSans-SemiBold': require('./assets/fonts/NunitoSans_10pt-SemiBold.ttf'),
+              'NunitoSans-Bold': require('./assets/fonts/NunitoSans_10pt-Bold.ttf'),
+              'NunitoSans-ExtraBold': require('./assets/fonts/NunitoSans_10pt-ExtraBold.ttf'),
+              'NunitoSans-Black': require('./assets/fonts/NunitoSans_10pt-Black.ttf'),
+              'NunitoSans-Italic': require('./assets/fonts/NunitoSans_10pt-Italic.ttf'),
+          });
+        } catch (e) {
+          console.warn(e);
+        } finally {
+          setFontsLoaded(true);
+          await SplashScreen.hideAsync();
+        }
+      }
+
+      loadResourcesAndDataAsync();
+    }, []);
+
+    if (!fontsLoaded) {
+      return null;
+  }
+
 
   const profiles = require(profiles_dir);
 
   return (
     <AppointmentsProvider>
+    <CompletedAppointmentsProvider>
+    <MissedAppointmentsProvider>
     <NavigationContainer>
-
+      {/* <View>
+        <ImageViewer path={"immunify-5c493.appspot.com/sertifikat_polio.png"}/>
+      </View> */}
       <Stack.Navigator >
 
         <Stack.Screen
@@ -62,6 +103,44 @@ export default function App() {
             ),
             animation: 'fade', // other options: slide_from_right, left, slide_from_bottom, slide_from_top
           }}
+        />
+        <Stack.Screen
+          name='RegisterScreen'
+          component={RegisterScreen}
+          options={{
+            title: 'RegisterScreen',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade',
+          }}
+          initialParams={{ profile: profiles }}
+        />
+        <Stack.Screen
+          name='EnterScreen'
+          component={EnterScreen}
+          options={{
+            title: 'EnterScreen',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Ionicons name="settings" size={24} color="black" />
+            ),
+            animation:'fade',
+          }}
+          initialParams={{ profile: profiles }}
         />
         <Stack.Screen
           name='Profile'
@@ -106,8 +185,6 @@ export default function App() {
             animation:'fade'
           }}
         />
-
-        
         <Stack.Screen
           name='Login'
           component={LoginScreen}
@@ -258,6 +335,8 @@ export default function App() {
       <NavBar/>
 
     </NavigationContainer>
+    </MissedAppointmentsProvider>
+    </CompletedAppointmentsProvider>
     </AppointmentsProvider>
   );
 }
