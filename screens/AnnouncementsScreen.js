@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Animated, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCompletedAppointments } from '../CompletedAppointmentsContext';
 import { useMissedAppointments } from '../MissedAppointmentsContext';
 
 const AnnouncementsScreen = ({ navigation, route }) => {
   const [selectedMenu, setSelectedMenu] = useState("semua");
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const animations = {
     semua: useRef(new Animated.Value(0)).current,
     mendatang: useRef(new Animated.Value(0)).current,
@@ -26,6 +27,63 @@ const AnnouncementsScreen = ({ navigation, route }) => {
 
   const handleMenuClick = (menu) => {
     setSelectedMenu(menu);
+  };
+
+  const sortAppointmentsByDate = (appointments) => {
+    return appointments.sort((a, b) => {
+      let dateA, dateB;
+
+      if (a.date && typeof a.date === 'object' && 'seconds' in a.date) {
+        dateA = new Date(a.date.seconds * 1000);
+      } else {
+        dateA = new Date(a.date);
+      }
+
+      if (b.date && typeof b.date === 'object' && 'seconds' in b.date) {
+        dateB = new Date(b.date.seconds * 1000);
+      } else {
+        dateB = new Date(b.date);
+      }
+
+      return dateB - dateA; // Sort in descending order
+    });
+  };
+
+  const calculateTimeDifference = (date) => {
+    const now = new Date();
+    const appointmentDate = new Date(date.seconds ? date.seconds * 1000 : date);
+    const diffInMs = now - appointmentDate;
+
+    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+    const diffInMonths = Math.floor(diffInDays / 30);
+    const diffInYears = Math.floor(diffInDays / 365);
+
+    if (diffInYears >= 1) {
+      return `${diffInYears}y`;
+    } else if (diffInMonths >= 1) {
+      return `${diffInMonths}mo`;
+    } else if (diffInDays >= 1) {
+      return `${diffInDays}d`;
+    } else if (diffInHours >= 1) {
+      return `${diffInHours}h`;
+    } else {
+      return `${diffInMinutes}m`;
+    }
+  };
+
+  const sortedCompletedAppointments = sortAppointmentsByDate(completedAppointments);
+  const sortedMissedAppointments = sortAppointmentsByDate(missedAppointments);
+  const combinedAppointments = [...completedAppointments, ...missedAppointments];
+  const sortedCombinedAppointments = sortAppointmentsByDate(combinedAppointments);
+
+  const onRefresh = () => {
+    setIsRefreshing(true);
+    // Add any refreshing logic here, like refetching data from API
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 2000); // Simulating a delay of 2 seconds for refreshing
   };
 
   return (
@@ -50,9 +108,44 @@ const AnnouncementsScreen = ({ navigation, route }) => {
       </View>
       <View style={styles.horizontalLine}></View>
 
-      <ScrollView>
+      <ScrollView refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} /> // Attach RefreshControl
+        }>
+          {selectedMenu == "semua" &&
+          sortedCombinedAppointments.map(appointment => {
+            let appointmentDate;
+          if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
+            // Firestore Timestamp object
+            appointmentDate = new Date(appointment.date.seconds * 1000);
+          } else {
+            // Attempt to parse it directly
+            appointmentDate = new Date(appointment.date);
+          }
+            const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            {/* const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); */}
+            const statusStyle = appointment.status === 'Selesai' ? styles.selesai : styles.terlewatkan;
+                return (
+                  <>
+                  <TouchableOpacity key={appointment.id} style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
+                    <View style={styles.wrapStatus}>
+                      <View style={statusStyle}>
+                        <Text>{appointment.status}</Text>
+                      </View>
+                      <View style={styles.redDot}></View>
+                    </View>
+                    <View style={styles.wrapInfoTime}>
+                      <Text style={styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin {appointment.vaccineType}. <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>
+                      <Text style={styles.time}>{calculateTimeDifference(appointment.date)}</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <View style={styles.horizontalLine}></View>
+                  </>
+                  
+                );
+          })
+          }
         {selectedMenu == "selesai" && 
-        completedAppointments.map(appointment => {
+        sortedCompletedAppointments.map(appointment => {
           let appointmentDate;
         if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
           // Firestore Timestamp object
@@ -63,18 +156,19 @@ const AnnouncementsScreen = ({ navigation, route }) => {
         }
           const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
           {/* const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); */}
+          
               return (
                 <>
                 <TouchableOpacity key={appointment.id} style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
                   <View style={styles.wrapStatus}>
                     <View style={styles.selesai}>
-                      <Text>Selesai</Text>
+                      <Text>{appointment.status}</Text>
                     </View>
                     <View style={styles.redDot}></View>
                   </View>
                   <View style={styles.wrapInfoTime}>
                     <Text style={styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin {appointment.vaccineType}. <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>
-                    <Text style={styles.time}> 1h</Text>
+                    <Text style={styles.time}>{calculateTimeDifference(appointment.date)}</Text>
                   </View>
                 </TouchableOpacity>
                 <View style={styles.horizontalLine}></View>
@@ -83,7 +177,7 @@ const AnnouncementsScreen = ({ navigation, route }) => {
               );
         })}
         {selectedMenu == "terlewatkan" && 
-          missedAppointments.map(appointment => {
+          sortedMissedAppointments.map(appointment => {
             let appointmentDate;
           if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
             // Firestore Timestamp object
@@ -99,13 +193,13 @@ const AnnouncementsScreen = ({ navigation, route }) => {
                   <TouchableOpacity key={appointment.id} style={styles.wrapAnnounce} onPress={() => navigation.navigate('Appointment')}>
                     <View style={styles.wrapStatus}>
                     <View style={styles.terlewatkan}>
-                      <Text>Terlewatkan</Text>
+                      <Text>{appointment.status}</Text>
                     </View>
                       <View style={styles.redDot}></View>
                     </View>
                     <View style={styles.wrapInfoTime}>
                     <Text style={styles.information}>Anda melewatkan vaksin {appointment.vaccineType} Tanggal {formattedDate}. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>
-                      <Text style={styles.time}> 1h</Text>
+                      <Text style={styles.time}> {calculateTimeDifference(appointment.date)}</Text>
                     </View>
                   </TouchableOpacity>
                   <View style={styles.horizontalLine}></View>
