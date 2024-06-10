@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFonts } from 'expo-font';
 import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
 import * as SplashScreen from 'expo-splash-screen';
 
 import HomeScreen from './screens/HomeScreen';
