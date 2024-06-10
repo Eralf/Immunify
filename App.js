@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import Fontisto from '@expo/vector-icons/Fontisto';
 import { useFonts } from 'expo-font';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -99,7 +100,7 @@ export default function App() {
               />
             ), 
             headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
+              <Fontisto name="bell-alt" size={24} color="black" />
             ),
             animation: 'fade', // other options: slide_from_right, left, slide_from_bottom, slide_from_top
           }}
