@@ -32,7 +32,7 @@ const NavBar = () => {
         <Text  style={styles.text}>Tanggal Vaksin</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HomeTemporarily')}>
         <Ionicons name="home" size={24} color = {Colors.black} />
         <Text  style={styles.text}>Home</Text>
       </TouchableOpacity>
