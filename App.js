@@ -27,6 +27,7 @@ import { AppointmentsProvider } from './AppointmentsContext'; // Import the Appo
 import { CompletedAppointmentsProvider } from './CompletedAppointmentsContext';
 import { MissedAppointmentsProvider } from './MissedAppointmentsContext';
 import {ImageViewer} from './ImageViewer';
+import HomeScreenTemporarily from './screens/HomeScreenTemporarily';
 
 const Stack = createNativeStackNavigator();
 
@@ -90,6 +91,24 @@ export default function App() {
         <Stack.Screen
           name='Home'
           component={HomeScreen}
+          options={{
+            title: 'Halo, Dominick',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Fontisto name="bell-alt" size={24} color="black" />
+            ),
+            animation: 'fade', // other options: slide_from_right, left, slide_from_bottom, slide_from_top
+          }}
+        />
+        <Stack.Screen
+          name='HomeTemporarily'
+          component={HomeScreenTemporarily}
           options={{
             title: 'Halo, Dominick',
             headerBackVisible: false,
