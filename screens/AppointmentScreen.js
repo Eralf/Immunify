@@ -26,12 +26,24 @@ const AppointmentForm = () => {
 
   const onDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
+    const today = new Date();
+    if (currentDate < today.setHours(0, 0, 0, 0)) {
+      Alert.alert("Error", "Tanggal tidak boleh sebelum waktu sekarang.");
+      setShowDatePicker(false);
+      return;
+    }
     setShowDatePicker(false);
     setDate(currentDate);
   };
 
   const onTimeChange = (event, selectedTime) => {
     const currentTime = selectedTime || time;
+    const combinedDateTime = combineDateAndTime(date, currentTime);
+    if (combinedDateTime < new Date()) {
+      Alert.alert("Error", "Waktu tidak boleh sebelum waktu sekarang.");
+      setShowTimePicker(false);
+      return;
+    }
     setShowTimePicker(false);
     setTime(currentTime);
   };
@@ -44,20 +56,35 @@ const AppointmentForm = () => {
     return combined;
   };
 
-  const submitConfirm = () => {
+  const validateForm = () => {
+    if (!vaccineType || !location || !parentName || !childName) {
+      Alert.alert("Error", "Semua data harus diisi.");
+      return false;
+    }
     const combinedDateTime = combineDateAndTime(date, time);
-    addDoc(collection(db, "appointments"), {
-      vaccineType: vaccineType,
-      location: location,
-      dateTime: combinedDateTime,
-      parentName: parentName,
-      childName: childName,
-    }).then(() => {
-      console.log('Appointment added successfully');
-      setModalVisible(true);
-    }).catch((error) => {
-      console.error('Error adding appointment: ', error);
-    });
+    if (combinedDateTime < new Date()) {
+      Alert.alert("Error", "Tanggal dan waktu tidak boleh sebelum waktu sekarang.");
+      return false;
+    }
+    return true;
+  };
+
+  const submitConfirm = () => {
+    if (validateForm()) {
+      const combinedDateTime = combineDateAndTime(date, time);
+      addDoc(collection(db, "appointments"), {
+        vaccineType: vaccineType,
+        location: location,
+        dateTime: combinedDateTime,
+        parentName: parentName,
+        childName: childName,
+      }).then(() => {
+        console.log('Appointment added successfully');
+        setModalVisible(true);
+      }).catch((error) => {
+        console.error('Error adding appointment: ', error);
+      });
+    }
   };
 
   return (
