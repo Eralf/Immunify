@@ -28,14 +28,14 @@ const AppointmentListScreen = () => {
       <Text style={styles.header}>Vaksin Terjadwalkan</Text>
       <ScrollView>
         {appointments.map(appointment => {
-          console.log('Raw dateTime from Firestore:', appointment.dateTime);
+          {/* console.log('Raw dateTime from Firestore:', appointment.dateTime); */}
           let appointmentDateTime;
           if (appointment.dateTime && typeof appointment.dateTime === 'object' && 'seconds' in appointment.dateTime) {
             appointmentDateTime = new Date(appointment.dateTime.seconds * 1000);
           } else {
             appointmentDateTime = new Date(appointment.dateTime);
           }
-          console.log('Parsed Date:', appointmentDateTime);
+          {/* console.log('Parsed Date:', appointmentDateTime); */}
           const formattedDate = appointmentDateTime.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
           const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 

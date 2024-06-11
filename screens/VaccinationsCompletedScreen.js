@@ -58,14 +58,16 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
             {/* const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); */}
                 return (
                   <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => openModal(appointment)}>
+                  <View style={styles.appointmentContainerGradient}></View>
                       <View style={styles.appointmentLine}></View>
-                      <Text style={styles.appointmentText(fontScale)}>{appointment.childName}, {appointment.vaccineType}</Text>
+                      <View style={styles.appointmentTextContainer}>
+                        <Text style={styles.appointmentText(fontScale)}>{appointment.childName}, {appointment.vaccineType}</Text>
+                      </View>
                       {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
                       <Text style={styles.appointmentText(fontScale)}>{formattedDate}</Text>
-                      <View style={styles.appointmentContainerGradient}></View>
-                      <View style={styles.infoIconContainer}>
+                      <TouchableOpacity style={styles.infoIconContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType, notCompleted:false})}>
                         <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
-                      </View>
+                      </TouchableOpacity>
                   </TouchableOpacity>
                 );
           })}
@@ -73,7 +75,7 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
       {selectedAppointment && (
         <Modal visible={modalVisible} animationType='fade' transparent={true}>
           <TouchableOpacity style={styles.modalContainer} onPress={closeModal}>
-              <ImageDisplay imagePath={selectedAppointment.certificateFile} height={400} width={windowWidth}/>
+              <ImageDisplay imagePath={selectedAppointment.certificateFile} height={300} width={windowWidth}/>
           </TouchableOpacity>
         </Modal>
       )}
@@ -111,12 +113,16 @@ const styles = StyleSheet.create({
     fontFamily: 'NunitoSans-Light',
     marginBottom: 16,
   },
+  appointmentTextContainer:{
+    zindex:1,
+  },
   appointmentText: (fontScale) => [{
     fontSize: 20/fontScale,
     fontFamily: 'NunitoSans-Light',
     marginBottom: 4,
     left:25,
     top:3,
+    zindex:10,
   }],
   button: {
     alignItems: 'center',
@@ -159,7 +165,8 @@ const styles = StyleSheet.create({
     position:'absolute',
     right:13,
     top:10,
-    zIndex:-1,
+    zIndex:-10,
+    elevation:-1,
   },
   appointmentContainer:{
     justifyContent: 'center',
@@ -184,6 +191,7 @@ const styles = StyleSheet.create({
     position:'absolute',
     right:0,
     top:40,
+    zindex:-1,
   },
   appointmentLine:{
     borderLeftColor:'black',

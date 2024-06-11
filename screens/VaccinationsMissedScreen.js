@@ -41,7 +41,7 @@ const VaccinationsMissedScreen = ({ navigation, route }) => {
             }
             const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
             return (
-              <TouchableOpacity key={appointment.id} style={styles.appointmentContainer}>
+              <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType})}>
                     <View style={styles.appointmentLine}></View>
                     <Text style={styles.appointmentText(fontScale)}>{appointment.childName}, {appointment.vaccineType}</Text>
                     {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
