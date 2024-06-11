@@ -43,7 +43,7 @@ const RegisterScreen = ({ navigation, route }) => {
           <Text style = {styles.buttonText}>Masuk</Text>
         </TouchableOpacity>
         <Image source={require('../assets/cloud4.png')} style={styles.cloud4} />
-        <Image source={require('../assets/new-beginnings.png')} style={styles.image} />
+        <Image source={require('../assets/late-for-class.png')} style={styles.image} />
       </View>
     </View>
   );
@@ -130,10 +130,11 @@ const styles = StyleSheet.create({
     height: 35,
   },
   image: {
-    width: 230,
-    height: 230,
+    width: 320,
+    height: 320,
     resizeMode: 'contain',
-    top: dh/-20
+    top: (dh/-20) + 50,
+    right: 80,
   },
   background: {
     position: 'absolute',
@@ -145,10 +146,10 @@ const styles = StyleSheet.create({
   cloud4: {
     flex:1,
     position: 'absolute',
-    // right: (dw/-2) - 15,
+    right: (dw/-20) - 30,
     height: 150,
-    width: 100,
-    top: (dh/3) + 200,
+    width: 120,
+    top: (dh/3) + 75,
     resizeMode: 'contain',
   },
 });
