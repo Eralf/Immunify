@@ -19,10 +19,46 @@ const AppointmentForm = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const locations = [
-    "Location 1",
-    "Location 2",
-    "Location 3",
-  ];
+    "RSUP Dr. Cipto Mangunkusumo",
+    "RS Pondok Indah",
+    "RSUP Sanglah",
+    "RSUP Dr. Hasan Sadikin",
+    "RSUP Dr. Kariadi",
+    "RSUP Fatmawati",
+    "RSUP Dr. Sardjito",
+    "Siloam Hospitals",
+    "Mayapada Hospital",
+    "RS Mitra Keluarga",
+    "Rumah Sakit Pusat Pertamina",
+    "Rumah Sakit Hermina",
+    "RS EKA Hospital",
+    "RS Harapan Kita",
+    "RS Dharmais",
+];
+
+
+  const vaccineTypes = [
+    "COVID-19",
+    "Chickenpox",
+    "Hepatitis A",
+    "Hepatitis B",
+    "Human Papillomavirus (HPV)",
+    "Influenza (Flu)",
+    "Measles",
+    "Mumps",
+    "Rubella",
+    "Meningococcal",
+    "Pneumococcal",
+    "Polio",
+    "Rabies",
+    "Tetanus",
+    "Tuberculosis (BCG)",
+    "Yellow Fever",
+    "Japanese Encephalitis",
+    "Typhoid",
+    "Cholera",
+];
+
 
   const onDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -94,12 +130,17 @@ const AppointmentForm = () => {
         <Text style={styles.title}>Buat Janji Baru</Text>
 
         <Text style={styles.label}>Jenis Vaksin</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Jenis Vaksin"
-          value={vaccineType}
-          onChangeText={setVaccineType}
-        />
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={vaccineType}
+            onValueChange={(itemValue, itemIndex) => setVaccineType(itemValue)}
+          >
+            <Picker.Item label="Pilih Jenis Vaksin" value="" />
+            {vaccineTypes.map((type, index) => (
+              <Picker.Item key={index} label={type} value={type} />
+            ))}
+          </Picker>
+        </View>
         
         <Text style={styles.label}>Pilih Lokasi Vaksinasi</Text>
         <View style={styles.pickerContainer}>
