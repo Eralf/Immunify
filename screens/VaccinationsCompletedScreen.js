@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, Button, TouchableOpacity, StyleSheet, Dimensions, useWindowDimensions} from 'react-native';
+import { ScrollView, View, Text, Button, TouchableOpacity, StyleSheet, Dimensions, useWindowDimensions, Modal} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Foundation } from '@expo/vector-icons';
 import { useCompletedAppointments } from '../CompletedAppointmentsContext';
@@ -12,9 +12,20 @@ const windowHeight = Dimensions.get('window').height;
 const VaccinationsCompletedScreen = ({ navigation, route }) => {
   const [menu] = useState();
   const {fontScale} = useWindowDimensions();
-  // console.log(windowWidth)
-  // console.log(windowHeight)
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const {completedAppointments} = useCompletedAppointments();
+
+  const openModal = (appointment) =>{
+    setSelectedAppointment(appointment);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setSelectedAppointment(null);
+    setModalVisible(false);
+  };
+
   return (
     <View>
       <View style={styles.pickerFrame}>
@@ -33,9 +44,6 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
             </Picker>
         </View>
       </View>
-      <View>
-        <ImageDisplay imagePath={'gs://immunify-5c493.appspot.com/images/certificates/sertifikat_lengkap.png'}/>
-      </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
           {completedAppointments.map(appointment => {
             let appointmentDate;
@@ -49,25 +57,47 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
             const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
             {/* const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); */}
                 return (
-                  <TouchableOpacity key={appointment.id} style={styles.appointmentContainer}>
+                  <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => openModal(appointment)}>
+                  <View style={styles.appointmentContainerGradient}></View>
                       <View style={styles.appointmentLine}></View>
-                      <Text style={styles.appointmentText(fontScale)}>{appointment.childName}, {appointment.vaccineType}</Text>
+                      <View style={styles.appointmentTextContainer}>
+                        <Text style={styles.appointmentText(fontScale)}>{appointment.childName}, {appointment.vaccineType}</Text>
+                      </View>
                       {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
                       <Text style={styles.appointmentText(fontScale)}>{formattedDate}</Text>
-                      <View style={styles.appointmentContainerGradient}></View>
-                      <ImageDisplay imagePath={appointment.certificateFile}/>
-                      <View style={styles.infoIconContainer}>
+                      <TouchableOpacity style={styles.infoIconContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType, notCompleted:false})}>
                         <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
-                      </View>
+                      </TouchableOpacity>
                   </TouchableOpacity>
                 );
           })}
       </ScrollView>
+      {selectedAppointment && (
+        <Modal visible={modalVisible} animationType='fade' transparent={true}>
+          <TouchableOpacity style={styles.modalContainer} onPress={closeModal}>
+              <ImageDisplay imagePath={selectedAppointment.certificateFile} height={300} width={windowWidth}/>
+          </TouchableOpacity>
+        </Modal>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  modalContent:{
+    width: '90%',
+    backgroundColor: '#fff',
+    padding: 16,
+    borderRadius: 8,
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  modalContainer:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
   scrollContainer: {
     flexGrow: 1,
     paddingBottom: 100,
@@ -83,12 +113,16 @@ const styles = StyleSheet.create({
     fontFamily: 'NunitoSans-Light',
     marginBottom: 16,
   },
+  appointmentTextContainer:{
+    zindex:1,
+  },
   appointmentText: (fontScale) => [{
     fontSize: 20/fontScale,
     fontFamily: 'NunitoSans-Light',
     marginBottom: 4,
     left:25,
     top:3,
+    zindex:10,
   }],
   button: {
     alignItems: 'center',
@@ -131,12 +165,13 @@ const styles = StyleSheet.create({
     position:'absolute',
     right:13,
     top:10,
-    zIndex:-1,
+    zIndex:-10,
+    elevation:-1,
   },
   appointmentContainer:{
     justifyContent: 'center',
     width: windowWidth*0.85,
-    height: windowWidth*0.62,
+    height: windowWidth*0.22,
     borderRadius: 10,
     backgroundColor: 'rgb(193,219,155)',
     position: 'relative',
@@ -156,6 +191,7 @@ const styles = StyleSheet.create({
     position:'absolute',
     right:0,
     top:40,
+    zindex:-1,
   },
   appointmentLine:{
     borderLeftColor:'black',

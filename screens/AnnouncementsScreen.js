@@ -13,8 +13,9 @@ const AnnouncementsScreen = ({ navigation, route }) => {
     terlewatkan: useRef(new Animated.Value(0)).current,
     selesai: useRef(new Animated.Value(0)).current,
   };
-  const {completedAppointments} = useCompletedAppointments();
-  const {missedAppointments} = useMissedAppointments();
+  const { completedAppointments } = useCompletedAppointments();
+  const { missedAppointments } = useMissedAppointments();
+
   useEffect(() => {
     Object.keys(animations).forEach(menu => {
       Animated.timing(animations[menu], {
@@ -111,55 +112,46 @@ const AnnouncementsScreen = ({ navigation, route }) => {
       <ScrollView refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} /> // Attach RefreshControl
         }>
-          {selectedMenu == "semua" &&
+        {selectedMenu == "semua" &&
           sortedCombinedAppointments.map(appointment => {
             let appointmentDate;
-          if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
-            // Firestore Timestamp object
-            appointmentDate = new Date(appointment.date.seconds * 1000);
-          } else {
-            // Attempt to parse it directly
-            appointmentDate = new Date(appointment.date);
-          }
+            if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
+              appointmentDate = new Date(appointment.date.seconds * 1000);
+            } else {
+              appointmentDate = new Date(appointment.date);
+            }
             const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-            {/* const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); */}
-            const statusStyle = appointment.status === 'Selesai' ? styles.selesai : styles.terlewatkan;
-                return (
-                  <>
-                  <TouchableOpacity key={appointment.id} style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
-                    <View style={styles.wrapStatus}>
-                      <View style={statusStyle}>
-                        <Text>{appointment.status}</Text>
-                      </View>
-                      <View style={styles.redDot}></View>
+            return (
+              <React.Fragment key={appointment.id}>
+                <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
+                  <View style={styles.wrapStatus}>
+                    <View style={appointment.status === 'Selesai' ? styles.selesai : styles.terlewatkan}>
+                      <Text>{appointment.status}</Text>
                     </View>
-                    <View style={styles.wrapInfoTime}>
-                      <Text style={styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin {appointment.vaccineType}. <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>
-                      <Text style={styles.time}>{calculateTimeDifference(appointment.date)}</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <View style={styles.horizontalLine}></View>
-                  </>
-                  
-                );
+                    <View style={styles.redDot}></View>
+                  </View>
+                  <View style={styles.wrapInfoTime}>
+                    <Text style={styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin {appointment.vaccineType}. <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>
+                    <Text style={styles.time}>{calculateTimeDifference(appointment.date)}</Text>
+                  </View>
+                </TouchableOpacity>
+                <View style={styles.horizontalLine}></View>
+              </React.Fragment>
+            );
           })
-          }
-        {selectedMenu == "selesai" && 
-        sortedCompletedAppointments.map(appointment => {
-          let appointmentDate;
-        if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
-          // Firestore Timestamp object
-          appointmentDate = new Date(appointment.date.seconds * 1000);
-        } else {
-          // Attempt to parse it directly
-          appointmentDate = new Date(appointment.date);
         }
-          const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-          {/* const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); */}
-          
-              return (
-                <>
-                <TouchableOpacity key={appointment.id} style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
+        {selectedMenu == "selesai" &&
+          sortedCompletedAppointments.map(appointment => {
+            let appointmentDate;
+            if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
+              appointmentDate = new Date(appointment.date.seconds * 1000);
+            } else {
+              appointmentDate = new Date(appointment.date);
+            }
+            const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            return (
+              <React.Fragment key={appointment.id}>
+                <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
                   <View style={styles.wrapStatus}>
                     <View style={styles.selesai}>
                       <Text>{appointment.status}</Text>
@@ -172,42 +164,37 @@ const AnnouncementsScreen = ({ navigation, route }) => {
                   </View>
                 </TouchableOpacity>
                 <View style={styles.horizontalLine}></View>
-                </>
-                
-              );
-        })}
-        {selectedMenu == "terlewatkan" && 
+              </React.Fragment>
+            );
+          })
+        }
+        {selectedMenu == "terlewatkan" &&
           sortedMissedAppointments.map(appointment => {
             let appointmentDate;
-          if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
-            // Firestore Timestamp object
-            appointmentDate = new Date(appointment.date.seconds * 1000);
-          } else {
-            // Attempt to parse it directly
-            appointmentDate = new Date(appointment.date);
-          }
+            if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
+              appointmentDate = new Date(appointment.date.seconds * 1000);
+            } else {
+              appointmentDate = new Date(appointment.date);
+            }
             const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-            {/* const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); */}
-                return (
-                  <>
-                  <TouchableOpacity key={appointment.id} style={styles.wrapAnnounce} onPress={() => navigation.navigate('Appointment')}>
-                    <View style={styles.wrapStatus}>
+            return (
+              <React.Fragment key={appointment.id}>
+                <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('Appointment')}>
+                  <View style={styles.wrapStatus}>
                     <View style={styles.terlewatkan}>
                       <Text>{appointment.status}</Text>
                     </View>
-                      <View style={styles.redDot}></View>
-                    </View>
-                    <View style={styles.wrapInfoTime}>
+                    <View style={styles.redDot}></View>
+                  </View>
+                  <View style={styles.wrapInfoTime}>
                     <Text style={styles.information}>Anda melewatkan vaksin {appointment.vaccineType} Tanggal {formattedDate}. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>
-                      <Text style={styles.time}> {calculateTimeDifference(appointment.date)}</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <View style={styles.horizontalLine}></View>
-                  </>
-                  
-                );
+                    <Text style={styles.time}> {calculateTimeDifference(appointment.date)}</Text>
+                  </View>
+                </TouchableOpacity>
+                <View style={styles.horizontalLine}></View>
+              </React.Fragment>
+            );
           })
-        
         }
         <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsMissed')}>
           <View style={styles.wrapStatus}>

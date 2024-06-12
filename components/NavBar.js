@@ -1,8 +1,38 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, Image, SafeAreaView, Dimensions, Keyboard } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../colors';
+
+const windowHeight = Dimensions.get('window').height;
+
+const useKeyboard = () => {
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+
+  useEffect(() => {
+    const keyboardOpenListener = Keyboard.addListener("keyboardDidShow", () =>
+      setIsKeyboardOpen(true)
+    );
+    const keyboardCloseListener = Keyboard.addListener("keyboardDidHide", () =>
+      setIsKeyboardOpen(false)
+    );
+
+    return () => {
+      if (keyboardOpenListener) keyboardOpenListener.remove();
+      if (keyboardCloseListener) keyboardCloseListener.remove();
+    };
+  }, []);
+
+  return isKeyboardOpen;
+}
+
+const getStyle = () =>{
+  const isKeyboardOpen = useKeyboard();
+  if(isKeyboardOpen){
+    return {height:0, width:0}
+  }
+  return {height: 70}
+}
 
 const NavBar = () => {
   
@@ -24,12 +54,10 @@ const NavBar = () => {
   // };
 
   return (
-    
-    <View style={styles.container}>
-
+    <SafeAreaView style={[styles.content, getStyle()]}>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Screen_3')}>
         <Ionicons name="calendar" size={24} color = {Colors.black} />
-        <Text  style={styles.text}>Tanggal Vaksin</Text>
+        <Text style={styles.text}>Tanggal Vaksin</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HomeTemporarily')}>
@@ -41,18 +69,17 @@ const NavBar = () => {
         <Ionicons name="person" size={24} color = {Colors.black}/>
         <Text  style={styles.text}>Profile</Text>
       </TouchableOpacity>
-
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  content: {
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: Colors.white,
     alignItems: 'center',
-    height: 70,
+    // height: 70,
   },
   button: {
     flex : 1,

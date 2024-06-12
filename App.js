@@ -92,7 +92,7 @@ export default function App() {
           name='Home'
           component={HomeScreen}
           options={{
-            title: 'Halo, Dominick',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -110,7 +110,7 @@ export default function App() {
           name='HomeTemporarily'
           component={HomeScreenTemporarily}
           options={{
-            title: 'Halo, Dominick',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -128,17 +128,18 @@ export default function App() {
           name='RegisterScreen'
           component={RegisterScreen}
           options={{
-            title: 'RegisterScreen',
-            headerBackVisible: false,
-            headerLeft: () => (
-              <Image
-                source={require('./assets/parentpfptemp.jpg')}
-                style={styles.profPict}
-              />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
-            ),
+              title:'',
+            // title: ' Halo, Dominick',
+            // headerBackVisible: false,
+            // headerLeft: () => (
+            //   <Image
+            //     source={require('./assets/parentpfptemp.jpg')}
+            //     style={styles.profPict}
+            //   />
+            // ), 
+            // headerRight:() => (
+            //   <Ionicons name="settings" size={24} color="black" />
+            // ),
             animation:'fade',
           }}
           initialParams={{ profile: profiles }}
@@ -147,7 +148,7 @@ export default function App() {
           name='EnterScreen'
           component={EnterScreen}
           options={{
-            title: 'EnterScreen',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -172,7 +173,7 @@ export default function App() {
             //   </View>
             // ),
 
-            title: 'Profile',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -191,7 +192,7 @@ export default function App() {
           name='Screen_3'
           component={Screen_3}
           options={{
-            title: 'Screen 3',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -209,17 +210,18 @@ export default function App() {
           name='Login'
           component={LoginScreen}
           options={{
-            title: 'Login',
-            headerBackVisible: false,
-            headerLeft: () => (
-              <Image
-                source={require('./assets/parentpfptemp.jpg')}
-                style={styles.profPict}
-              />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
-            ),
+            title:'',
+            // title: 'Login',
+            // headerBackVisible: false,
+            // headerLeft: () => (
+            //   <Image
+            //     source={require('./assets/parentpfptemp.jpg')}
+            //     style={styles.profPict}
+            //   />
+            // ), 
+            // headerRight:() => (
+            //   <Ionicons name="settings" size={24} color="black" />
+            // ),
             animation:'fade'
           }}
         />
@@ -227,7 +229,7 @@ export default function App() {
           name='Announcements'
           component={AnnouncementsScreen}
           options={{
-            title: '  Halo, Dominick',
+            title: ' Halo, Dominick',
             // headerTitleAlign: 'center',
             headerBackVisible: false,
             headerLeft: () => (
@@ -246,7 +248,7 @@ export default function App() {
           name='Appointment'
           component={AppointmentScreen}
           options={{
-            title: 'Appointment',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -264,7 +266,7 @@ export default function App() {
           name='VaccinationsCompleted'
           component={VaccinationsCompletedScreen}
           options={{
-            title: 'Completed Vaccinations',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -282,7 +284,7 @@ export default function App() {
           name='VaccinationsMissed'
           component={VaccinationsMissedScreen}
           options={{
-            title: 'Missed Vaccinations',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -300,7 +302,7 @@ export default function App() {
           name='VaccinationsUpcoming'
           component={VaccinationsUpcomingScreen}
           options={{
-            title: 'Upcoming Vaccinations',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -318,7 +320,7 @@ export default function App() {
           name='VaccinationsOnGoing'
           component={VaccinationsOnGoingScreen}
           options={{
-            title: 'OnGoing Vaccinations',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -336,7 +338,7 @@ export default function App() {
           name='VaccineDetails'
           component={VaccineDetailsScreen}
           options={{
-            title: 'Vaccine Details',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
