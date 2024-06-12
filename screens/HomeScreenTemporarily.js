@@ -7,7 +7,8 @@ import { Colors } from '../colors';
 const pfp_main_temp = '../assets/Girl.png';
 const syringe = '../assets/Syringe.png';
 const listPaper = '../assets/listPaper.png';
-const HomeScreenTemporarily = ({ navigation, route }) => {
+const HomeScreenTemporarily = () => {
+  const navigation = useNavigation();
   return (
     <ScrollView>
     <SafeAreaView style={{backgroundColor:'white'}}>
@@ -25,7 +26,7 @@ const HomeScreenTemporarily = ({ navigation, route }) => {
           }}/>
         </View>
       </View>
-      <View style={{backgroundColor: '#EF5454',
+      <TouchableOpacity onPress={() => navigation.navigate('VaccinationsMissed')} style={{backgroundColor: '#EF5454',
         marginHorizontal: 20, 
         marginVertical:30, 
         borderRadius:20, 
@@ -43,7 +44,7 @@ const HomeScreenTemporarily = ({ navigation, route }) => {
           <Text style={{color:'red',fontSize:70,fontWeight:'bold'}}>!</Text>
         </View>
 
-      </View>
+      </TouchableOpacity>
       <View style={{backgroundColor:'#A9E5FF',borderTopLeftRadius:20,borderTopRightRadius:20}}>
           <Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular',marginTop:10}}>Servis</Text>
           <View style={{flexDirection:'row', justifyContent:'space-between',marginVertical:10,marginHorizontal:20,backgroundColor:'white',padding:20}}>
@@ -56,13 +57,13 @@ const HomeScreenTemporarily = ({ navigation, route }) => {
             </View>
             <View style={{justifyContent:'center'}}>
               <Text style={{fontFamily: 'NunitoSans-Regular'}}>Mau Daftar Vaksin?</Text>
-              <TouchableOpacity style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10}}><Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular'}}>Daftar Disini!</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')} style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10}}><Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular'}}>Daftar Disini!</Text></TouchableOpacity>
             </View>
           </View>
           <View style={{flexDirection:'row', justifyContent:'space-between',marginVertical:10,marginHorizontal:20,backgroundColor:'white',padding:20}}>
             <View style={{justifyContent:'center'}}>
               <Text style={{fontFamily: 'NunitoSans-Regular'}}>Mau Cek Sertifikat Vaksin?</Text>
-              <TouchableOpacity style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10,width:150}}><Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular'}}>Cek Disini!</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => {navigation.navigate('VaccinationsCompleted')}} style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10,width:150}}><Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular'}}>Cek Disini!</Text></TouchableOpacity>
             </View>
 
             <View>
