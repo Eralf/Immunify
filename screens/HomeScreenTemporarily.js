@@ -30,23 +30,35 @@ const HomeScreenTemporarily = () => {
         marginHorizontal: 20, 
         marginVertical:30, 
         borderRadius:20, 
-        paddingHorizontal: 20,
-        paddingVertical:10,flexDirection:'row',justifyContent:'space-between'}}>
-        <View style={{justifyContent:'center'}}>
-          <Text style={{color:'white', fontFamily: 'NunitoSans-SemiBold', fontSize:16}}>Vaksin kamu ada yang {'\n'}bolong? <Text style={{fontWeight:'bold',fontFamily:'NunitoSans-Bold'}}>Cek sekarang</Text></Text>
+        
+        flexDirection:'row',justifyContent:'space-between'}}>
+        <View style={{justifyContent:'center',position:'relative',overflow:'hidden'}}>
+          <Text style={{color:'white', fontFamily: 'NunitoSans-SemiBold', fontSize:16, marginLeft:20}}>Vaksin kamu ada yang {'\n'}bolong? <Text style={{fontWeight:'bold',fontFamily:'NunitoSans-Bold'}}>Cek sekarang</Text></Text>
+          <View style={{backgroundColor:'#F99797', width:100, height:100,position:'absolute',
+            borderRadius:50, transform: [{ scaleX: 3 }],zIndex:-1,bottom:-70,left:35}}></View>
         </View>
         <View style={{backgroundColor:'white',width:100,
           height:100,
           justifyContent:'center',
           alignItems:'center',
-          borderRadius:20
+          borderRadius:20, marginVertical:10, marginRight:20
           }}>
           <Text style={{color:'red',fontSize:70,fontWeight:'bold'}}>!</Text>
         </View>
 
       </TouchableOpacity>
-      <View style={{backgroundColor:'#A9E5FF',borderTopLeftRadius:20,borderTopRightRadius:20}}>
+      <View style={{backgroundColor:'#A9E5FF',borderTopLeftRadius:20,borderTopRightRadius:20, position:'relative', overflow:'hidden'}}>
           <Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular',marginTop:10}}>Servis</Text>
+          <View style={{backgroundColor:'#D4F4F9', width:150, height:150,position:'absolute',
+            borderRadius:75,  transform: [
+              {scaleX: 5},{scaleY:2},
+              {skewY:'70deg'}
+            ],zIndex:-1,right:-100,top:0}}></View>
+          <View style={{backgroundColor:'#D4F4F9', width:150, height:150,position:'absolute',
+            borderRadius:75,  transform: [
+              {scaleX: 2},{scaleY:2},
+              {skewY:'40deg'}
+            ],zIndex:-1, bottom:-30,left:-30}}></View>
           <View style={{flexDirection:'row', justifyContent:'space-between',marginVertical:10,marginHorizontal:20,backgroundColor:'white',padding:20}}>
             <View>
               <Image source={require(syringe)} style={{
@@ -60,7 +72,7 @@ const HomeScreenTemporarily = () => {
               <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')} style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10}}><Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular'}}>Daftar Disini!</Text></TouchableOpacity>
             </View>
           </View>
-          <View style={{flexDirection:'row', justifyContent:'space-between',marginVertical:10,marginHorizontal:20,backgroundColor:'white',padding:20}}>
+          <View style={{flexDirection:'row', justifyContent:'space-between',marginTop:10,marginBottom:50, marginHorizontal:20,backgroundColor:'white',padding:20}}>
             <View style={{justifyContent:'center'}}>
               <Text style={{fontFamily: 'NunitoSans-Regular'}}>Mau Cek Sertifikat Vaksin?</Text>
               <TouchableOpacity onPress={() => {navigation.navigate('VaccinationsCompleted')}} style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10,width:150}}><Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular'}}>Cek Disini!</Text></TouchableOpacity>
