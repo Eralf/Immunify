@@ -132,7 +132,7 @@ export default function App() {
           options={{
               title:'',
             // title: ' Halo, Dominick',
-            // headerBackVisible: false,
+            headerBackVisible: false,
             // headerLeft: () => (
             //   <Image
             //     source={require('./assets/parentpfptemp.jpg')}
@@ -214,7 +214,7 @@ export default function App() {
           options={{
             title:'',
             // title: 'Login',
-            // headerBackVisible: false,
+            headerBackVisible: false,
             // headerLeft: () => (
             //   <Image
             //     source={require('./assets/parentpfptemp.jpg')}
