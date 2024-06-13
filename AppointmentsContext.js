@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { db } from './firebasecfg'; // Adjust this path to your Firebase configuration
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
 
 const AppointmentsContext = createContext();
 
@@ -23,8 +23,17 @@ export const AppointmentsProvider = ({ children }) => {
     return unsubscribe;
   }, []);
 
+  const deleteAppointment = async (appointmentId) => {
+    try {
+      await deleteDoc(doc(db, 'appointments', appointmentId));
+      setAppointments(appointments.filter(appointment => appointment.id !== appointmentId));
+    } catch (error) {
+      console.error('Error deleting appointment:', error);
+    }
+  };
+
   return (
-    <AppointmentsContext.Provider value={{ appointments, setAppointments }}>
+    <AppointmentsContext.Provider value={{ appointments, setAppointments, deleteAppointment }}>
       {children}
     </AppointmentsContext.Provider>
   );

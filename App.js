@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {useState, useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useFonts } from 'expo-font'
+import Fontisto from '@expo/vector-icons/Fontisto';
+import { useFonts } from 'expo-font';
 import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
 import * as SplashScreen from 'expo-splash-screen';
-
 
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
@@ -20,15 +19,21 @@ import VaccinationsMissedScreen from './screens/VaccinationsMissedScreen';
 import VaccinationsUpcomingScreen from './screens/VaccinationsUpcomingScreen';
 import VaccinationsOnGoingScreen from './screens/VaccinationsOnGoingScreen';
 import VaccineDetailsScreen from './screens/VaccineDetailsScreen';
+import RegisterScreen from './screens/LoginScreen2';
+import EnterScreen from './screens/LoginScreen3';
 
 import NavBar from './components/NavBar';
 import { AppointmentsProvider } from './AppointmentsContext'; // Import the AppointmentsProvider
+import { CompletedAppointmentsProvider } from './CompletedAppointmentsContext';
+import { MissedAppointmentsProvider } from './MissedAppointmentsContext';
+import { ProfilesProvider } from './ProfileContext';
+import {ImageViewer} from './ImageViewer';
+import HomeScreenTemporarily from './screens/HomeScreenTemporarily';
 
 const Stack = createNativeStackNavigator();
 
 var selectedProfile = 1;
 var profiles_dir = './profiles.json';
-
 
 export default function App() {
   // let [fontsLoaded] = useFonts({
@@ -41,40 +46,34 @@ export default function App() {
   //   'NunitoSans-Black': require('./assets/fonts/NunitoSans_10pt-Black.ttf'),
   //   'NunitoSans-Italic': require('./assets/fonts/NunitoSans_10pt-Italic.ttf'),
   // });
-  // if (!fontsLoaded) {
-  //   return <AppLoading />;
-  // }
-
-
-
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  useEffect(() => {
-    async function loadResourcesAndDataAsync() {
-      try {
-        await Font.loadAsync({
-            'NunitoSans-Light': require('./assets/fonts/NunitoSans_10pt-Light.ttf'),
-            'NunitoSans-Regular': require('./assets/fonts/NunitoSans_10pt-Regular.ttf'),
-            'NunitoSans-Medium': require('./assets/fonts/NunitoSans_10pt-Medium.ttf'),
-            'NunitoSans-SemiBold': require('./assets/fonts/NunitoSans_10pt-SemiBold.ttf'),
-            'NunitoSans-Bold': require('./assets/fonts/NunitoSans_10pt-Bold.ttf'),
-            'NunitoSans-ExtraBold': require('./assets/fonts/NunitoSans_10pt-ExtraBold.ttf'),
-            'NunitoSans-Black': require('./assets/fonts/NunitoSans_10pt-Black.ttf'),
-            'NunitoSans-Italic': require('./assets/fonts/NunitoSans_10pt-Italic.ttf'),
-        });
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        setFontsLoaded(true);
-        await SplashScreen.hideAsync();
+    useEffect(() => {
+      async function loadResourcesAndDataAsync() {
+        try {
+          await Font.loadAsync({
+              'NunitoSans-Light': require('./assets/fonts/NunitoSans_10pt-Light.ttf'),
+              'NunitoSans-Regular': require('./assets/fonts/NunitoSans_10pt-Regular.ttf'),
+              'NunitoSans-Medium': require('./assets/fonts/NunitoSans_10pt-Medium.ttf'),
+              'NunitoSans-SemiBold': require('./assets/fonts/NunitoSans_10pt-SemiBold.ttf'),
+              'NunitoSans-Bold': require('./assets/fonts/NunitoSans_10pt-Bold.ttf'),
+              'NunitoSans-ExtraBold': require('./assets/fonts/NunitoSans_10pt-ExtraBold.ttf'),
+              'NunitoSans-Black': require('./assets/fonts/NunitoSans_10pt-Black.ttf'),
+              'NunitoSans-Italic': require('./assets/fonts/NunitoSans_10pt-Italic.ttf'),
+          });
+        } catch (e) {
+          console.warn(e);
+        } finally {
+          setFontsLoaded(true);
+          await SplashScreen.hideAsync();
+        }
       }
-    }
 
-    loadResourcesAndDataAsync();
-  }, []);
+      loadResourcesAndDataAsync();
+    }, []);
 
-  if (!fontsLoaded) {
-    return null;
+    if (!fontsLoaded) {
+      return null;
   }
 
 
@@ -82,15 +81,76 @@ export default function App() {
 
   return (
     <AppointmentsProvider>
+    <CompletedAppointmentsProvider>
+    <MissedAppointmentsProvider>
+    <ProfilesProvider>
     <NavigationContainer>
-
+      {/* <View>
+        <ImageViewer path={"immunify-5c493.appspot.com/sertifikat_polio.png"}/>
+      </View> */}
       <Stack.Navigator >
 
         <Stack.Screen
           name='Home'
           component={HomeScreen}
           options={{
-            title: 'Halo, Dominick',
+            title: ' Halo, Dominick',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/pfp/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Fontisto name="bell-alt" size={24} color="black" />
+            ),
+            animation: 'fade', // other options: slide_from_right, left, slide_from_bottom, slide_from_top
+          }}
+        />
+        <Stack.Screen
+          name='HomeTemporarily'
+          component={HomeScreenTemporarily}
+          options={{
+            title: ' Halo, Dominick',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <Image
+                source={require('./assets/pfp/parentpfptemp.jpg')}
+                style={styles.profPict}
+              />
+            ), 
+            headerRight:() => (
+              <Fontisto name="bell-alt" size={24} color="black" />
+            ),
+            animation: 'fade', // other options: slide_from_right, left, slide_from_bottom, slide_from_top
+          }}
+        />
+        <Stack.Screen
+          name='RegisterScreen'
+          component={RegisterScreen}
+          options={{
+              title:'',
+            // title: ' Halo, Dominick',
+            // headerBackVisible: false,
+            // headerLeft: () => (
+            //   <Image
+            //     source={require('./assets/pfp/parentpfptemp.jpg')}
+            //     style={styles.profPict}
+            //   />
+            // ), 
+            // headerRight:() => (
+            //   <Ionicons name="settings" size={24} color="black" />
+            // ),
+            animation:'fade',
+          }}
+          initialParams={{ profile: profiles }}
+        />
+        <Stack.Screen
+          name='EnterScreen'
+          component={EnterScreen}
+          options={{
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -101,8 +161,9 @@ export default function App() {
             headerRight:() => (
               <Ionicons name="settings" size={24} color="black" />
             ),
-            animation: 'fade', // other options: slide_from_right, left, slide_from_bottom, slide_from_top
+            animation:'fade',
           }}
+          initialParams={{ profile: profiles }}
         />
         <Stack.Screen
           name='Profile'
@@ -114,7 +175,7 @@ export default function App() {
             //   </View>
             // ),
 
-            title: 'Profile',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -133,7 +194,7 @@ export default function App() {
           name='Screen_3'
           component={Screen_3}
           options={{
-            title: 'Screen 3',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -147,23 +208,22 @@ export default function App() {
             animation:'fade'
           }}
         />
-
-        
         <Stack.Screen
           name='Login'
           component={LoginScreen}
           options={{
-            title: 'Login',
-            headerBackVisible: false,
-            headerLeft: () => (
-              <Image
-                source={require('./assets/pfp/parentpfptemp.jpg')}
-                style={styles.profPict}
-              />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
-            ),
+            title:'',
+            // title: 'Login',
+            // headerBackVisible: false,
+            // headerLeft: () => (
+            //   <Image
+            //     source={require('./assets/pfp/parentpfptemp.jpg')}
+            //     style={styles.profPict}
+            //   />
+            // ), 
+            // headerRight:() => (
+            //   <Ionicons name="settings" size={24} color="black" />
+            // ),
             animation:'fade'
           }}
         />
@@ -171,7 +231,7 @@ export default function App() {
           name='Announcements'
           component={AnnouncementsScreen}
           options={{
-            title: '  Halo, Dominick',
+            title: ' Halo, Dominick',
             // headerTitleAlign: 'center',
             headerBackVisible: false,
             headerLeft: () => (
@@ -190,7 +250,7 @@ export default function App() {
           name='Appointment'
           component={AppointmentScreen}
           options={{
-            title: 'Appointment',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -208,7 +268,7 @@ export default function App() {
           name='VaccinationsCompleted'
           component={VaccinationsCompletedScreen}
           options={{
-            title: 'Completed Vaccinations',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -226,7 +286,7 @@ export default function App() {
           name='VaccinationsMissed'
           component={VaccinationsMissedScreen}
           options={{
-            title: 'Missed Vaccinations',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -244,7 +304,7 @@ export default function App() {
           name='VaccinationsUpcoming'
           component={VaccinationsUpcomingScreen}
           options={{
-            title: 'Upcoming Vaccinations',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -262,7 +322,7 @@ export default function App() {
           name='VaccinationsOnGoing'
           component={VaccinationsOnGoingScreen}
           options={{
-            title: 'OnGoing Vaccinations',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -280,7 +340,7 @@ export default function App() {
           name='VaccineDetails'
           component={VaccineDetailsScreen}
           options={{
-            title: 'Vaccine Details',
+            title: ' Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -299,6 +359,9 @@ export default function App() {
       <NavBar/>
 
     </NavigationContainer>
+    </ProfilesProvider>
+    </MissedAppointmentsProvider>
+    </CompletedAppointmentsProvider>
     </AppointmentsProvider>
   );
 }

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, TextInput, StyleSheet, TouchableOpacity, Modal, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { db } from '../firebasecfg';
-import { collection, doc, setDoc, addDoc } from "firebase/firestore";
-import { useAppointments, AppointmentsProvider } from '../AppointmentsContext';
-
+import { collection, addDoc } from "firebase/firestore";
+import { useNavigation } from '@react-navigation/native';
 
 const AppointmentForm = () => {
+  const navigation = useNavigation();
   const [vaccineType, setVaccineType] = useState('');
   const [location, setLocation] = useState('');
   const [date, setDate] = useState(new Date());
@@ -17,39 +16,113 @@ const AppointmentForm = () => {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [parentName, setParentName] = useState('');
   const [childName, setChildName] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   const locations = [
-    "Location 1",
-    "Location 2",
-    "Location 3",
-  ];
+    "RSUP Dr. Cipto Mangunkusumo",
+    "RS Pondok Indah",
+    "RSUP Sanglah",
+    "RSUP Dr. Hasan Sadikin",
+    "RSUP Dr. Kariadi",
+    "RSUP Fatmawati",
+    "RSUP Dr. Sardjito",
+    "Siloam Hospitals",
+    "Mayapada Hospital",
+    "RS Mitra Keluarga",
+    "Rumah Sakit Pusat Pertamina",
+    "Rumah Sakit Hermina",
+    "RS EKA Hospital",
+    "RS Harapan Kita",
+    "RS Dharmais",
+];
+
+
+  const vaccineTypes = [
+    "COVID-19",
+    "Chickenpox",
+    "Hepatitis A",
+    "Hepatitis B",
+    "Human Papillomavirus (HPV)",
+    "Influenza (Flu)",
+    "Measles",
+    "Mumps",
+    "Rubella",
+    "Meningococcal",
+    "Pneumococcal",
+    "Polio",
+    "Rabies",
+    "Tetanus",
+    "Tuberculosis (BCG)",
+    "Yellow Fever",
+    "Japanese Encephalitis",
+    "Typhoid",
+    "Cholera",
+];
+
 
   const onDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
+    const today = new Date();
+    if (currentDate < today.setHours(0, 0, 0, 0)) {
+      Alert.alert("Error", "Tanggal tidak boleh sebelum waktu sekarang.");
+      setShowDatePicker(false);
+      return;
+    }
     setShowDatePicker(false);
     setDate(currentDate);
   };
 
   const onTimeChange = (event, selectedTime) => {
     const currentTime = selectedTime || time;
+    const combinedDateTime = combineDateAndTime(date, currentTime);
+    if (combinedDateTime < new Date()) {
+      Alert.alert("Error", "Waktu tidak boleh sebelum waktu sekarang.");
+      setShowTimePicker(false);
+      return;
+    }
     setShowTimePicker(false);
     setTime(currentTime);
   };
 
-  function submitConfirm () {
-    addDoc(collection(db, "appointments"), {
-      vaccineType: vaccineType,
-      location: location,
-      date: date,
-      time: time,
-      parentName: parentName,
-      childName: childName,
-    }).then(() => {
-      console.log('Appointment added successfully');
-    }).catch((error) => {
-      console.error('Error adding appointment: ', error);
-    });
+  const combineDateAndTime = (date, time) => {
+    const combined = new Date(date);
+    combined.setHours(time.getHours());
+    combined.setMinutes(time.getMinutes());
+    combined.setSeconds(time.getSeconds());
+    return combined;
   };
+
+  const validateForm = () => {
+    if (!vaccineType || !location || !parentName || !childName) {
+      Alert.alert("Error", "Semua data harus diisi.");
+      return false;
+    }
+    const combinedDateTime = combineDateAndTime(date, time);
+    if (combinedDateTime < new Date()) {
+      Alert.alert("Error", "Tanggal dan waktu tidak boleh sebelum waktu sekarang.");
+      return false;
+    }
+    return true;
+  };
+
+  const submitConfirm = () => {
+    if (validateForm()) {
+      const combinedDateTime = combineDateAndTime(date, time);
+      addDoc(collection(db, "appointments"), {
+        vaccineType: vaccineType,
+        location: location,
+        dateTime: combinedDateTime,
+        parentName: parentName,
+        childName: childName,
+      }).then(() => {
+        console.log('Appointment added successfully');
+        setModalVisible(true);
+      }).catch((error) => {
+        console.error('Error adding appointment: ', error);
+      });
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <Text style={styles.greeting}>Halo, Douglas</Text>
@@ -57,12 +130,17 @@ const AppointmentForm = () => {
         <Text style={styles.title}>Buat Janji Baru</Text>
 
         <Text style={styles.label}>Jenis Vaksin</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Jenis Vaksin"
-          value={vaccineType}
-          onChangeText={setVaccineType}
-        />
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={vaccineType}
+            onValueChange={(itemValue, itemIndex) => setVaccineType(itemValue)}
+          >
+            <Picker.Item label="Pilih Jenis Vaksin" value="" />
+            {vaccineTypes.map((type, index) => (
+              <Picker.Item key={index} label={type} value={type} />
+            ))}
+          </Picker>
+        </View>
         
         <Text style={styles.label}>Pilih Lokasi Vaksinasi</Text>
         <View style={styles.pickerContainer}>
@@ -141,9 +219,30 @@ const AppointmentForm = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity style={styles.checkButton}>
+      <TouchableOpacity style={styles.checkButton} onPress={() => navigation.navigate('Screen_3')}>
         <Text style={styles.checkButtonText}>Cek Vaksin Terjadwalkan Disini</Text>
       </TouchableOpacity>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Janji berhasil dibuat!</Text>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -154,7 +253,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f0f8ff',
   },
-
   greeting: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -201,7 +299,6 @@ const styles = StyleSheet.create({
   TimeInput: {
     flex: 1,
   },
-
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -241,6 +338,46 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center',
     backgroundColor: '#fff',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+    width: 80,
+    borderRadius: 20,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
 

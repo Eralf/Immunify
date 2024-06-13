@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Button, TouchableOpacity, Image, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { db, collection, doc, getDocs } from '../firebasecfg';
+
+import { useProfiles } from '../ProfileContext';
+
+import ImageDisplay from '../ImageViewer';
 
 const English = require('../languages/English.json');
 
@@ -11,8 +16,8 @@ var bgImage = '../assets/mainprofile-bg.png';
 const pfp_main_temp = '../assets/pfp/mainpfptemp.png';
 const pfp_parent_temp = '../assets/pfp/parentpfptemp.jpg';
 
-var selectedProfile_index = 1;
-var parentProfile_index = 2;
+var selectedProfile_index = 0;
+var parentProfile_index = 0;
 
 const margin_outside = 17;
 const margin_inside = 12;
@@ -26,16 +31,96 @@ const br_bigCard = 10; // border radius
 
 const ProfileScreen = ({ route }) => {
 
-  const { profile } = route.params;
+  // const { profile } = route.params;
+
+  const { profiles } = useProfiles();
+
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [parentProfile, setParentProfile] = useState(null);
+  const [childrenProfiles, setChildrenProfiles] = useState([]);
+
+  useEffect(() => {
+    if (profiles && profiles.length > 0) {
+      const parent = profiles[parentProfile_index];
+      setParentProfile(parent);
+      fetchChildrenProfiles(parent.id);
+    }
+  }, [profiles]);
 
 
-  const [selectedProfile, setSelectedProfile] = useState(profile[selectedProfile_index]);
-  const [parentProfile, setParentProfile] = useState(profile[parentProfile_index]);
+  const fetchChildrenProfiles = async (parentId) => {
+    try {
+      const childrenCollectionRef = collection(db, 'profiles', parentId, 'children');
+      const childrenCollection = await getDocs(childrenCollectionRef);
+      const childrenData = childrenCollection.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setChildrenProfiles(childrenData);
+      if (childrenData.length > 0) {
+        setSelectedProfile(childrenData[selectedProfile_index]);
+      }
+    } catch (error) {
+      console.error("Error fetching children profiles: ", error);
+    }
+  };
+
+  if (!profiles || profiles.length === 0 || !selectedProfile || !parentProfile) {
+    return <Text>Loading...</Text>;
+  };
 
   var pfp_main = '../assets/pfp/' + selectedProfile.picture;
   var pfp_parent = '../assets/pfp/' + parentProfile.picture;
   // var pfp_main = pfp_main_temp;
   // var pfp_parent = pfp_parent_temp;
+
+
+  const calculateAge = (dob) => {
+    const today = new Date();
+    const birthDate = dob.toDate();
+    var years = today.getFullYear() - birthDate.getFullYear();
+    var months = today.getMonth() - birthDate.getMonth();
+    var days = today.getDate() - birthDate.getDate();
+
+    if (days < 0) {
+      months = months - 1;
+      days = days + daysInPreviousMonth(today.getMonth, today.getFullYear);
+    }
+    if (months < 0) {
+        years = years - 1;
+        months = months + 12;
+    }
+
+    if (years > 1) {
+      return `${years} years and ${months} months old`;
+    } else if (years === 1) {
+      return `${years} year and ${months} months old`;
+    } else if (years > 0) {
+      return `${months} months and ${days} days old`;
+    } else {
+      return `${days} days old`;
+    }
+  }
+  const daysInPreviousMonth = (month, year) => {
+    if (month == 2) {
+        if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0)
+            return 29; // Leap year
+        else
+            return 28;
+    }
+    else if ([1, 3, 5, 7, 8, 10, 12].includes(month)) {
+        return 31;
+    }
+    else {
+        return 30;
+    }
+  }
+
+  const getSex = (sex) => {
+    if(!sex)
+      return "Male";
+    return "Female";
+  }
 
   return (
     <View style={styles.container}>
@@ -86,7 +171,7 @@ const ProfileScreen = ({ route }) => {
             fontSize: 16,
             color: 'white',
           }}>
-            {English[0].sex[selectedProfile.sex]}
+            {getSex(selectedProfile)}
           </Text>
 
           <Text style={{
@@ -94,7 +179,7 @@ const ProfileScreen = ({ route }) => {
             fontSize: 16,
             color: 'white',
           }}>
-            7 Months
+            {calculateAge(selectedProfile.dob)}
           </Text>
 
           <Text style={{
@@ -193,7 +278,7 @@ const ProfileScreen = ({ route }) => {
               fontSize: 16,
               color: 'black',
             }}>
-              {English[0].sex[parentProfile.sex]}
+              {getSex(parentProfile.sex)}
             </Text>
 
             <Text style={{
@@ -201,7 +286,7 @@ const ProfileScreen = ({ route }) => {
               fontSize: 16,
               color: 'black',
             }}>
-              42 Years
+              {calculateAge(parentProfile.dob)}
             </Text>
 
             <Text style={{
