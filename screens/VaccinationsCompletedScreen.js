@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { ScrollView, View, Text, Button, TouchableOpacity, StyleSheet, Dimensions, useWindowDimensions, Modal} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Foundation } from '@expo/vector-icons';
-import { useCompletedAppointments } from '../CompletedAppointmentsContext';
+import { useViewAppointments } from '../ViewAppointmentsContext';
 import ImageDisplay from '../ImageViewer';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -14,7 +13,7 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
   const {fontScale} = useWindowDimensions();
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const {completedAppointments} = useCompletedAppointments();
+  const {viewAppointments} = useViewAppointments();
 
   const openModal = (appointment) =>{
     setSelectedAppointment(appointment);
@@ -45,7 +44,7 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-          {completedAppointments.map(appointment => {
+          {viewAppointments.map(appointment => {
             let appointmentDate;
           if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
             // Firestore Timestamp object
@@ -56,20 +55,22 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
           }
             const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
             {/* const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); */}
-                return (
-                  <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => openModal(appointment)}>
-                  <View style={styles.appointmentContainerGradient}></View>
-                      <View style={styles.appointmentLine}></View>
-                      <View style={styles.appointmentTextContainer}>
-                        <Text style={styles.appointmentText(fontScale)}>{appointment.childName}, {appointment.vaccineType}</Text>
-                      </View>
-                      {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
-                      <Text style={styles.appointmentText(fontScale)}>{formattedDate}</Text>
-                      <TouchableOpacity style={styles.infoIconContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType, notCompleted:false})}>
-                        <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
-                      </TouchableOpacity>
-                  </TouchableOpacity>
-                );
+                if(appointment.status === 'Selesai'){
+                  return (
+                    <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => openModal(appointment)}>
+                    <View style={styles.appointmentContainerGradient}></View>
+                        <View style={styles.appointmentLine}></View>
+                        <View style={styles.appointmentTextContainer}>
+                          <Text style={styles.appointmentText(fontScale)}>{appointment.name}, {appointment.vaccineType}</Text>
+                        </View>
+                        {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
+                        <Text style={styles.appointmentText(fontScale)}>{formattedDate}</Text>
+                        <TouchableOpacity style={styles.infoIconContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType, notCompleted:false})}>
+                          <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
+                        </TouchableOpacity>
+                    </TouchableOpacity>
+                  );
+                };
           })}
       </ScrollView>
       {selectedAppointment && (

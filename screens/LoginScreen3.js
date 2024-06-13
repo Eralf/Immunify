@@ -1,18 +1,41 @@
 import React,  { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions, ImageBackground} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions, ImageBackground, Alert} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Checkbox from 'expo-checkbox';
+import { collection } from 'firebase/firestore';
+import { db } from '../firebasecfg';
+import { useProfiles } from '../ProfilesContext';
 
 const dw = Dimensions.get('window').width;
 const dh = Dimensions.get('window').height;
 
 const RegisterScreen = ({ navigation, route }) => {
-  const [isChecked,setChecked] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const {profiles} = useProfiles();
+
+  const validateForm = () => {
+    if (!email || !password) {
+      Alert.alert("Error", "Semua data harus diisi.");
+      return false;
+    }
+    const sameProfile = profiles.filter(profile =>
+      profile.emailAddress === email && profile.password === password
+    );
+    if(sameProfile && sameProfile.length){
+      return true;
+    }
+    Alert.alert("Error", "Kredensial salah atau email belum terdaftar");
+    return false;
+  };
+
+  const submitConfirm = () => {
+    if (validateForm()) {
+      navigation.navigate('Home');
+    }
+  };
+
   return (
-    
-    
-
-
     <View style={styles.container}>
 
      <LinearGradient
@@ -36,10 +59,10 @@ const RegisterScreen = ({ navigation, route }) => {
         </View>
         
 
-        <TextInput placeholder="Enter Username or Email" style={styles.input} />
-        <TextInput placeholder="Enter password" style={styles.input} secureTextEntry />
+        <TextInput placeholder="Enter Username or Email" style={styles.input} value={email} onChangeText={setEmail}/>
+        <TextInput placeholder="Enter password" style={styles.input} secureTextEntry value={password} onChangeText={setPassword}/>
 
-        <TouchableOpacity style = {styles.buttonContainer} onPress={() => navigation.navigate('RegisterScreen')}>   
+        <TouchableOpacity style = {styles.buttonContainer} onPress={submitConfirm}>   
           <Text style = {styles.buttonText}>Masuk</Text>
         </TouchableOpacity>
         <Image source={require('../assets/cloud4.png')} style={styles.cloud4} />

@@ -18,9 +18,11 @@ const AppointmentListScreen = () => {
     setSelectedAppointment(null);
   };
 
-  const handleDelete = async (appointmentId) => {
-    await deleteAppointment(appointmentId);
-    closeModal();
+  const handleDelete = async () => {
+    if (selectedAppointment) {
+      await deleteAppointment(selectedAppointment.id);
+      closeModal();
+    }
   };
 
   return (
@@ -28,14 +30,13 @@ const AppointmentListScreen = () => {
       <Text style={styles.header}>Vaksin Terjadwalkan</Text>
       <ScrollView>
         {appointments.map(appointment => {
-          {/* console.log('Raw dateTime from Firestore:', appointment.dateTime); */}
           let appointmentDateTime;
           if (appointment.dateTime && typeof appointment.dateTime === 'object' && 'seconds' in appointment.dateTime) {
             appointmentDateTime = new Date(appointment.dateTime.seconds * 1000);
           } else {
             appointmentDateTime = new Date(appointment.dateTime);
           }
-          {/* console.log('Parsed Date:', appointmentDateTime); */}
+
           const formattedDate = appointmentDateTime.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
           const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -97,7 +98,7 @@ const AppointmentListScreen = () => {
               </View>
 
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => handleDelete(selectedAppointment.id)}>
+                <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleDelete}>
                   <Text style={styles.buttonText}>Batalkan</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={closeModal}>
