@@ -34,8 +34,7 @@ const AppointmentForm = () => {
     "RS EKA Hospital",
     "RS Harapan Kita",
     "RS Dharmais",
-];
-
+  ];
 
   const vaccineTypes = [
     "COVID-19",
@@ -57,8 +56,7 @@ const AppointmentForm = () => {
     "Japanese Encephalitis",
     "Typhoid",
     "Cholera",
-];
-
+  ];
 
   const onDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -105,21 +103,35 @@ const AppointmentForm = () => {
     return true;
   };
 
-  const submitConfirm = () => {
+  const submitConfirm = (profileId, childId) => {
     if (validateForm()) {
       const combinedDateTime = combineDateAndTime(date, time);
-      addDoc(collection(db, "appointments"), {
+      const appointmentData = {
         vaccineType: vaccineType,
         location: location,
         dateTime: combinedDateTime,
         parentName: parentName,
         childName: childName,
-      }).then(() => {
-        console.log('Appointment added successfully');
-        setModalVisible(true);
-      }).catch((error) => {
-        console.error('Error adding appointment: ', error);
-      });
+      };
+
+      // Add to child -> appointments collection
+      addDoc(collection(db, 'profiles', profileId, 'child', childId, 'appointments'), appointmentData)
+        .then(() => {
+          console.log('Appointment added to child appointments successfully');
+        })
+        .catch((error) => {
+          console.error('Error adding appointment to child appointments: ', error);
+        });
+
+      // Add to allappointments collection
+      addDoc(collection(db, 'profiles', profileId, 'allAppointment'), appointmentData)
+        .then(() => {
+          console.log('Appointment added to allappointments successfully');
+          setModalVisible(true);
+        })
+        .catch((error) => {
+          console.error('Error adding appointment to allappointments: ', error);
+        });
     }
   };
 
@@ -214,10 +226,14 @@ const AppointmentForm = () => {
         />
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.confirmButton} onPress={submitConfirm}>
+          <TouchableOpacity
+            style={styles.confirmButton}
+            onPress={() => submitConfirm('profileIdExample', 'childIdExample')}
+          >
             <Text style={styles.confirmButtonText}>Konfirmasi</Text>
           </TouchableOpacity>
         </View>
+
       </View>
       <TouchableOpacity style={styles.checkButton} onPress={() => navigation.navigate('Screen_3')}>
         <Text style={styles.checkButtonText}>Cek Vaksin Terjadwalkan Disini</Text>
