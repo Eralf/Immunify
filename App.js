@@ -26,6 +26,7 @@ import NavBar from './components/NavBar';
 import { AppointmentsProvider } from './AppointmentsContext'; // Import the AppointmentsProvider
 import { CompletedAppointmentsProvider } from './CompletedAppointmentsContext';
 import { MissedAppointmentsProvider } from './MissedAppointmentsContext';
+import { ProfilesProvider } from './ProfilesContext';
 import {ImageViewer} from './ImageViewer';
 import HomeScreenTemporarily from './screens/HomeScreenTemporarily';
 
@@ -79,6 +80,7 @@ export default function App() {
   const profiles = require(profiles_dir);
 
   return (
+    <ProfilesProvider>
     <AppointmentsProvider>
     <CompletedAppointmentsProvider>
     <MissedAppointmentsProvider>
@@ -148,17 +150,17 @@ export default function App() {
           name='EnterScreen'
           component={EnterScreen}
           options={{
-            title: ' Halo, Dominick',
+            title: '',
             headerBackVisible: false,
-            headerLeft: () => (
-              <Image
-                source={require('./assets/parentpfptemp.jpg')}
-                style={styles.profPict}
-              />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
-            ),
+            // headerLeft: () => (
+            //   <Image
+            //     source={require('./assets/parentpfptemp.jpg')}
+            //     style={styles.profPict}
+            //   />
+            // ), 
+            // headerRight:() => (
+            //   <Ionicons name="settings" size={24} color="black" />
+            // ),
             animation:'fade',
           }}
           initialParams={{ profile: profiles }}
@@ -360,6 +362,7 @@ export default function App() {
     </MissedAppointmentsProvider>
     </CompletedAppointmentsProvider>
     </AppointmentsProvider>
+    </ProfilesProvider>
   );
 }
 

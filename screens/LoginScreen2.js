@@ -1,13 +1,60 @@
 import React,  { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions, Alert, Modal} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Checkbox from 'expo-checkbox';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../firebasecfg';
+import { useProfiles } from '../ProfilesContext';
 
 const dw = Dimensions.get('window').width;
 const dh = Dimensions.get('window').height;
 
 const RegisterScreen = ({ navigation, route }) => {
   const [isChecked,setChecked] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const {profiles} = useProfiles();
+  // const [modalVisible, setModalVisible] = useState(false);
+
+  const validateForm = () => {
+    if (!name || !email || !password) {
+      Alert.alert("Error", "Semua data harus diisi.");
+      return false;
+    }
+    if(!isChecked){
+      Alert.alert("Error", "Anda harus setuju dengan Syarat dan Ketentuan yang berlaku");
+      return false;
+    }
+    // Alert.alert("Error", "Email sudah terdaftar. Silahkan menuju ke Login page");
+    console.log(profiles);
+    const sameProfile = profiles.filter(profile =>
+      profile.emailAddress === email
+    );
+    console.log(sameProfile);
+    if(sameProfile && sameProfile.length){
+      Alert.alert("Error", "Email sudah terdaftar. Silahkan menuju ke Login page");
+      return false;
+    }
+    return true;
+  };
+
+  const submitConfirm = () => {
+    if (validateForm()) {
+      addDoc(collection(db, "profiles"), {
+        emailAddress: email,
+        name: name,
+        password: password,
+        profilePictureFile: "gs://immunify-5c493.appspot.com/images/profilePictures/parentPFP/default_PFP.jpg",
+      }).then(() => {
+        navigation.navigate('Home');
+        console.log('Profile added successfully');
+      }).catch((error) => {
+        console.error('Error adding appointment: ', error);
+      });
+    }
+  };
+
   return (
     
     <View style={styles.container}>
@@ -32,16 +79,16 @@ const RegisterScreen = ({ navigation, route }) => {
         </View>
         
 
-        <TextInput placeholder="Enter your name" style={styles.input} />
-        <TextInput placeholder="Enter Email" style={styles.input} />
-        <TextInput placeholder="Enter password" style={styles.input} secureTextEntry />
+        <TextInput placeholder="Enter your name" style={styles.input} value={name} onChangeText={setName}/>
+        <TextInput placeholder="Enter Email" style={styles.input} value={email} onChangeText={setEmail}/>
+        <TextInput placeholder="Enter password" style={styles.input} secureTextEntry value={password} onChangeText={setPassword}/>
 
         <View style={styles.checkboxContainer}>
           <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked}/>
           <Text style={styles.checkboxText}>Saya setuju dengan Syarat dan Ketentuan yang berlaku</Text>
         </View>
 
-        <TouchableOpacity style = {styles.buttonContainer} onPress={() => navigation.navigate('RegisterScreen')}>   
+        <TouchableOpacity style = {styles.buttonContainer} onPress={submitConfirm}>   
           <Text style = {styles.buttonText}>Daftar</Text>
         </TouchableOpacity>
 
