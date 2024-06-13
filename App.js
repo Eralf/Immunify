@@ -27,8 +27,11 @@ import { AppointmentsProvider } from './AppointmentsContext'; // Import the Appo
 import { CompletedAppointmentsProvider } from './CompletedAppointmentsContext';
 import { MissedAppointmentsProvider } from './MissedAppointmentsContext';
 import { ProfilesProvider } from './ProfilesContext';
+import { UserProvider } from './UserContext';
+import { ChildProvider } from './ChildContext';
 import {ImageViewer} from './ImageViewer';
 import HomeScreenTemporarily from './screens/HomeScreenTemporarily';
+import { ViewAppointmentsProvider } from './ViewAppointmentsContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -75,19 +78,20 @@ export default function App() {
     if (!fontsLoaded) {
       return null;
   }
-
+  // const parentID = 'P5d9T710ztSinYGg9k9a';
+  // const childID = '7IzFkFYdUYARwHemOmuV';
 
   const profiles = require(profiles_dir);
 
   return (
+    <UserProvider initialUserID={'P5d9T710ztSinYGg9k9a'}>
+    <ChildProvider initialChildID={'7IzFkFYdUYARwHemOmuV'}>
     <ProfilesProvider>
     <AppointmentsProvider>
+    <ViewAppointmentsProvider>
     <CompletedAppointmentsProvider>
     <MissedAppointmentsProvider>
     <NavigationContainer>
-      {/* <View>
-        <ImageViewer path={"immunify-5c493.appspot.com/sertifikat_polio.png"}/>
-      </View> */}
       <Stack.Navigator >
 
         <Stack.Screen
@@ -361,8 +365,11 @@ export default function App() {
     </NavigationContainer>
     </MissedAppointmentsProvider>
     </CompletedAppointmentsProvider>
+    </ViewAppointmentsProvider>
     </AppointmentsProvider>
     </ProfilesProvider>
+    </ChildProvider>
+    </UserProvider>
   );
 }
 
