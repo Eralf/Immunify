@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useFonts } from 'expo-font';
+import { useFonts } from 'expo-font'
+import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import * as SplashScreen from 'expo-splash-screen';
+
 
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
@@ -25,17 +29,54 @@ const Stack = createNativeStackNavigator();
 var selectedProfile = 1;
 var profiles_dir = './profiles.json';
 
+
 export default function App() {
-  let [fontsLoaded] = useFonts({
-    'NunitoSans-Light': require('./assets/fonts/NunitoSans_10pt-Light.ttf'),
-    'NunitoSans-Regular': require('./assets/fonts/NunitoSans_10pt-Regular.ttf'),
-    'NunitoSans-Medium': require('./assets/fonts/NunitoSans_10pt-Medium.ttf'),
-    'NunitoSans-SemiBold': require('./assets/fonts/NunitoSans_10pt-SemiBold.ttf'),
-    'NunitoSans-Bold': require('./assets/fonts/NunitoSans_10pt-Bold.ttf'),
-    'NunitoSans-ExtraBold': require('./assets/fonts/NunitoSans_10pt-ExtraBold.ttf'),
-    'NunitoSans-Black': require('./assets/fonts/NunitoSans_10pt-Black.ttf'),
-    'NunitoSans-Italic': require('./assets/fonts/NunitoSans_10pt-Italic.ttf'),
-  });
+  // let [fontsLoaded] = useFonts({
+  //   'NunitoSans-Light': require('./assets/fonts/NunitoSans_10pt-Light.ttf'),
+  //   'NunitoSans-Regular': require('./assets/fonts/NunitoSans_10pt-Regular.ttf'),
+  //   'NunitoSans-Medium': require('./assets/fonts/NunitoSans_10pt-Medium.ttf'),
+  //   'NunitoSans-SemiBold': require('./assets/fonts/NunitoSans_10pt-SemiBold.ttf'),
+  //   'NunitoSans-Bold': require('./assets/fonts/NunitoSans_10pt-Bold.ttf'),
+  //   'NunitoSans-ExtraBold': require('./assets/fonts/NunitoSans_10pt-ExtraBold.ttf'),
+  //   'NunitoSans-Black': require('./assets/fonts/NunitoSans_10pt-Black.ttf'),
+  //   'NunitoSans-Italic': require('./assets/fonts/NunitoSans_10pt-Italic.ttf'),
+  // });
+  // if (!fontsLoaded) {
+  //   return <AppLoading />;
+  // }
+
+
+
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    async function loadResourcesAndDataAsync() {
+      try {
+        await Font.loadAsync({
+            'NunitoSans-Light': require('./assets/fonts/NunitoSans_10pt-Light.ttf'),
+            'NunitoSans-Regular': require('./assets/fonts/NunitoSans_10pt-Regular.ttf'),
+            'NunitoSans-Medium': require('./assets/fonts/NunitoSans_10pt-Medium.ttf'),
+            'NunitoSans-SemiBold': require('./assets/fonts/NunitoSans_10pt-SemiBold.ttf'),
+            'NunitoSans-Bold': require('./assets/fonts/NunitoSans_10pt-Bold.ttf'),
+            'NunitoSans-ExtraBold': require('./assets/fonts/NunitoSans_10pt-ExtraBold.ttf'),
+            'NunitoSans-Black': require('./assets/fonts/NunitoSans_10pt-Black.ttf'),
+            'NunitoSans-Italic': require('./assets/fonts/NunitoSans_10pt-Italic.ttf'),
+        });
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setFontsLoaded(true);
+        await SplashScreen.hideAsync();
+      }
+    }
+
+    loadResourcesAndDataAsync();
+  }, []);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
 
   const profiles = require(profiles_dir);
 
@@ -53,7 +94,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -77,7 +118,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -96,7 +137,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -116,7 +157,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -135,7 +176,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -153,7 +194,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -171,7 +212,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -189,7 +230,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -207,7 +248,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -225,7 +266,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -243,7 +284,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 

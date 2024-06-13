@@ -4,7 +4,7 @@
 	  "age": ["Day(s)", "Month(s)", "Year(s)"],
 
 	  "your_account": "Your Account",
-	  "main_parent": "Main (Parent)",
+	  "parent": "Parent",
 	  "children": "Children"
 	}
   ]
