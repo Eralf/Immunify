@@ -3,6 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Animated, Refresh
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCompletedAppointments } from '../CompletedAppointmentsContext';
 import { useMissedAppointments } from '../MissedAppointmentsContext';
+import { useViewAppointments } from '../ViewAppointmentsContext';
 
 const AnnouncementsScreen = ({ navigation, route }) => {
   const [selectedMenu, setSelectedMenu] = useState("semua");
@@ -10,12 +11,13 @@ const AnnouncementsScreen = ({ navigation, route }) => {
   const animations = {
     semua: useRef(new Animated.Value(0)).current,
     mendatang: useRef(new Animated.Value(0)).current,
+    berlangsung: useRef(new Animated.Value(0)).current,
     terlewatkan: useRef(new Animated.Value(0)).current,
     selesai: useRef(new Animated.Value(0)).current,
   };
   const { completedAppointments } = useCompletedAppointments();
   const { missedAppointments } = useMissedAppointments();
-
+  const {viewAppointments} = useViewAppointments();
   useEffect(() => {
     Object.keys(animations).forEach(menu => {
       Animated.timing(animations[menu], {
@@ -34,16 +36,16 @@ const AnnouncementsScreen = ({ navigation, route }) => {
     return appointments.sort((a, b) => {
       let dateA, dateB;
 
-      if (a.date && typeof a.date === 'object' && 'seconds' in a.date) {
-        dateA = new Date(a.date.seconds * 1000);
+      if (a.announcementDate && typeof a.announcementDate === 'object' && 'seconds' in a.announcementDate) {
+        dateA = new Date(a.announcementDate.seconds * 1000);
       } else {
-        dateA = new Date(a.date);
+        dateA = new Date(a.announcementDate);
       }
 
-      if (b.date && typeof b.date === 'object' && 'seconds' in b.date) {
-        dateB = new Date(b.date.seconds * 1000);
+      if (b.announcementDate && typeof b.announcementDate === 'object' && 'seconds' in b.announcementDate) {
+        dateB = new Date(b.announcementDate.seconds * 1000);
       } else {
-        dateB = new Date(b.date);
+        dateB = new Date(b.announcementDate);
       }
 
       return dateB - dateA; // Sort in descending order
@@ -77,7 +79,7 @@ const AnnouncementsScreen = ({ navigation, route }) => {
   const sortedCompletedAppointments = sortAppointmentsByDate(completedAppointments);
   const sortedMissedAppointments = sortAppointmentsByDate(missedAppointments);
   const combinedAppointments = [...completedAppointments, ...missedAppointments];
-  const sortedCombinedAppointments = sortAppointmentsByDate(combinedAppointments);
+  const sortedCombinedAppointments = sortAppointmentsByDate(viewAppointments);
 
   const onRefresh = () => {
     setIsRefreshing(true);
@@ -87,6 +89,7 @@ const AnnouncementsScreen = ({ navigation, route }) => {
     }, 2000); // Simulating a delay of 2 seconds for refreshing
   };
 
+  
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.text}>Notifikasi</Text>
@@ -94,7 +97,7 @@ const AnnouncementsScreen = ({ navigation, route }) => {
       <View style={styles.navigatesContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.navigates}>
-            {["semua", "mendatang", "terlewatkan", "selesai"].map(menu => (
+            {["semua", "mendatang","berlangsung", "terlewatkan", "selesai"].map(menu => (
               <TouchableOpacity key={menu} onPress={() => handleMenuClick(menu)}>
                 <View style={styles.menuItem}>
                   <Text style={styles.navigatesText}>
@@ -113,90 +116,225 @@ const AnnouncementsScreen = ({ navigation, route }) => {
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} /> // Attach RefreshControl
         }>
         {selectedMenu == "semua" &&
-          sortedCombinedAppointments.map(appointment => {
-            let appointmentDate;
-            if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
-              appointmentDate = new Date(appointment.date.seconds * 1000);
-            } else {
-              appointmentDate = new Date(appointment.date);
-            }
-            const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-            return (
-              <React.Fragment key={appointment.id}>
-                <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
+        sortedCombinedAppointments.map(appointment => {
+          let appointmentDate;
+        if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
+          // Firestore Timestamp object
+          appointmentDate = new Date(appointment.date.seconds * 1000);
+        } else {
+          // Attempt to parse it directly
+          appointmentDate = new Date(appointment.date);
+        }
+        const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        if(appointment.status === 'Terlewatkan' || appointment.status === 'Selesai' || appointment.status === 'Mendatang' || appointment.status === 'Berlangsung'){
+          return (
+            <React.Fragment key={appointment.id}>
+                <TouchableOpacity style={styles.wrapAnnounce} onPress={() => {
+                  if (appointment.status === 'Selesai') {
+                    navigation.navigate('VaccinationsCompleted');
+                  } else if (appointment.status === 'Terlewatkan') {
+                    navigation.navigate('Appointment');
+                  } else if (appointment.status === 'Berlangsung'){
+                    // Optionally handle other statuses or show a message
+                    navigation.navigate('VaccinationsOnGoing')
+                  }
+                  else if (appointment.status === 'Mendatang'){
+                    // Optionally handle other statuses or show a message
+                    navigation.navigate('VaccinationsUpcoming')
+                  }
+                }}>
                   <View style={styles.wrapStatus}>
-                    <View style={appointment.status === 'Selesai' ? styles.selesai : styles.terlewatkan}>
+                    <View style={appointment.status === 'Selesai' ? styles.selesai : appointment.status === 'Terlewatkan' ? styles.terlewatkan : appointment.status === 'Mendatang' ? styles.mendatang: styles.berlangsung}>
                       <Text>{appointment.status}</Text>
                     </View>
                     <View style={styles.redDot}></View>
                   </View>
                   <View style={styles.wrapInfoTime}>
-                    <Text style={styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin {appointment.vaccineType}. <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>
-                    <Text style={styles.time}>{calculateTimeDifference(appointment.date)}</Text>
+                    {appointment.status === 'Terlewatkan' && <Text style={styles.information}>Anda melewatkan vaksin {appointment.vaccineType} Tanggal {formattedDate}. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>}
+                    {appointment.status === 'Selesai' &&<Text style={styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin {appointment.vaccineType}. <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>}
+                    {appointment.status === 'Berlangsung' && <Text style={styles.information}>Anda telah membuat janji untuk vaksin {appointment.vaccineType} pada Tanggal {formattedDate}. <Text style={styles.boldText}>Klik untuk Cek!</Text></Text>}
+                    {/* Anda perlu mengambil vaksin C pada Tanggal 18 Oktober 2050. Klik untuk Cek! */}
+                    {appointment.status === 'Mendatang' && <Text style={styles.information}>Anda perlu mengambil vaksin {appointment.vaccineType} pada Tanggal {formattedDate}. <Text style={styles.boldText}>Klik untuk Cek!</Text></Text>}
+                    <Text style={styles.time}>{calculateTimeDifference(appointment.announcementDate)}</Text>
                   </View>
                 </TouchableOpacity>
                 <View style={styles.horizontalLine}></View>
               </React.Fragment>
-            );
-          })
+          );
+        };
+      })
+          // sortedCombinedAppointments.map(appointment => {
+          //   let appointmentDate;
+          //   if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
+          //     appointmentDate = new Date(appointment.date.seconds * 1000);
+          //   } else {
+          //     appointmentDate = new Date(appointment.date);
+          //   }
+          //   const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+          //   return (
+              // <React.Fragment key={appointment.id}>
+              //   <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
+              //     <View style={styles.wrapStatus}>
+              //       <View style={appointment.status === 'Selesai' ? styles.selesai : appointment.status === 'Terlewatkan' ? styles.terlewatkan : appointment.status === 'Mendatang' ? styles.mendatang: ''}>
+              //         <Text>{appointment.status}</Text>
+              //       </View>
+              //       <View style={styles.redDot}></View>
+              //     </View>
+              //     <View style={styles.wrapInfoTime}>
+              //       {appointment.status === 'Terlewatkan' && <Text style={styles.information}>Anda melewatkan vaksin {appointment.vaccineType} Tanggal {formattedDate}. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>}
+              //       {appointment.status === 'Selesai' &&<Text style={styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin {appointment.vaccineType}. <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>}
+              //       <Text style={styles.time}>{calculateTimeDifference(appointment.date)}</Text>
+              //     </View>
+              //   </TouchableOpacity>
+              //   <View style={styles.horizontalLine}></View>
+              // </React.Fragment>
+          //   );
+          // })
         }
-        {selectedMenu == "selesai" &&
-          sortedCompletedAppointments.map(appointment => {
+
+        {selectedMenu == "selesai" && sortedCombinedAppointments.map(appointment => {
             let appointmentDate;
+          if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
+            // Firestore Timestamp object
+            appointmentDate = new Date(appointment.date.seconds * 1000);
+          } else {
+            // Attempt to parse it directly
+            appointmentDate = new Date(appointment.date);
+          }
+            const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            {/* const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); */}
+                if(appointment.status === 'Selesai'){
+                  return (
+                    <React.Fragment key={appointment.id}>
+                      <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
+                        <View style={styles.wrapStatus}>
+                          <View style={styles.selesai}>
+                            <Text>{appointment.status}</Text>
+                          </View>
+                          <View style={styles.redDot}></View>
+                        </View>
+                        <View style={styles.wrapInfoTime}>
+                          <Text style={styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin {appointment.vaccineType}. <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>
+                          <Text style={styles.time}>{calculateTimeDifference(appointment.announcementDate)}</Text>
+                        </View>
+                      </TouchableOpacity>
+                      <View style={styles.horizontalLine}></View>
+                    </React.Fragment>
+                    // <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => openModal(appointment)}>
+                    // <View style={styles.appointmentContainerGradient}></View>
+                    //     <View style={styles.appointmentLine}></View>
+                    //     <View style={styles.appointmentTextContainer}>
+                    //       <Text style={styles.appointmentText(fontScale)}>{appointment.name}, {appointment.vaccineType}</Text>
+                    //     </View>
+                    //     {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
+                    //     <Text style={styles.appointmentText(fontScale)}>{formattedDate}</Text>
+                    //     <TouchableOpacity style={styles.infoIconContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType, notCompleted:false})}>
+                    //       <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
+                    //     </TouchableOpacity>
+                    // </TouchableOpacity>
+                  );
+                };
+          })}
+
+
+        {selectedMenu == "terlewatkan" && sortedCombinedAppointments.map(appointment => {
+              let appointmentDate;
             if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
+              // Firestore Timestamp object
               appointmentDate = new Date(appointment.date.seconds * 1000);
             } else {
+              // Attempt to parse it directly
               appointmentDate = new Date(appointment.date);
             }
             const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-            return (
-              <React.Fragment key={appointment.id}>
-                <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
-                  <View style={styles.wrapStatus}>
-                    <View style={styles.selesai}>
-                      <Text>{appointment.status}</Text>
+            if(appointment.status === 'Terlewatkan'){
+              return (
+                <React.Fragment key={appointment.id}>
+                  <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('Appointment')}>
+                    <View style={styles.wrapStatus}>
+                      <View style={styles.terlewatkan}>
+                        <Text>{appointment.status}</Text>
+                      </View>
+                      <View style={styles.redDot}></View>
                     </View>
-                    <View style={styles.redDot}></View>
-                  </View>
-                  <View style={styles.wrapInfoTime}>
-                    <Text style={styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin {appointment.vaccineType}. <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>
-                    <Text style={styles.time}>{calculateTimeDifference(appointment.date)}</Text>
-                  </View>
-                </TouchableOpacity>
-                <View style={styles.horizontalLine}></View>
-              </React.Fragment>
-            );
-          })
-        }
-        {selectedMenu == "terlewatkan" &&
-          sortedMissedAppointments.map(appointment => {
-            let appointmentDate;
+                    <View style={styles.wrapInfoTime}>
+                      
+                      <Text style={styles.information}>Anda melewatkan vaksin {appointment.vaccineType} Tanggal {formattedDate}. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>
+                      <Text style={styles.time}> {calculateTimeDifference(appointment.date)}</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <View style={styles.horizontalLine}></View>
+                </React.Fragment>
+                
+              );
+            };
+          })}
+        {selectedMenu == "mendatang" && sortedCombinedAppointments.map(appointment => {
+              let appointmentDate;
             if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
+              // Firestore Timestamp object
               appointmentDate = new Date(appointment.date.seconds * 1000);
             } else {
+              // Attempt to parse it directly
               appointmentDate = new Date(appointment.date);
             }
             const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-            return (
-              <React.Fragment key={appointment.id}>
-                <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('Appointment')}>
-                  <View style={styles.wrapStatus}>
-                    <View style={styles.terlewatkan}>
-                      <Text>{appointment.status}</Text>
+            if(appointment.status === 'Mendatang'){
+              return (
+                <React.Fragment key={appointment.id}>
+                  <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsUpcoming')}>
+                    <View style={styles.wrapStatus}>
+                      <View style={styles.mendatang}>
+                        <Text>{appointment.status}</Text>
+                      </View>
+                      <View style={styles.redDot}></View>
                     </View>
-                    <View style={styles.redDot}></View>
-                  </View>
-                  <View style={styles.wrapInfoTime}>
-                    <Text style={styles.information}>Anda melewatkan vaksin {appointment.vaccineType} Tanggal {formattedDate}. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>
-                    <Text style={styles.time}> {calculateTimeDifference(appointment.date)}</Text>
-                  </View>
-                </TouchableOpacity>
-                <View style={styles.horizontalLine}></View>
-              </React.Fragment>
-            );
-          })
-        }
-        <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsMissed')}>
+                    <View style={styles.wrapInfoTime}>
+                    {/* Anda perlu mengambil vaksin C pada Tanggal 18 Oktober 2050. Klik untuk Cek! */}
+                      <Text style={styles.information}>Anda perlu mengambil vaksin {appointment.vaccineType} pada Tanggal {formattedDate}. <Text style={styles.boldText}>Klik untuk Cek!</Text></Text>
+                      <Text style={styles.time}> {calculateTimeDifference(appointment.announcementDate)}</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <View style={styles.horizontalLine}></View>
+                </React.Fragment>
+                
+              );
+            };
+          })}
+        {selectedMenu == "berlangsung" && sortedCombinedAppointments.map(appointment => {
+              let appointmentDate;
+            if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
+              // Firestore Timestamp object
+              appointmentDate = new Date(appointment.date.seconds * 1000);
+            } else {
+              // Attempt to parse it directly
+              appointmentDate = new Date(appointment.date);
+            }
+            const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            if(appointment.status === 'Berlangsung'){
+              return (
+                <React.Fragment key={appointment.id}>
+                  <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsOnGoing')}>
+                    <View style={styles.wrapStatus}>
+                      <View style={styles.berlangsung}>
+                        <Text>{appointment.status}</Text>
+                      </View>
+                      <View style={styles.redDot}></View>
+                    </View>
+                    <View style={styles.wrapInfoTime}>
+                    {/* Anda perlu mengambil vaksin C pada Tanggal 18 Oktober 2050. Klik untuk Cek! */}
+                    {/* Anda telah membuat janji untuk vaksin C Tahap Pertama pada Tanggal 20 September 2050. Klik untuk Cek ! */}
+                      <Text style={styles.information}>Anda telah membuat janji untuk vaksin {appointment.vaccineType} pada Tanggal {formattedDate}. <Text style={styles.boldText}>Klik untuk Cek!</Text></Text>
+                      <Text style={styles.time}> {calculateTimeDifference(appointment.announcementDate)}</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <View style={styles.horizontalLine}></View>
+                </React.Fragment>
+                
+              );
+            };
+          })}
+        {/* <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsMissed')}>
           <View style={styles.wrapStatus}>
             <View style={styles.terlewatkan}>
               <Text>Terlewatkan</Text>
@@ -250,7 +388,7 @@ const AnnouncementsScreen = ({ navigation, route }) => {
             <Text style={styles.time}> 1h</Text>
           </View>
         </TouchableOpacity>
-        <View style={styles.horizontalLine}></View>
+        <View style={styles.horizontalLine}></View> */}
       </ScrollView>
     </SafeAreaView>
   );
@@ -258,7 +396,8 @@ const AnnouncementsScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor:'white'
   },
   text: {
     fontSize: 24,
@@ -271,13 +410,14 @@ const styles = StyleSheet.create({
     borderBottomColor: '#D5D5D5',
     borderBottomWidth: 1,
     width: '100%',
-    marginBottom: 16,
+    // marginBottom: 16,
   },
   navigates: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginLeft: 20,
     marginRight: 20,
+    paddingTop: 16
   },
   navigatesText: {
     fontFamily: 'NunitoSans-Regular',
@@ -339,8 +479,9 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   wrapAnnounce: {
-    marginHorizontal: 20,
-    marginBottom: 16
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor:'#D5D5D5'
   },
   wrapStatus: {
     flexDirection: 'row',
