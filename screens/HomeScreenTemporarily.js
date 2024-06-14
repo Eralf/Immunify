@@ -82,7 +82,7 @@ const HomeScreenTemporarily = () => {
             </View>
             <View style={{justifyContent:'center'}}>
               <Text style={{fontFamily: 'NunitoSans-Regular', fontSize: 17}}>Mau Daftar Vaksin?</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('EnterScreen')} style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10}}>
+              <TouchableOpacity onPress={() => navigation.navigate('Appointment')} style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10}}>
                 <Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular', fontSize:17}}>Daftar Disini!</Text>
                 </TouchableOpacity>
             </View>
