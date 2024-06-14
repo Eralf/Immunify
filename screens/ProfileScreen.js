@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Button, TouchableOpacity, Image, StyleSheet, Dimensions, ScrollView, TextInput, Modal, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { db, collection, doc, getDocs } from '../firebasecfg';
+import { db, collection, doc, getDocs, storage } from '../firebasecfg';
 import { addDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-picker/picker';
 
 import { useProfiles } from '../ProfilesContext';
 // import { useSelectedProfile } from '../SelectedProfileContext';
@@ -56,11 +59,70 @@ const ProfileScreen = ({ route }) => {
   const [childPicture, setChildPicture] = useState(false);
   const [children, setChildren] = useState([]);
 
+  const [imageUri, setImageUri] = useState(null);
+  const [uploading, setUploading] = useState(null);
   
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   
   const navigation = useNavigation();
+
+  const requestPermissions = async () => {
+    const { status: mediaLibraryStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (mediaLibraryStatus !== 'granted' || cameraStatus !== 'granted') {
+      Alert.alert('Permissions required', 'You need to grant camera and storage permissions to select or take an image.');
+      return false;
+    }
+    return true;
+  };
+
+  const selectImage = async () => {
+    const hasPermission = await requestPermissions();
+    if (!hasPermission) {
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
+
+  const uploadImage = async () => {
+    if (!imageUri) return;
+
+    setUploading(true);
+
+    const response = await fetch(imageUri);
+    const blob = await response.blob();
+    const filename = childName+'_'+childNIK+'_PFP';
+
+    const storageRef = ref(storage, `images/profilePictures/childPFP/${filename}`);
+    uploadBytes(storageRef, blob)
+      .then(snapshot => {
+        return getDownloadURL(snapshot.ref);
+      })
+      .then(downloadURL => {
+        console.log('File available at', downloadURL);
+        // Alert.alert('Success', 'Image uploaded successfully');
+        setImageUri(null);
+      })
+      .catch(error => {
+        console.error('Upload failed', error);
+        Alert.alert('Error', 'Image upload failed');
+      })
+      .finally(() => {
+        setUploading(false);
+      });
+  };
 
   const handleAddChild = async () => {
     if (childName && childDOB) {
@@ -73,19 +135,21 @@ const ProfileScreen = ({ route }) => {
     } else {
       
     }
-
-    addDoc(collection(db, "profiles", parentProfile.id, "child"), {
-      name: childName,
-      picture: childPicture,
-      dob:childDOB,
-      sex:childGender,
-      nik:childNIK,
-    }).then(() => {
-      navigation.navigate('Profile');
-      console.log('Profile added successfully');
-    }).catch((error) => {
-      console.error('Error adding child: ', error);
-    });
+    uploadImage();
+    if(!uploading){
+      addDoc(collection(db, "profiles", parentProfile.id, "child"), {
+        name: childName,
+        picture: 'gs://immunify-5c493.appspot.com/images/profilePictures/childPFP/'+childName+'_'+childNIK+'_PFP',
+        dob:childDOB,
+        sex:childGender,
+        nik:childNIK,
+      }).then(() => {
+        navigation.navigate('Profile');
+        console.log('Profile added successfully');
+      }).catch((error) => {
+        console.error('Error adding child: ', error);
+      });
+    }
 
 
 
@@ -447,13 +511,6 @@ const ProfileScreen = ({ route }) => {
 
           </View>
 
-
-
-
-
-
-
-
         </View>
 
             
@@ -619,11 +676,26 @@ const ProfileScreen = ({ route }) => {
                 )}
 
 
-
-                <TextInput
-                  placeholder="Child's Gender"
-                  value={childGender}
-                  onChangeText={setChildGender}
+                <View style={{
+                  overflow:'hidden',
+                  height: 40,
+                  borderColor: 'gray',
+                  borderWidth: 1,
+                  marginBottom: 10,
+                  paddingLeft: 8,
+                  width: 200,
+                }}>
+                <Picker
+                    selectedValue={childGender}
+                    onValueChange={(itemValue) => setChildGender(itemValue)}
+                    itemStyle={{fontSize: 5}}
+                  >
+                    <Picker.Item label="Laki-laki" value={false}/>
+                    <Picker.Item label="Perempuan" value={true}/>
+                  </Picker>
+                </View>
+                <TouchableOpacity
+                  onPress={selectImage}
                   style={{
                     height: 40,
                     borderColor: 'gray',
@@ -633,21 +705,9 @@ const ProfileScreen = ({ route }) => {
                     width: 200,
                   }}
                   // keyboardType="numeric"
-                />
-                <TextInput
-                  placeholder="Child's Picture"
-                  value={childPicture}
-                  onChangeText={setChildPicture}
-                  style={{
-                    height: 40,
-                    borderColor: 'gray',
-                    borderWidth: 1,
-                    marginBottom: 10,
-                    paddingLeft: 8,
-                    width: 200,
-                  }}
-                  // keyboardType="numeric"
-                />
+                >
+                  <Text>Pilih Foto Profil</Text>
+                </TouchableOpacity>
                 <TextInput
                   placeholder="Child's NIK"
                   value={childNIK}
