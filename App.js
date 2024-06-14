@@ -6,6 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import ImageDisplay from './ImageViewer';
 
 import HomeScreenTemporarily from './screens/HomeScreenTemporarily';
 import ProfileScreen from './screens/ProfileScreen';
@@ -32,6 +33,301 @@ import { ViewAppointmentsProvider } from './ViewAppointmentsContext';
 import { ViewChildProvider } from './ViewChildContext';
 
 const Stack = createNativeStackNavigator();
+
+const AppContent = () =>{
+  const {userID} = useUser();
+  const {profiles} = useProfiles();
+  const sameProfile = profiles.filter(profile =>
+    profile.id === userID
+  );
+  return(
+    <Stack.Navigator>
+      <Stack.Screen
+        name='Login'
+        component={LoginScreen}
+        options={{
+          title: '',
+          headerBackVisible: false,
+          headerShown:false,
+          animation: 'fade',
+        }}
+      />
+      <Stack.Screen
+        name='HomeTemporarily'
+        component={HomeScreenTemporarily}
+        options={({ navigation }) => ({
+          title: 'Halo, '+sameProfile[0].name,
+          headerBackVisible: false,
+          headerLeft: () => (
+            <View style={styles.profPict}>
+              <ImageDisplay imagePath={sameProfile[0].picture} height={31} width={31}/>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ position: 'relative' }}>
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+              <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
+            </View>
+          ),
+          animation: 'fade',
+        })}
+      />
+      <Stack.Screen
+        name='RegisterScreen'
+        component={RegisterScreen}
+        options={{
+          title: '',
+          headerBackVisible: false,
+          headerShown:false,
+          animation: 'fade',
+        }}
+        initialParams={{ profile: require('./profiles.json') }}
+      />
+      <Stack.Screen
+        name='EnterScreen'
+        component={EnterScreen}
+        options={{
+          title: '',
+          headerBackVisible: false,
+          headerShown:false,
+          animation: 'fade',
+        }}
+        initialParams={{ profile: require('./profiles.json') }}
+      />
+      <Stack.Screen
+        name='Profile'
+        component={ProfileScreen}
+        options={({ navigation }) => ({
+          title: 'Halo, '+sameProfile[0].name,
+          headerBackVisible: false,
+          headerLeft: () => (
+            <View style={styles.profPict}>
+              <ImageDisplay imagePath={sameProfile[0].picture} height={31} width={31}/>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ position: 'relative' }}>
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+              <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
+            </View>
+          ),
+          animation: 'fade',
+        })}
+        initialParams={{ profile: require('./profiles.json') }}
+      />
+      <Stack.Screen
+        name='Screen_3'
+        component={Screen_3}
+        options={({ navigation }) => ({
+          title: 'Halo, '+sameProfile[0].name,
+          headerBackVisible: false,
+          headerLeft: () => (
+            <View style={styles.profPict}>
+              <ImageDisplay imagePath={sameProfile[0].picture} height={31} width={31}/>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ position: 'relative' }}>
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+              <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
+            </View>
+          ),
+          animation: 'fade',
+        })}
+      />
+      <Stack.Screen
+        name='Announcements'
+        component={AnnouncementsScreen}
+        options={({ navigation }) => ({
+          title: 'Halo, '+sameProfile[0].name,
+          headerBackVisible: false,
+          headerLeft: () => (
+            <View style={styles.profPict}>
+              <ImageDisplay imagePath={sameProfile[0].picture} height={31} width={31}/>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ position: 'relative' }}>
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+              <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
+            </View>
+          ),
+          animation: 'fade',
+        })}
+      />
+      <Stack.Screen
+        name='Appointment'
+        component={AppointmentScreen}
+        options={({ navigation }) => ({
+          title: 'Halo, '+sameProfile[0].name,
+          headerBackVisible: false,
+          headerLeft: () => (
+            <View style={styles.profPict}>
+              <ImageDisplay imagePath={sameProfile[0].picture} height={31} width={31}/>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ position: 'relative' }}>
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+              <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
+            </View>
+          ),
+          animation: 'fade',
+        })}
+      />
+      <Stack.Screen
+        name='VaccinationsCompleted'
+        component={VaccinationsCompletedScreen}
+        options={({ navigation }) => ({
+          title: 'Halo, '+sameProfile[0].name,
+          headerBackVisible: false,
+          headerLeft: () => (
+            <View style={styles.profPict}>
+              <ImageDisplay imagePath={sameProfile[0].picture} height={31} width={31}/>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ position: 'relative' }}>
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+              <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
+            </View>
+          ),
+          animation: 'fade',
+        })}
+      />
+      <Stack.Screen
+        name='VaccinationsMissed'
+        component={VaccinationsMissedScreen}
+        options={({ navigation }) => ({
+          title: 'Halo, '+sameProfile[0].name,
+          headerBackVisible: false,
+          headerLeft: () => (
+            <View style={styles.profPict}>
+              <ImageDisplay imagePath={sameProfile[0].picture} height={31} width={31}/>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ position: 'relative' }}>
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+              <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
+            </View>
+          ),
+          animation: 'fade',
+        })}
+      />
+      <Stack.Screen
+        name='VaccinationsUpcoming'
+        component={VaccinationsUpcomingScreen}
+        options={({ navigation }) => ({
+          title: 'Halo, '+sameProfile[0].name,
+          headerBackVisible: false,
+          headerLeft: () => (
+            <View style={styles.profPict}>
+              <ImageDisplay imagePath={sameProfile[0].picture} height={31} width={31}/>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ position: 'relative' }}>
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+              <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
+            </View>
+          ),
+          animation: 'fade',
+        })}
+      />
+      <Stack.Screen
+        name='VaccinationsOnGoing'
+        component={VaccinationsOnGoingScreen}
+        options={({ navigation }) => ({
+          title: 'Halo, '+sameProfile[0].name,
+          headerBackVisible: false,
+          headerLeft: () => (
+            <View style={styles.profPict}>
+              <ImageDisplay imagePath={sameProfile[0].picture} height={31} width={31}/>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ position: 'relative' }}>
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+              <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
+            </View>
+          ),
+          animation: 'fade',
+        })}
+      />
+      <Stack.Screen
+        name='VaccineDetails'
+        component={VaccineDetailsScreen}
+        options={({ navigation }) => ({
+          title: 'Halo, '+sameProfile[0].name,
+          headerBackVisible: false,
+          headerLeft: () => (
+            <View style={styles.profPict}>
+              <ImageDisplay imagePath={sameProfile[0].picture} height={31} width={31}/>
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ position: 'relative' }}>
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+              <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
+            </View>
+          ),
+          animation: 'fade',
+        })}
+      />
+    </Stack.Navigator>
+  )
+}
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -77,298 +373,7 @@ export default function App() {
                 <CompletedAppointmentsProvider>
                   <MissedAppointmentsProvider>
                     <NavigationContainer onStateChange={(state) => setCurrentScreen(state.routes[state.index].name)}>
-                      <Stack.Navigator>
-                        <Stack.Screen
-                          name='Login'
-                          component={LoginScreen}
-                          options={{
-                            title: '',
-                            headerBackVisible: false,
-                            animation: 'fade',
-                          }}
-                        />
-                        <Stack.Screen
-                          name='HomeTemporarily'
-                          component={HomeScreenTemporarily}
-                          options={({ navigation }) => ({
-                            title: 'Halo, Timothee',
-                            headerBackVisible: false,
-                            headerLeft: () => (
-                              <Image
-                                source={require('./assets/pfp/parentpfptemp.jpg')}
-                                style={styles.profPict}
-                              />
-                            ),
-                            headerRight: () => (
-                              <View style={{ position: 'relative' }}>
-                                <Fontisto
-                                  name='bell-alt'
-                                  size={24}
-                                  color='black'
-                                  onPress={() => navigation.navigate('Announcements')}
-                                />
-                                <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
-                              </View>
-                            ),
-                            animation: 'fade',
-                          })}
-                        />
-                        <Stack.Screen
-                          name='RegisterScreen'
-                          component={RegisterScreen}
-                          options={{
-                            title: '',
-                            headerBackVisible: false,
-                            animation: 'fade',
-                          }}
-                          initialParams={{ profile: require('./profiles.json') }}
-                        />
-                        <Stack.Screen
-                          name='EnterScreen'
-                          component={EnterScreen}
-                          options={{
-                            title: '',
-                            headerBackVisible: false,
-                            animation: 'fade',
-                          }}
-                          initialParams={{ profile: require('./profiles.json') }}
-                        />
-                        <Stack.Screen
-                          name='Profile'
-                          component={ProfileScreen}
-                          options={({ navigation }) => ({
-                            title: 'Halo, Timothee',
-                            headerBackVisible: false,
-                            headerLeft: () => (
-                              <Image
-                                source={require('./assets/pfp/parentpfptemp.jpg')}
-                                style={styles.profPict}
-                              />
-                            ),
-                            headerRight: () => (
-                              <View style={{ position: 'relative' }}>
-                                <Fontisto
-                                  name='bell-alt'
-                                  size={24}
-                                  color='black'
-                                  onPress={() => navigation.navigate('Announcements')}
-                                />
-                                <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
-                              </View>
-                            ),
-                            animation: 'fade',
-                          })}
-                          initialParams={{ profile: require('./profiles.json') }}
-                        />
-                        <Stack.Screen
-                          name='Screen_3'
-                          component={Screen_3}
-                          options={({ navigation }) => ({
-                            title: 'Halo, Timothee',
-                            headerBackVisible: false,
-                            headerLeft: () => (
-                              <Image
-                                source={require('./assets/pfp/parentpfptemp.jpg')}
-                                style={styles.profPict}
-                              />
-                            ),
-                            headerRight: () => (
-                              <View style={{ position: 'relative' }}>
-                                <Fontisto
-                                  name='bell-alt'
-                                  size={24}
-                                  color='black'
-                                  onPress={() => navigation.navigate('Announcements')}
-                                />
-                                <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
-                              </View>
-                            ),
-                            animation: 'fade',
-                          })}
-                        />
-                        <Stack.Screen
-                          name='Announcements'
-                          component={AnnouncementsScreen}
-                          options={({ navigation }) => ({
-                            title: 'Halo, Timothee',
-                            headerBackVisible: false,
-                            headerLeft: () => (
-                              <Image
-                                source={require('./assets/pfp/parentpfptemp.jpg')}
-                                style={styles.profPict}
-                              />
-                            ),
-                            headerRight: () => (
-                              <View style={{ position: 'relative' }}>
-                                <Fontisto
-                                  name='bell-alt'
-                                  size={24}
-                                  color='black'
-                                  onPress={() => navigation.navigate('Announcements')}
-                                />
-                                <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
-                              </View>
-                            ),
-                            animation: 'fade',
-                          })}
-                        />
-                        <Stack.Screen
-                          name='Appointment'
-                          component={AppointmentScreen}
-                          options={({ navigation }) => ({
-                            title: 'Halo, Timothee',
-                            headerBackVisible: false,
-                            headerLeft: () => (
-                              <Image
-                                source={require('./assets/pfp/parentpfptemp.jpg')}
-                                style={styles.profPict}
-                              />
-                            ),
-                            headerRight: () => (
-                              <View style={{ position: 'relative' }}>
-                                <Fontisto
-                                  name='bell-alt'
-                                  size={24}
-                                  color='black'
-                                  onPress={() => navigation.navigate('Announcements')}
-                                />
-                                <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
-                              </View>
-                            ),
-                            animation: 'fade',
-                          })}
-                        />
-                        <Stack.Screen
-                          name='VaccinationsCompleted'
-                          component={VaccinationsCompletedScreen}
-                          options={({ navigation }) => ({
-                            title: 'Halo, Timothee',
-                            headerBackVisible: false,
-                            headerLeft: () => (
-                              <Image
-                                source={require('./assets/pfp/parentpfptemp.jpg')}
-                                style={styles.profPict}
-                              />
-                            ),
-                            headerRight: () => (
-                              <View style={{ position: 'relative' }}>
-                                <Fontisto
-                                  name='bell-alt'
-                                  size={24}
-                                  color='black'
-                                  onPress={() => navigation.navigate('Announcements')}
-                                />
-                                <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
-                              </View>
-                            ),
-                            animation: 'fade',
-                          })}
-                        />
-                        <Stack.Screen
-                          name='VaccinationsMissed'
-                          component={VaccinationsMissedScreen}
-                          options={({ navigation }) => ({
-                            title: 'Halo, Timothee',
-                            headerBackVisible: false,
-                            headerLeft: () => (
-                              <Image
-                                source={require('./assets/pfp/parentpfptemp.jpg')}
-                                style={styles.profPict}
-                              />
-                            ),
-                            headerRight: () => (
-                              <View style={{ position: 'relative' }}>
-                                <Fontisto
-                                  name='bell-alt'
-                                  size={24}
-                                  color='black'
-                                  onPress={() => navigation.navigate('Announcements')}
-                                />
-                                <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
-                              </View>
-                            ),
-                            animation: 'fade',
-                          })}
-                        />
-                        <Stack.Screen
-                          name='VaccinationsUpcoming'
-                          component={VaccinationsUpcomingScreen}
-                          options={({ navigation }) => ({
-                            title: 'Halo, Timothee',
-                            headerBackVisible: false,
-                            headerLeft: () => (
-                              <Image
-                                source={require('./assets/pfp/parentpfptemp.jpg')}
-                                style={styles.profPict}
-                              />
-                            ),
-                            headerRight: () => (
-                              <View style={{ position: 'relative' }}>
-                                <Fontisto
-                                  name='bell-alt'
-                                  size={24}
-                                  color='black'
-                                  onPress={() => navigation.navigate('Announcements')}
-                                />
-                                <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
-                              </View>
-                            ),
-                            animation: 'fade',
-                          })}
-                        />
-                        <Stack.Screen
-                          name='VaccinationsOnGoing'
-                          component={VaccinationsOnGoingScreen}
-                          options={({ navigation }) => ({
-                            title: 'Halo, Timothee',
-                            headerBackVisible: false,
-                            headerLeft: () => (
-                              <Image
-                                source={require('./assets/pfp/parentpfptemp.jpg')}
-                                style={styles.profPict}
-                              />
-                            ),
-                            headerRight: () => (
-                              <View style={{ position: 'relative' }}>
-                                <Fontisto
-                                  name='bell-alt'
-                                  size={24}
-                                  color='black'
-                                  onPress={() => navigation.navigate('Announcements')}
-                                />
-                                <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
-                              </View>
-                            ),
-                            animation: 'fade',
-                          })}
-                        />
-                        <Stack.Screen
-                          name='VaccineDetails'
-                          component={VaccineDetailsScreen}
-                          options={({ navigation }) => ({
-                            title: 'Halo, Timothee',
-                            headerBackVisible: false,
-                            headerLeft: () => (
-                              <Image
-                                source={require('./assets/pfp/parentpfptemp.jpg')}
-                                style={styles.profPict}
-                              />
-                            ),
-                            headerRight: () => (
-                              <View style={{ position: 'relative' }}>
-                                <Fontisto
-                                  name='bell-alt'
-                                  size={24}
-                                  color='black'
-                                  onPress={() => navigation.navigate('Announcements')}
-                                />
-                                <View style={{ backgroundColor: '#FF0000', width: 10, height: 10, borderRadius: 10, position: 'absolute', right: 0 }}></View>
-                              </View>
-                            ),
-                            animation: 'fade',
-                          })}
-                        />
-                      </Stack.Navigator>
+                      <AppContent/>
                       {!screensWithoutNavBar.includes(currentScreen) && <NavBar />}
                     </NavigationContainer>
                   </MissedAppointmentsProvider>
@@ -384,11 +389,12 @@ export default function App() {
 
 const styles = StyleSheet.create({
   profPict: {
-    width: 30,
-    height: 30,
+    height:30,
+    width:30,
     borderRadius: 15,
     marginRight: 10,
     borderWidth: 1,
     borderColor: 'black',
+    overflow:'hidden',
   },
 });
