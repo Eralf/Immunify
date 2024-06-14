@@ -95,41 +95,55 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator >
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name='Home'
           component={HomeScreen}
-          options={{
-            title: ' Halo, Dominick',
+          options={({ navigation }) => ({
+            title: 'Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
                 source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
-            ), 
-            headerRight:() => (
-              <Fontisto name="bell-alt" size={24} color="black" />
             ),
-            animation: 'fade', // other options: slide_from_right, left, slide_from_bottom, slide_from_top
-          }}
-        />
+            headerRight: () => (
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+            ),
+            animation: 'fade',
+          })}
+        /> */}
         <Stack.Screen
           name='HomeTemporarily'
           component={HomeScreenTemporarily}
-          options={{
-            title: ' Halo, Dominick',
+          options={({ navigation }) => ({
+            title: 'Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
                 source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
-            ), 
-            headerRight:() => (
-              <Fontisto name="bell-alt" size={24} color="black" />
             ),
-            animation: 'fade', // other options: slide_from_right, left, slide_from_bottom, slide_from_top
-          }}
+            headerRight: () => (
+              <View style={{position:'relative'}}>
+                <Fontisto
+                  name='bell-alt'
+                  size={24}
+                  color='black'
+                  onPress={() => navigation.navigate('Announcements')}
+                />
+                {/* <View style={{backgroundColor: '#FF0000',width: 10,height: 10,borderRadius: 10, position:'absolute', right:0}}></View> */}
+            </View>
+              
+            ),
+            animation: 'fade',
+          })}
         />
         <Stack.Screen
           name='RegisterScreen'
@@ -173,45 +187,49 @@ export default function App() {
         <Stack.Screen
           name='Profile'
           component={ProfileScreen}
-          options={{
-            // header: (props) => (
-            //   <View style={{ height: 60 }}>
-                
-            //   </View>
-            // ),
-
-            title: ' Halo, Dominick',
+          options={({ navigation }) => ({
+            title: 'Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
                 source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
             ),
-            animation:'fade',
-          }}
+            headerRight: () => (
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+            ),
+            animation: 'fade',
+          })}
           initialParams={{ profile: profiles }}
         />
         <Stack.Screen
           name='Screen_3'
           component={Screen_3}
-          options={{
-            title: ' Halo, Dominick',
+          options={({ navigation }) => ({
+            title: 'Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
                 source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
             ),
-            animation:'fade'
-          }}
+            headerRight: () => (
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+            ),
+            animation: 'fade',
+          })}
         />
         <Stack.Screen
           name='Login'
@@ -235,129 +253,163 @@ export default function App() {
         <Stack.Screen
           name='Announcements'
           component={AnnouncementsScreen}
-          options={{
-            title: ' Halo, Dominick',
-            // headerTitleAlign: 'center',
+          options={({ navigation }) => ({
+            title: 'Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
                 source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
             ),
-            animation:'fade'
-          }}
+            headerRight: () => (
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+            ),
+            animation: 'fade',
+          })}
         />
         <Stack.Screen
           name='Appointment'
           component={AppointmentScreen}
-          options={{
-            title: ' Halo, Dominick',
+          options={({ navigation }) => ({
+            title: 'Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
                 source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
             ),
-            animation:'fade'
-          }}
+            headerRight: () => (
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+            ),
+            animation: 'fade',
+          })}
         />
         <Stack.Screen
           name='VaccinationsCompleted'
           component={VaccinationsCompletedScreen}
-          options={{
-            title: ' Halo, Dominick',
+          options={({ navigation }) => ({
+            title: 'Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
                 source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
             ),
-            animation:'fade'
-          }}
+            headerRight: () => (
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+            ),
+            animation: 'fade',
+          })}
         />
         <Stack.Screen
           name='VaccinationsMissed'
           component={VaccinationsMissedScreen}
-          options={{
-            title: ' Halo, Dominick',
+          options={({ navigation }) => ({
+            title: 'Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
                 source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
             ),
-            animation:'fade'
-          }}
+            headerRight: () => (
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+            ),
+            animation: 'fade',
+          })}
         />
         <Stack.Screen
           name='VaccinationsUpcoming'
           component={VaccinationsUpcomingScreen}
-          options={{
-            title: ' Halo, Dominick',
+          options={({ navigation }) => ({
+            title: 'Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
                 source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
             ),
-            animation:'fade'
-          }}
+            headerRight: () => (
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+            ),
+            animation: 'fade',
+          })}
         />
         <Stack.Screen
           name='VaccinationsOnGoing'
           component={VaccinationsOnGoingScreen}
-          options={{
-            title: ' Halo, Dominick',
+          options={({ navigation }) => ({
+            title: 'Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
                 source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
             ),
-            animation:'fade'
-          }}
+            headerRight: () => (
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+            ),
+            animation: 'fade',
+          })}
         />
         <Stack.Screen
           name='VaccineDetails'
           component={VaccineDetailsScreen}
-          options={{
-            title: ' Halo, Dominick',
+          options={({ navigation }) => ({
+            title: 'Halo, Dominick',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
                 source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
             ),
-            animation:'fade'
-          }}
+            headerRight: () => (
+              <Fontisto
+                name='bell-alt'
+                size={24}
+                color='black'
+                onPress={() => navigation.navigate('Announcements')}
+              />
+            ),
+            animation: 'fade',
+          })}
         />
       </Stack.Navigator>
 
