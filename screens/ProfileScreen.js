@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, Button, TouchableOpacity, Image, StyleSheet, Dimensions, ScrollView, TextInput, Modal } from 'react-native';
+import { View, Text, Button, TouchableOpacity, Image, StyleSheet, Dimensions, ScrollView, TextInput, Modal, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { db, collection, doc, getDocs } from '../firebasecfg';
 import { addDoc } from 'firebase/firestore';
@@ -50,7 +50,7 @@ const ProfileScreen = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const [childName, setChildName] = useState('');
-  const [childDOB, setChildDOB] = useState(new Date(new Date()-5.3654e11));
+  const [childDOB, setChildDOB] = useState(new Date);
   const [childNIK, setChildNIK] = useState('');
   const [childGender, setChildGender] = useState(false);
   const [childPicture, setChildPicture] = useState(false);
@@ -221,8 +221,8 @@ const ProfileScreen = ({ route }) => {
   const onDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     const today = new Date();
-    if (currentDate < today.setHours(0, 0, 0, 0)) {
-      Alert.alert("Error", "Tanggal tidak boleh sebelum waktu sekarang.");
+    if (currentDate > today.setHours(0, 0, 0, 0)) {
+      Alert.alert("Error", "Tanggal tidak boleh setelah waktu sekarang.");
       setShowDatePicker(false);
       return;
     }
@@ -663,7 +663,7 @@ const ProfileScreen = ({ route }) => {
                   keyboardType="numeric"
                 />
                 <Button title="Add Child" onPress={handleAddChild} />
-                <Button title="Cancel" onPress={() => setModalVisible(false)} />
+                <Button title="Cancel" onPress={() => {setChildDOB(new Date); setModalVisible(false);}} />
               </View>
             </View>
           </Modal>
