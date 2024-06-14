@@ -4,7 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCompletedAppointments } from '../CompletedAppointmentsContext';
 import { useMissedAppointments } from '../MissedAppointmentsContext';
 import { useViewAppointments } from '../ViewAppointmentsContext';
-
+import { db } from '../firebasecfg';
+import { collection, addDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 const AnnouncementsScreen = ({ navigation, route }) => {
   const [selectedMenu, setSelectedMenu] = useState("semua");
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -81,6 +82,27 @@ const AnnouncementsScreen = ({ navigation, route }) => {
   const combinedAppointments = [...completedAppointments, ...missedAppointments];
   const sortedCombinedAppointments = sortAppointmentsByDate(viewAppointments);
 
+  const handlePress = async (appointment) => {
+    try {
+      
+
+      const appointmentRef = doc(db, 'profiles','P5d9T710ztSinYGg9k9a','child','7IzFkFYdUYARwHemOmuV','appointments',appointment.id);
+      await updateDoc(appointmentRef, { isRead: true });
+
+      if (appointment.status === 'Selesai') {
+        navigation.navigate('VaccinationsCompleted');
+      } else if (appointment.status === 'Terlewatkan') {
+        navigation.navigate('Appointment');
+      } else if (appointment.status === 'Berlangsung') {
+        navigation.navigate('VaccinationsOnGoing');
+      } else if (appointment.status === 'Mendatang') {
+        navigation.navigate('VaccinationsUpcoming');
+      }
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+
   const onRefresh = () => {
     setIsRefreshing(true);
     // Add any refreshing logic here, like refetching data from API
@@ -129,25 +151,12 @@ const AnnouncementsScreen = ({ navigation, route }) => {
         if(appointment.status === 'Terlewatkan' || appointment.status === 'Selesai' || appointment.status === 'Mendatang' || appointment.status === 'Berlangsung'){
           return (
             <React.Fragment key={appointment.id}>
-                <TouchableOpacity style={styles.wrapAnnounce} onPress={() => {
-                  if (appointment.status === 'Selesai') {
-                    navigation.navigate('VaccinationsCompleted');
-                  } else if (appointment.status === 'Terlewatkan') {
-                    navigation.navigate('Appointment');
-                  } else if (appointment.status === 'Berlangsung'){
-                    // Optionally handle other statuses or show a message
-                    navigation.navigate('VaccinationsOnGoing')
-                  }
-                  else if (appointment.status === 'Mendatang'){
-                    // Optionally handle other statuses or show a message
-                    navigation.navigate('VaccinationsUpcoming')
-                  }
-                }}>
+                <TouchableOpacity style={[styles.wrapAnnounce,{backgroundColor: appointment.isRead ? 'white':'#D5D5D5'}]} onPress={() => handlePress(appointment)}>
                   <View style={styles.wrapStatus}>
                     <View style={appointment.status === 'Selesai' ? styles.selesai : appointment.status === 'Terlewatkan' ? styles.terlewatkan : appointment.status === 'Mendatang' ? styles.mendatang: styles.berlangsung}>
                       <Text>{appointment.status}</Text>
                     </View>
-                    <View style={styles.redDot}></View>
+                    {!appointment.isRead && <View style={styles.redDot}></View>}
                   </View>
                   <View style={styles.wrapInfoTime}>
                     {appointment.status === 'Terlewatkan' && <Text style={styles.information}>Anda melewatkan vaksin {appointment.vaccineType} Tanggal {formattedDate}. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>}
@@ -163,33 +172,7 @@ const AnnouncementsScreen = ({ navigation, route }) => {
           );
         };
       })
-          // sortedCombinedAppointments.map(appointment => {
-          //   let appointmentDate;
-          //   if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
-          //     appointmentDate = new Date(appointment.date.seconds * 1000);
-          //   } else {
-          //     appointmentDate = new Date(appointment.date);
-          //   }
-          //   const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-          //   return (
-              // <React.Fragment key={appointment.id}>
-              //   <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
-              //     <View style={styles.wrapStatus}>
-              //       <View style={appointment.status === 'Selesai' ? styles.selesai : appointment.status === 'Terlewatkan' ? styles.terlewatkan : appointment.status === 'Mendatang' ? styles.mendatang: ''}>
-              //         <Text>{appointment.status}</Text>
-              //       </View>
-              //       <View style={styles.redDot}></View>
-              //     </View>
-              //     <View style={styles.wrapInfoTime}>
-              //       {appointment.status === 'Terlewatkan' && <Text style={styles.information}>Anda melewatkan vaksin {appointment.vaccineType} Tanggal {formattedDate}. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>}
-              //       {appointment.status === 'Selesai' &&<Text style={styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin {appointment.vaccineType}. <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>}
-              //       <Text style={styles.time}>{calculateTimeDifference(appointment.date)}</Text>
-              //     </View>
-              //   </TouchableOpacity>
-              //   <View style={styles.horizontalLine}></View>
-              // </React.Fragment>
-          //   );
-          // })
+          
         }
 
         {selectedMenu == "selesai" && sortedCombinedAppointments.map(appointment => {
@@ -206,12 +189,13 @@ const AnnouncementsScreen = ({ navigation, route }) => {
                 if(appointment.status === 'Selesai'){
                   return (
                     <React.Fragment key={appointment.id}>
-                      <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
+                      
+                      <TouchableOpacity style={[styles.wrapAnnounce,{backgroundColor: appointment.isRead ? 'white':'#D5D5D5'}]} onPress={() => navigation.navigate('VaccinationsCompleted')}>
                         <View style={styles.wrapStatus}>
                           <View style={styles.selesai}>
                             <Text>{appointment.status}</Text>
                           </View>
-                          <View style={styles.redDot}></View>
+                          {!appointment.isRead && <View style={styles.redDot}></View>}
                         </View>
                         <View style={styles.wrapInfoTime}>
                           <Text style={styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin {appointment.vaccineType}. <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>
@@ -250,12 +234,12 @@ const AnnouncementsScreen = ({ navigation, route }) => {
             if(appointment.status === 'Terlewatkan'){
               return (
                 <React.Fragment key={appointment.id}>
-                  <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('Appointment')}>
+                  <TouchableOpacity style={[styles.wrapAnnounce,{backgroundColor: appointment.isRead ? 'white':'#D5D5D5'}]} onPress={() => navigation.navigate('Appointment')}>
                     <View style={styles.wrapStatus}>
                       <View style={styles.terlewatkan}>
                         <Text>{appointment.status}</Text>
                       </View>
-                      <View style={styles.redDot}></View>
+                      {!appointment.isRead && <View style={styles.redDot}></View>}
                     </View>
                     <View style={styles.wrapInfoTime}>
                       
@@ -282,12 +266,12 @@ const AnnouncementsScreen = ({ navigation, route }) => {
             if(appointment.status === 'Mendatang'){
               return (
                 <React.Fragment key={appointment.id}>
-                  <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsUpcoming')}>
+                  <TouchableOpacity style={[styles.wrapAnnounce,{backgroundColor: appointment.isRead ? 'white':'#D5D5D5'}]} onPress={() => navigation.navigate('VaccinationsUpcoming')}>
                     <View style={styles.wrapStatus}>
                       <View style={styles.mendatang}>
                         <Text>{appointment.status}</Text>
                       </View>
-                      <View style={styles.redDot}></View>
+                      {!appointment.isRead && <View style={styles.redDot}></View>}
                     </View>
                     <View style={styles.wrapInfoTime}>
                     {/* Anda perlu mengambil vaksin C pada Tanggal 18 Oktober 2050. Klik untuk Cek! */}
@@ -314,12 +298,12 @@ const AnnouncementsScreen = ({ navigation, route }) => {
             if(appointment.status === 'Berlangsung'){
               return (
                 <React.Fragment key={appointment.id}>
-                  <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsOnGoing')}>
+                  <TouchableOpacity style={[styles.wrapAnnounce,{backgroundColor: appointment.isRead ? 'white':'#D5D5D5'}]} onPress={() => navigation.navigate('VaccinationsOnGoing')}>
                     <View style={styles.wrapStatus}>
                       <View style={styles.berlangsung}>
                         <Text>{appointment.status}</Text>
                       </View>
-                      <View style={styles.redDot}></View>
+                      {!appointment.isRead && <View style={styles.redDot}></View>}
                     </View>
                     <View style={styles.wrapInfoTime}>
                     {/* Anda perlu mengambil vaksin C pada Tanggal 18 Oktober 2050. Klik untuk Cek! */}
@@ -334,61 +318,7 @@ const AnnouncementsScreen = ({ navigation, route }) => {
               );
             };
           })}
-        {/* <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsMissed')}>
-          <View style={styles.wrapStatus}>
-            <View style={styles.terlewatkan}>
-              <Text>Terlewatkan</Text>
-            </View>
-            <View style={styles.redDot}></View>
-          </View>
-          <View style={styles.wrapInfoTime}>
-            <Text style={styles.information}>Anda melewatkan vaksin C Tanggal 18 September 2010. <Text style={styles.boldText}>Klik untuk membuat janji baru!</Text></Text>
-            <Text style={styles.time}> 1h</Text>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.horizontalLine}></View>
-
-        <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsUpcoming')}>
-          <View style={styles.wrapStatus}>
-            <View style={styles.mendatang}>
-              <Text>Mendatang</Text>
-            </View>
-            <View style={styles.redDot}></View>
-          </View>
-          <View style={styles.wrapInfoTime}>
-            <Text style={styles.information}>Anda perlu mengambil vaksin C pada Tanggal 18 Oktober 2050. <Text style={styles.boldText}>Klik untuk Cek!</Text></Text>
-            <Text style={styles.time}> 1h</Text>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.horizontalLine}></View>
-
-        <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsCompleted')}>
-          <View style={styles.wrapStatus}>
-            <View style={styles.selesai}>
-              <Text>Selesai</Text>
-            </View>
-            <View style={styles.redDot}></View>
-          </View>
-          <View style={styles.wrapInfoTime}>
-            <Text style={styles.information}><Text style={styles.boldText}>Selamat!</Text> Anda telah mengambil vaksin C Tahap Pertama. <Text style={styles.boldText}>Klik untuk Cek Sertifikat Vaksin Anda!</Text></Text>
-            <Text style={styles.time}> 1h</Text>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.horizontalLine}></View>
-
-        <TouchableOpacity style={styles.wrapAnnounce} onPress={() => navigation.navigate('VaccinationsOnGoing')}>
-          <View style={styles.wrapStatus}>
-            <View style={styles.berlangsung}>
-              <Text>Berlangsung</Text>
-            </View>
-            <View style={styles.redDot}></View>
-          </View>
-          <View style={styles.wrapInfoTime}>
-            <Text style={styles.information}>Anda telah membuat janji untuk vaksin C Tahap Pertama pada Tanggal 20 September 2050. <Text style={styles.boldText}>Klik untuk Cek!</Text></Text>
-            <Text style={styles.time}> 1h</Text>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.horizontalLine}></View> */}
+        
       </ScrollView>
     </SafeAreaView>
   );
@@ -481,7 +411,7 @@ const styles = StyleSheet.create({
   wrapAnnounce: {
     paddingHorizontal: 20,
     paddingVertical: 16,
-    backgroundColor:'#D5D5D5'
+    // backgroundColor:'#D5D5D5'
   },
   wrapStatus: {
     flexDirection: 'row',
