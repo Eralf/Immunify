@@ -28,7 +28,7 @@ export const ViewAppointmentsProvider = ({ children }) => {
     });
 
     return unsubscribe;
-  }, []);
+  }, [userID, childID]);
 
   return (
     <ViewAppointmentsContext.Provider value={{ viewAppointments, setViewAppointments }}>

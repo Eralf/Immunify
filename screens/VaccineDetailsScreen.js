@@ -11,7 +11,7 @@ const vaccineList = {
   "Hepatitis A":"Vaksin Hepatitis A mengandung virus hepatitis A yang telah dinonaktifkan. Vaksin ini merangsang sistem kekebalan untuk memproduksi antibodi yang melawan virus hepatitis A, mencegah infeksi dan komplikasi.",
   "COVID-19":"Vaksin COVID-19 untuk bayi dan anak-anak dirancang untuk melindungi mereka dari infeksi virus SARS-CoV-2. Vaksin ini, yang sering menggunakan teknologi mRNA atau protein subunit, bekerja dengan merangsang sistem kekebalan untuk mengenali dan melawan virus.",
   "Chickenpox":"Vaksin cacar air mengandung virus varicella-zoster yang dilemahkan. Vaksin ini membantu mencegah infeksi dengan merangsang tubuh untuk membentuk kekebalan terhadap virus penyebab cacar air.",
-  "Human Papillomavirus (HPV)":"Vaksin HPV mengandung protein dari beberapa jenis virus HPV yang paling umum menyebabkan kanker serviks dan kutil kelamin. Vaksin ini merangsang respons imun untuk mencegah infeksi HPV.",
+  "HPV":"Vaksin HPV mengandung protein dari beberapa jenis virus HPV yang paling umum menyebabkan kanker serviks dan kutil kelamin. Vaksin ini merangsang respons imun untuk mencegah infeksi HPV.",
   "Influenza (Flu)":"Vaksin influenza mengandung virus influenza yang dilemahkan atau protein virus yang telah dimurnikan. Vaksin ini diberikan setiap tahun untuk melindungi dari strain flu musiman yang berubah-ubah.",
   "Measles":"Vaksin campak mengandung virus campak yang dilemahkan. Vaksin ini membantu tubuh membentuk kekebalan terhadap virus campak, mencegah penyakit dan komplikasi serius.",
   "Mumps":"Vaksin gondong mengandung virus gondong yang dilemahkan. Vaksin ini merangsang sistem kekebalan untuk menghasilkan antibodi yang melindungi dari infeksi gondong.",
