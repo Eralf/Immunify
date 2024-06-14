@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Button, TouchableOpacity, Image, StyleSheet, Dimensions, ScrollView, TextInput, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { db, collection, doc, getDocs } from '../firebasecfg';
+import { addDoc } from 'firebase/firestore';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { useProfiles } from '../ProfilesContext';
 // import { useSelectedProfile } from '../SelectedProfileContext';
@@ -28,6 +30,7 @@ const margin_outside = 17;
 const margin_inside = 12;
 
 const boxWidth = Dimensions.get('window').width - 2*margin_outside;
+const boxHeight = Dimensions.get('window').height;
 
 const height_mainProfileCard = 136;
 const height_yourAccountCard = 380;
@@ -46,6 +49,62 @@ const ProfileScreen = ({ route }) => {
   
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [childName, setChildName] = useState('');
+  const [childDOB, setChildDOB] = useState(new Date(new Date()-5.3654e11));
+  const [childNIK, setChildNIK] = useState('');
+  const [childGender, setChildGender] = useState(false);
+  const [childPicture, setChildPicture] = useState(false);
+  const [children, setChildren] = useState([]);
+
+  
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  
+  const navigation = useNavigation();
+
+  const handleAddChild = async () => {
+    if (childName && childDOB) {
+      setChildren([...children, { name: childName, age: childDOB }]);
+      setChildName('');
+      setChildDOB(childDOB);
+      setChildNIK('');
+      setChildGender('');
+      setModalVisible(false);
+    } else {
+      
+    }
+
+    addDoc(collection(db, "profiles", parentProfile.id, "child"), {
+      name: childName,
+      picture: childPicture,
+      dob:childDOB,
+      sex:childGender,
+      nik:childNIK,
+    }).then(() => {
+      navigation.navigate('Profile');
+      console.log('Profile added successfully');
+    }).catch((error) => {
+      console.error('Error adding child: ', error);
+    });
+
+
+
+    try {
+      const childrenCollectionRef = collection(db, 'profiles', parentProfile.id, 'child');
+      const childrenCollection = await getDocs(childrenCollectionRef);
+      const childrenData = childrenCollection.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setChildrenProfiles(childrenData);
+      if (childrenData.length > 0) {
+        setSelectedProfile(childrenData[selectedChild]);
+      }
+    } catch (error) {
+      console.error("Error fetching children profiles: ", error);
+    }
+  };
+
 
 
   const [selectedChild, setSelectedChild] = useState('1');
@@ -53,7 +112,7 @@ const ProfileScreen = ({ route }) => {
     // fetchChildrenProfiles(parentProfile.id);
 
     try {
-      const childrenCollectionRef = collection(db, 'profiles', parentProfile.id, 'children');
+      const childrenCollectionRef = collection(db, 'profiles', parentProfile.id, 'child');
       const childrenCollection = await getDocs(childrenCollectionRef);
       const childrenData = childrenCollection.docs.map(doc => ({
         id: doc.id,
@@ -86,7 +145,7 @@ const ProfileScreen = ({ route }) => {
 
   const fetchChildrenProfiles = async (parentId) => {
     try {
-      const childrenCollectionRef = collection(db, 'profiles', parentId, 'children');
+      const childrenCollectionRef = collection(db, 'profiles', parentId, 'child');
       const childrenCollection = await getDocs(childrenCollectionRef);
       const childrenData = childrenCollection.docs.map(doc => ({
         id: doc.id,
@@ -128,13 +187,13 @@ const ProfileScreen = ({ route }) => {
     }
 
     if (years > 1) {
-      return `${years} years and ${months} months old`;
+      return `${years} Tahun ${months} Bulan`;
     } else if (years === 1) {
-      return `${years} year and ${months} months old`;
+      return `${years} Tahun ${months} Bulan`;
     } else if (years >= 0) {
-      return `${months} months and ${days} days old`;
+      return `${months} Bulan ${days} Hari`;
     } else {
-      return `${days} days old`;
+      return `${days} Hari`;
     }
   }
   const daysInPreviousMonth = (month, year) => {
@@ -154,10 +213,23 @@ const ProfileScreen = ({ route }) => {
 
   const getSex = (sex) => {
     if(!sex)
-      return "Male";
-    return "Female";
+      return "Laki-laki";
+    return "Perempuan";
   }
 
+
+  const onDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    const today = new Date();
+    if (currentDate < today.setHours(0, 0, 0, 0)) {
+      Alert.alert("Error", "Tanggal tidak boleh sebelum waktu sekarang.");
+      setShowDatePicker(false);
+      return;
+    }
+    setShowDatePicker(false);
+    setChildDOB(currentDate);
+  };
+  
 
 
 
@@ -261,7 +333,8 @@ const ProfileScreen = ({ route }) => {
         left: 0,
         alignItems: 'baseline',
       }}>
-          {English[0].your_account}
+          {/* {English[0].your_account} */}
+          Akun Anda
       </Text>
       {/* YOUR ACCOUNT */}
       <View style={{
@@ -293,7 +366,8 @@ const ProfileScreen = ({ route }) => {
             top: margin_inside,
             left: margin_inside,
           }}>
-            {English[0].parent}
+            {/* {English[0].parent} */}
+            Orangtua
           </Text>
 
           {/* Parent Profile Image */}
@@ -414,7 +488,8 @@ const ProfileScreen = ({ route }) => {
             top: margin_inside,
             left: margin_inside,
           }}>
-            {English[0].children}
+            {/* {English[0].children} */}
+            Anak-anak
           </Text>
 
           <ScrollView horizontal={true} style={{
@@ -433,7 +508,7 @@ const ProfileScreen = ({ route }) => {
 
 
 
-            {/* Add Child */}
+            {/* Children */}
             {childrenProfiles.map((child, index) => (
               <ChildCard
                 key={index}
@@ -442,6 +517,8 @@ const ProfileScreen = ({ route }) => {
                 onSelect={() => handleSelectChild(child.id)}
               />
             ))}
+
+            {/* Add Child */}
             <View style={{
               width: 70,
               height: 70+40,
@@ -478,10 +555,115 @@ const ProfileScreen = ({ route }) => {
             visible={modalVisible}
             onRequestClose={() => setModalVisible(false)}
           >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Hello, this is a popup!</Text>
-                <Button title="close" onPress={() => setModalVisible(false)} />
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 22 }}>
+              <View style={{
+                margin: 20,
+                backgroundColor: 'white',
+                borderRadius: 20,
+                padding: 35,
+                alignItems: 'center',
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 4,
+                elevation: 5,
+              }}>
+                <Text style={{ marginBottom: 15, textAlign: 'center' }}>Add a New Child</Text>
+                <TextInput
+                  placeholder="Child's Name"
+                  value={childName}
+                  onChangeText={setChildName}
+                  style={{
+                    height: 40,
+                    borderColor: 'gray',
+                    borderWidth: 1,
+                    marginBottom: 10,
+                    paddingLeft: 8,
+                    width: 200,
+                  }}
+                />
+                {/* <TextInput
+                  placeholder="Child's Date of Birth"
+                  value={childDOB}
+                  onChangeText={setChildDOB}
+                  style={{
+                    height: 40,
+                    borderColor: 'gray',
+                    borderWidth: 1,
+                    marginBottom: 10,
+                    paddingLeft: 8,
+                    width: 200,
+                  }}
+                  // keyboardType="numeric"
+                /> */}
+
+
+                <TouchableOpacity onPress={() => setShowDatePicker(true)} style={{width:'100%', alignItems:'center', justifyContent:'center'}}>
+                  <TextInput
+                    style={[styles.input, {fontWeight:'condensedBold'}]}
+                    placeholder="Tanggal Lahir"
+                    value={"Masukkan DOB: " + childDOB.toLocaleDateString()}
+                    editable={false}
+                  />
+                </TouchableOpacity>
+                {showDatePicker && (
+                  <DateTimePicker
+                    value={childDOB}
+                    mode="date"
+                    display="default"
+                    onChange={onDateChange}
+                  />
+                )}
+
+
+
+                <TextInput
+                  placeholder="Child's Gender"
+                  value={childGender}
+                  onChangeText={setChildGender}
+                  style={{
+                    height: 40,
+                    borderColor: 'gray',
+                    borderWidth: 1,
+                    marginBottom: 10,
+                    paddingLeft: 8,
+                    width: 200,
+                  }}
+                  // keyboardType="numeric"
+                />
+                <TextInput
+                  placeholder="Child's Picture"
+                  value={childPicture}
+                  onChangeText={setChildPicture}
+                  style={{
+                    height: 40,
+                    borderColor: 'gray',
+                    borderWidth: 1,
+                    marginBottom: 10,
+                    paddingLeft: 8,
+                    width: 200,
+                  }}
+                  // keyboardType="numeric"
+                />
+                <TextInput
+                  placeholder="Child's NIK"
+                  value={childNIK}
+                  onChangeText={setChildNIK}
+                  style={{
+                    height: 40,
+                    borderColor: 'gray',
+                    borderWidth: 1,
+                    marginBottom: 10,
+                    paddingLeft: 8,
+                    width: 200,
+                  }}
+                  keyboardType="numeric"
+                />
+                <Button title="Add Child" onPress={handleAddChild} />
+                <Button title="Cancel" onPress={() => setModalVisible(false)} />
               </View>
             </View>
           </Modal>
@@ -492,6 +674,56 @@ const ProfileScreen = ({ route }) => {
         </View>
         
 
+
+      </View>
+
+      {/* erm what the sigma */}
+      <View style={{
+        width: boxWidth,
+        height: boxHeight - height_mainProfileCard - height_yourAccountCard - 3*margin_outside - 20 - 70*2 - 24,
+        marginTop: 20,
+        alignItems: 'center',
+        backgroundColor: 'white',
+      }}>
+        <Text style={{
+          fontFamily: 'NunitoSans-Bold',
+          fontSize: 20,
+          marginTop: 20,
+          color: 'black',
+        }}>
+          Pengaturan
+        </Text>
+        {/* <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: 20,
+        }}>
+          <Image source={require('path/to/english_icon.png')} style={{ width: 24, height: 24 }} />
+          <Text style={{
+            fontFamily: 'NunitoSans-Bold',
+            fontSize: 16,
+            marginLeft: 10,
+            color: 'black',
+          }}>
+            English
+          </Text>
+        </View>
+
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: 10,
+        }}>
+          <Image source={require('../assest/customer_service_icon.png')} style={{ width: 24, height: 24 }} />
+          <Text style={{
+            fontFamily: 'NunitoSans-Bold',
+            fontSize: 16,
+            marginLeft: 10,
+            color: 'black',
+          }}>
+            Customer Service
+          </Text>
+        </View> */}
 
       </View>
 

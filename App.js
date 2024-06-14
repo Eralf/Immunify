@@ -33,6 +33,9 @@ import {ImageViewer} from './ImageViewer';
 import HomeScreenTemporarily from './screens/HomeScreenTemporarily';
 import { ViewAppointmentsProvider } from './ViewAppointmentsContext';
 
+import { useUser } from './UserContext';
+import { useChild } from './ChildContext';
+
 const Stack = createNativeStackNavigator();
 
 var selectedProfile = 1;
@@ -51,6 +54,7 @@ export default function App() {
   // });
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
+  
     useEffect(() => {
       async function loadResourcesAndDataAsync() {
         try {
