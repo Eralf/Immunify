@@ -36,19 +36,25 @@ const AnnouncementsScreen = ({ navigation, route }) => {
   const sortAppointmentsByDate = (appointments) => {
     return appointments.sort((a, b) => {
       let dateA, dateB;
-
+  
+      // Parse date A
       if (a.announcementDate && typeof a.announcementDate === 'object' && 'seconds' in a.announcementDate) {
         dateA = new Date(a.announcementDate.seconds * 1000);
-      } else {
+      } else if (a.announcementDate) {
         dateA = new Date(a.announcementDate);
+      } else {
+        return 1; // Handle cases where announcementDate is missing in one of the objects
       }
-
+  
+      // Parse date B
       if (b.announcementDate && typeof b.announcementDate === 'object' && 'seconds' in b.announcementDate) {
         dateB = new Date(b.announcementDate.seconds * 1000);
-      } else {
+      } else if (b.announcementDate) {
         dateB = new Date(b.announcementDate);
+      } else {
+        return -1; // Handle cases where announcementDate is missing in one of the objects
       }
-
+  
       return dateB - dateA; // Sort in descending order
     });
   };
