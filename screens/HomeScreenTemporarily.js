@@ -3,12 +3,21 @@ import { View, Text, Button, TouchableOpacity, StyleSheet, Image, ScrollView } f
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../colors';
+import { useViewChild } from '../ViewChildContext';
+import { useChild } from '../ChildContext';
+import { useUser } from '../UserContext';
 
 const pfp_main_temp = '../assets/Girl.png';
 const syringe = '../assets/Syringe.png';
 const listPaper = '../assets/listPaper.png';
 const HomeScreenTemporarily = () => {
   const navigation = useNavigation();
+  const {viewChild} = useViewChild();
+  const {childID, setChildID} = useChild();
+  const {userID, setUserID} = useUser();
+  setChildID(viewChild[0].id);
+  console.log('Current child ID:'+viewChild[0].id);
+  console.log('Current parent ID:'+userID);
   return (
     <ScrollView>
     <SafeAreaView style={{backgroundColor:'white'}}>
@@ -70,7 +79,7 @@ const HomeScreenTemporarily = () => {
             </View>
             <View style={{justifyContent:'center'}}>
               <Text style={{fontFamily: 'NunitoSans-Regular'}}>Mau Daftar Vaksin?</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')} style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10}}><Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular'}}>Daftar Disini!</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('EnterScreen')} style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10}}><Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular'}}>Daftar Disini!</Text></TouchableOpacity>
             </View>
           </View>
           <View style={{flexDirection:'row', justifyContent:'space-between',marginTop:10,marginBottom:50, marginHorizontal:20,backgroundColor:'white',padding:20,borderRadius:10}}>
