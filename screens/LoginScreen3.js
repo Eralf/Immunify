@@ -66,7 +66,12 @@ const RegisterScreen = ({ navigation, route }) => {
 
         <TextInput placeholder="Enter Username or Email" style={styles.input} value={email} onChangeText={setEmail}/>
         <TextInput placeholder="Enter password" style={styles.input} secureTextEntry value={password} onChangeText={setPassword}/>
-
+        <View  style = {styles.container3}>
+          <Text style = {styles.container3.text1}>Belum punya akun?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
+           <Text style = {styles.container3.text2}>Daftar</Text>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity style = {styles.buttonContainer} onPress={submitConfirm}>   
           <Text style = {styles.buttonText}>Masuk</Text>
         </TouchableOpacity>
@@ -82,6 +87,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#CFF0FF',
+  },
+  container3: {
+    alignItems: 'center',
+    flexDirection: 'row',
+      text1: {
+        color: '#867F7F',
+        fontSize: 15,
+        fontWeight: 'bold',
+        margin: 5,
+      },
+      text2: {
+        color: '#01A2FF',
+        fontSize: 15,
+        fontWeight: 'bold',
+      }
   },
   container1: {
     width: dw * 0.8,
