@@ -38,7 +38,7 @@ const Stack = createNativeStackNavigator();
 
 var selectedProfile = 1;
 var profiles_dir = './profiles.json';
-
+// const {viewAppointments} = useViewAppointments();
 export default function App() {
   // let [fontsLoaded] = useFonts({
   //   'NunitoSans-Light': require('./assets/fonts/NunitoSans_10pt-Light.ttf'),
@@ -51,7 +51,7 @@ export default function App() {
   //   'NunitoSans-Italic': require('./assets/fonts/NunitoSans_10pt-Italic.ttf'),
   // });
   const [fontsLoaded, setFontsLoaded] = useState(false);
-
+  // const {viewAppointments} = useViewAppointments();
     useEffect(() => {
       async function loadResourcesAndDataAsync() {
         try {
@@ -121,6 +121,25 @@ export default function App() {
           })}
         /> */}
         <Stack.Screen
+          name='Login'
+          component={LoginScreen}
+          options={{
+            title:'',
+            // title: 'Login',
+            headerBackVisible: false,
+            // headerLeft: () => (
+            //   <Image
+            //     source={require('./assets/pfp/parentpfptemp.jpg')}
+            //     style={styles.profPict}
+            //   />
+            // ), 
+            // headerRight:() => (
+            //   <Ionicons name="settings" size={24} color="black" />
+            // ),
+            animation:'fade'
+          }}
+        />
+        <Stack.Screen
           name='HomeTemporarily'
           component={HomeScreenTemporarily}
           options={({ navigation }) => ({
@@ -140,7 +159,7 @@ export default function App() {
                   color='black'
                   onPress={() => navigation.navigate('Announcements')}
                 />
-                {/* <View style={{backgroundColor: '#FF0000',width: 10,height: 10,borderRadius: 10, position:'absolute', right:0}}></View> */}
+                <View style={{backgroundColor: '#FF0000',width: 10,height: 10,borderRadius: 10, position:'absolute', right:0}}></View>
             </View>
               
             ),
@@ -199,12 +218,15 @@ export default function App() {
               />
             ),
             headerRight: () => (
-              <Fontisto
-                name='bell-alt'
-                size={24}
-                color='black'
-                onPress={() => navigation.navigate('Announcements')}
-              />
+              <View style={{position:'relative'}}>
+                <Fontisto
+                  name='bell-alt'
+                  size={24}
+                  color='black'
+                  onPress={() => navigation.navigate('Announcements')}
+                />
+                <View style={{backgroundColor: '#FF0000',width: 10,height: 10,borderRadius: 10, position:'absolute', right:0}}></View>
+              </View>
             ),
             animation: 'fade',
           })}
@@ -223,35 +245,20 @@ export default function App() {
               />
             ),
             headerRight: () => (
-              <Fontisto
-                name='bell-alt'
-                size={24}
-                color='black'
-                onPress={() => navigation.navigate('Announcements')}
-              />
+              <View style={{position:'relative'}}>
+                <Fontisto
+                  name='bell-alt'
+                  size={24}
+                  color='black'
+                  onPress={() => navigation.navigate('Announcements')}
+                />
+                <View style={{backgroundColor: '#FF0000',width: 10,height: 10,borderRadius: 10, position:'absolute', right:0}}></View>
+              </View>
             ),
             animation: 'fade',
           })}
         />
-        <Stack.Screen
-          name='Login'
-          component={LoginScreen}
-          options={{
-            title:'',
-            // title: 'Login',
-            headerBackVisible: false,
-            // headerLeft: () => (
-            //   <Image
-            //     source={require('./assets/pfp/parentpfptemp.jpg')}
-            //     style={styles.profPict}
-            //   />
-            // ), 
-            // headerRight:() => (
-            //   <Ionicons name="settings" size={24} color="black" />
-            // ),
-            animation:'fade'
-          }}
-        />
+        
         <Stack.Screen
           name='Announcements'
           component={AnnouncementsScreen}
@@ -265,12 +272,15 @@ export default function App() {
               />
             ),
             headerRight: () => (
-              <Fontisto
-                name='bell-alt'
-                size={24}
-                color='black'
-                onPress={() => navigation.navigate('Announcements')}
-              />
+              <View style={{position:'relative'}}>
+                <Fontisto
+                  name='bell-alt'
+                  size={24}
+                  color='black'
+                  onPress={() => navigation.navigate('Announcements')}
+                />
+                <View style={{backgroundColor: '#FF0000',width: 10,height: 10,borderRadius: 10, position:'absolute', right:0}}></View>
+              </View>
             ),
             animation: 'fade',
           })}
@@ -288,12 +298,15 @@ export default function App() {
               />
             ),
             headerRight: () => (
-              <Fontisto
-                name='bell-alt'
-                size={24}
-                color='black'
-                onPress={() => navigation.navigate('Announcements')}
-              />
+              <View style={{position:'relative'}}>
+                <Fontisto
+                  name='bell-alt'
+                  size={24}
+                  color='black'
+                  onPress={() => navigation.navigate('Announcements')}
+                />
+                <View style={{backgroundColor: '#FF0000',width: 10,height: 10,borderRadius: 10, position:'absolute', right:0}}></View>
+              </View>
             ),
             animation: 'fade',
           })}
@@ -311,12 +324,15 @@ export default function App() {
               />
             ),
             headerRight: () => (
-              <Fontisto
-                name='bell-alt'
-                size={24}
-                color='black'
-                onPress={() => navigation.navigate('Announcements')}
-              />
+              <View style={{position:'relative'}}>
+                <Fontisto
+                  name='bell-alt'
+                  size={24}
+                  color='black'
+                  onPress={() => navigation.navigate('Announcements')}
+                />
+                <View style={{backgroundColor: '#FF0000',width: 10,height: 10,borderRadius: 10, position:'absolute', right:0}}></View>
+              </View>
             ),
             animation: 'fade',
           })}
@@ -334,12 +350,15 @@ export default function App() {
               />
             ),
             headerRight: () => (
-              <Fontisto
-                name='bell-alt'
-                size={24}
-                color='black'
-                onPress={() => navigation.navigate('Announcements')}
-              />
+              <View style={{position:'relative'}}>
+                <Fontisto
+                  name='bell-alt'
+                  size={24}
+                  color='black'
+                  onPress={() => navigation.navigate('Announcements')}
+                />
+                <View style={{backgroundColor: '#FF0000',width: 10,height: 10,borderRadius: 10, position:'absolute', right:0}}></View>
+              </View>
             ),
             animation: 'fade',
           })}
@@ -357,12 +376,15 @@ export default function App() {
               />
             ),
             headerRight: () => (
-              <Fontisto
-                name='bell-alt'
-                size={24}
-                color='black'
-                onPress={() => navigation.navigate('Announcements')}
-              />
+              <View style={{position:'relative'}}>
+                <Fontisto
+                  name='bell-alt'
+                  size={24}
+                  color='black'
+                  onPress={() => navigation.navigate('Announcements')}
+                />
+                <View style={{backgroundColor: '#FF0000',width: 10,height: 10,borderRadius: 10, position:'absolute', right:0}}></View>
+              </View>
             ),
             animation: 'fade',
           })}
@@ -380,12 +402,15 @@ export default function App() {
               />
             ),
             headerRight: () => (
-              <Fontisto
-                name='bell-alt'
-                size={24}
-                color='black'
-                onPress={() => navigation.navigate('Announcements')}
-              />
+              <View style={{position:'relative'}}>
+                <Fontisto
+                  name='bell-alt'
+                  size={24}
+                  color='black'
+                  onPress={() => navigation.navigate('Announcements')}
+                />
+                <View style={{backgroundColor: '#FF0000',width: 10,height: 10,borderRadius: 10, position:'absolute', right:0}}></View>
+              </View>
             ),
             animation: 'fade',
           })}
@@ -403,12 +428,15 @@ export default function App() {
               />
             ),
             headerRight: () => (
-              <Fontisto
-                name='bell-alt'
-                size={24}
-                color='black'
-                onPress={() => navigation.navigate('Announcements')}
-              />
+              <View style={{position:'relative'}}>
+                <Fontisto
+                  name='bell-alt'
+                  size={24}
+                  color='black'
+                  onPress={() => navigation.navigate('Announcements')}
+                />
+                <View style={{backgroundColor: '#FF0000',width: 10,height: 10,borderRadius: 10, position:'absolute', right:0}}></View>
+              </View>
             ),
             animation: 'fade',
           })}
