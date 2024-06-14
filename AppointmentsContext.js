@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { db } from './firebasecfg'; 
 import { collection, onSnapshot, doc, deleteDoc, addDoc, setDoc } from 'firebase/firestore';
+import { useUser } from './UserContext';
+import { useChild } from './ChildContext';
 
 const AppointmentsContext = createContext();
 
@@ -9,11 +11,13 @@ export const useAppointments = () => {
 };
 
 export const AppointmentsProvider = ({ children }) => {
+  const {userID} = useUser();
+  const {childID} = useChild();
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-    const profileId = 'profileIdExample'; // Replace with dynamic profile ID if necessary
-
+    const profileId = userID; // Replace with dynamic profile ID if necessary
+    console.log('profileId:', profileId);
     const unsubscribeAppointments = onSnapshot(
       collection(db, 'profiles', profileId, 'allAppointment'),
       (appointmentSnapshot) => {
@@ -55,7 +59,7 @@ export const AppointmentsProvider = ({ children }) => {
 
   const deleteAppointment = async (appointmentId) => {
     try {
-      const profileId = 'profileIdExample'; // Replace with dynamic profile ID if necessary
+      const profileId = userID; // Replace with dynamic profile ID if necessary
   
       // Find the appointment to get the childId
       console.log(appointments);
