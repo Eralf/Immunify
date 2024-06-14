@@ -61,7 +61,6 @@ const HomeScreenTemporarily = () => {
 
       </TouchableOpacity>
       <View style={{backgroundColor:'#A9E5FF',borderTopLeftRadius:20,borderTopRightRadius:20, position:'relative', overflow:'hidden'}}>
-          <Text style={{textAlign:'center',fontFamily: 'NunitoSans-Bold',marginTop:10,fontSize: 18}}>Servis</Text>
           <Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular',marginTop:10,fontSize: 17}}>Layanan</Text>
           <View style={{backgroundColor:'#D4F4F9', width:150, height:150,position:'absolute',
             borderRadius:75,  transform: [
