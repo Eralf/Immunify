@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { db } from './firebasecfg'; // Adjust this path to your Firebase configuration
 import { collection, onSnapshot } from 'firebase/firestore';
-import { useUser } from './UserContext';
-import { useChild } from './ChildContext';
+import { useUser } from './UserContext'; //for user/paren id
+import { useChild } from './ChildContext'; //for child
 
 const ViewAppointmentsContext = createContext();
 
