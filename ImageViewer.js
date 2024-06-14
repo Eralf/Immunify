@@ -8,6 +8,7 @@ const ImageDisplay = ({imagePath, height=300, width=200, scaleMode='contain'}) =
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
   useEffect(() => {
     const fetchImageUrl = async () => {
       try {
@@ -23,7 +24,7 @@ const ImageDisplay = ({imagePath, height=300, width=200, scaleMode='contain'}) =
     };
 
     fetchImageUrl();
-  }, []);
+  }, [imagePath]);
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -36,11 +37,14 @@ const ImageDisplay = ({imagePath, height=300, width=200, scaleMode='contain'}) =
   return (
     <View>
       {imageUrl && (
-        <Image
-          source={{ uri: imageUrl }}
-          style={{ width: width, height: height }}
-          resizeMode={scaleMode}
-        />
+        <View>
+          <Image
+            source={{ uri: imageUrl }}
+            style={{ width: width, height: height }}
+            resizeMode={scaleMode}
+          />
+          {/* <Text style={{position: 'absolute', top: 0, fontSize: 10}}>{imageUrl}</Text> */}
+        </View>
       )}
     </View>
   );
