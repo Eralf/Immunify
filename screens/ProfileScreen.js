@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, Button, TouchableOpacity, Image, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { View, Text, Button, TouchableOpacity, Image, StyleSheet, Dimensions, ScrollView, TextInput, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { db, collection, doc, getDocs } from '../firebasecfg';
 
 import { useProfiles } from '../ProfilesContext';
+// import { useSelectedProfile } from '../SelectedProfileContext';
 
 import ImageDisplay from '../ImageViewer';
 
@@ -11,14 +12,16 @@ const English = require('../languages/English.json');
 
 
 
-var bgImage = '../assets/mainprofile-bg.png';
+const bgImage = '../assets/mainprofile-bg.png';
+const addChildPopupBgImage = '../assets/addchild_popup_bg.png';
+const pfpIcon = '../assets/Girl.png';
 
 const pfp_main_temp = '../assets/pfp/mainpfptemp.png';
 const pfp_parent_temp = '../assets/pfp/parentpfptemp.jpg';
 
 var addchild_button = '../assets/addchild_button.png';
 
-var selectedProfile_index = 0;
+// var selectedProfile_index = 0;
 var parentProfile_index = 0;
 
 const margin_outside = 17;
@@ -39,7 +42,20 @@ const ProfileScreen = ({ route }) => {
 
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [parentProfile, setParentProfile] = useState(null);
-  const [childrenProfiles, setChildrenProfiles] = useState([]);
+  const [childrenProfiles, setChildrenProfiles] = useState({});
+  
+  const [modalVisible, setModalVisible] = useState(false);
+
+
+
+  const [selectedChild, setSelectedChild] = useState('1');
+  const handleSelectChild = async (childId) => {
+    setSelectedChild(childId);
+    setSelectedProfile(childrenProfiles[selectedChild]);
+  };
+
+
+
 
   useEffect(() => {
     if (profiles && profiles.length > 0) {
@@ -60,7 +76,7 @@ const ProfileScreen = ({ route }) => {
       }));
       setChildrenProfiles(childrenData);
       if (childrenData.length > 0) {
-        setSelectedProfile(childrenData[selectedProfile_index]);
+        setSelectedProfile(childrenData[selectedChild]);
       }
     } catch (error) {
       console.error("Error fetching children profiles: ", error);
@@ -97,7 +113,7 @@ const ProfileScreen = ({ route }) => {
       return `${years} years and ${months} months old`;
     } else if (years === 1) {
       return `${years} year and ${months} months old`;
-    } else if (years > 0) {
+    } else if (years >= 0) {
       return `${months} months and ${days} days old`;
     } else {
       return `${days} days old`;
@@ -124,42 +140,7 @@ const ProfileScreen = ({ route }) => {
     return "Female";
   }
 
-  // const [showAddChildPopup, setShowAddChildPopup] = useState(false);
-  // const handleAddChildPress = () => {
-  //   setShowAddChildPopup(true);
-  // };
-  // const handleAddChildSubmit = () => {
-  //   // Handle form submission logic here
-  //   console.log("Form submitted");
-  // };
-  // if (showAddChildPopup) {
-  //   return (
-  //     <View style={styles.addChildPopupContainer}>
-  //       {/* Background */}
-  //       <Image source={require(addChildPopupBgImage)} style={styles.addChildPopupBackground} />
 
-  //       {/* Title */}
-  //       <Text style={styles.addChildPopupTitle}>Add Child</Text>
-
-  //       {/* Image */}
-  //       <Image source={require(childImage)} style={styles.addChildPopupImage} />
-
-  //       {/* Form */}
-  //       <View style={styles.addChildPopupForm}>
-  //         {/* Form fields */}
-  //         <TextInput style={styles.addChildPopupFormField} placeholder="Name" />
-  //         <TextInput style={styles.addChildPopupFormField} placeholder="Date of Birth" />
-  //         <TextInput style={styles.addChildPopupFormField} placeholder="Sex" />
-  //         <TextInput style={styles.addChildPopupFormField} placeholder="NIK" />
-
-  //         {/* Submit button */}
-  //         <TouchableOpacity style={styles.addChildPopupSubmitButton} onPress={handleAddChildSubmit}>
-  //           <Text style={styles.addChildPopupSubmitButtonText}>Submit</Text>
-  //         </TouchableOpacity>
-  //       </View>
-  //     </View>
-  //   );
-  // }
 
 
   return (
@@ -198,6 +179,7 @@ const ProfileScreen = ({ route }) => {
             justifyContent: 'center',
             overflow: 'hidden',
           }}>
+            {/* <Text>{selectedProfile.picture}</Text> */}
             <ImageDisplay imagePath={selectedProfile.picture} height={height_mainProfileCard-2*margin_inside} width={90} scaleMode={'fill'}/>
           </View>
         
@@ -435,7 +417,12 @@ const ProfileScreen = ({ route }) => {
 
             {/* Add Child */}
             {childrenProfiles.map((child, index) => (
-              <ChildCard key={index} child={child} isSelected={index===selectedProfile_index} />
+              <ChildCard
+                key={index}
+                child={child}
+                selected={selectedChild}
+                onSelect={() => handleSelectChild(child.id)}
+              />
             ))}
             <View style={{
               width: 70,
@@ -443,13 +430,17 @@ const ProfileScreen = ({ route }) => {
               borderRadius: br_bigCard,
               overflow: 'hidden',
             }}>
-              <TouchableOpacity style={{width: 70, height: 70, borderRadius: br_bigCard, overflow: 'hidden'}}>
+              <TouchableOpacity
+                style={{width: 70, height: 70, borderRadius: br_bigCard, overflow: 'hidden'}}
+                onPress={() => setModalVisible(true)}
+              >
                 <Image source={require(addchild_button)} style={{width: 70, height: 70}}/>
               </TouchableOpacity>
               <Text style={{
                 fontFamily: 'NunitoSans-Bold',
                 fontSize: 12,
                 textAlign: 'center',
+                marginTop: 5,
               }}>
                 Add Child
               </Text>
@@ -458,6 +449,27 @@ const ProfileScreen = ({ route }) => {
             {/* spacer */}
             <View style={{width: margin_inside}}></View>
           </ScrollView>
+          
+          
+
+
+          {/* POPUP */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Hello, this is a popup!</Text>
+                <Button title="close" onPress={() => setModalVisible(false)} />
+              </View>
+            </View>
+          </Modal>
+
+
+
 
         </View>
         
@@ -469,9 +481,9 @@ const ProfileScreen = ({ route }) => {
   );
 }
 
-const ChildCard = ({child, isSelected}) => {
+const ChildCard = ({child, selected, onSelect}) => {
   var boxWidth;
-  if(isSelected) boxWidth = 90;
+  if(child.id === selected) boxWidth = 90;
   else boxWidth = 70;
 
   return (
@@ -494,7 +506,9 @@ const ChildCard = ({child, isSelected}) => {
         overflow: 'hidden',
         display: 'flex',
         justifyContent: 'center',
-      }}>
+      }}
+        onPress={onSelect}
+      >
         <ImageDisplay imagePath={child.picture} height={boxWidth} width={boxWidth} scaleMode={'fill'}/>
       </TouchableOpacity>
 
