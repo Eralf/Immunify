@@ -6,7 +6,6 @@ import { db } from '../firebasecfg';
 import { collection, addDoc, doc, setDoc, getDocs } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../UserContext';
-import { useChild } from '../ChildContext';
 
 const AppointmentForm = () => {
   const navigation = useNavigation();
@@ -17,11 +16,11 @@ const AppointmentForm = () => {
   const [time, setTime] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [parentName, setParentName] = useState('');
-  const [childName, setChildName] = useState('');
-  const [children, setChildren] = useState([]); // State to store children list
+  const [selectedChildId, setSelectedChildId] = useState(''); // State for selected child ID
+  const [selectedChildName, setSelectedChildName] = useState(''); // State for selected child name
   const [modalVisible, setModalVisible] = useState(false);
   const { userID } = useUser();
-  const { childID } = useChild();
+  const [children, setChildren] = useState([]); // State to store children list
 
   useEffect(() => {
     // Fetch the children from Firestore
@@ -61,7 +60,7 @@ const AppointmentForm = () => {
     "Chickenpox",
     "Hepatitis A",
     "Hepatitis B",
-    "Human Papillomavirus (HPV)",
+    "HPV",
     "Influenza (Flu)",
     "Measles",
     "Mumps",
@@ -111,7 +110,7 @@ const AppointmentForm = () => {
   };
 
   const validateForm = () => {
-    if (!vaccineType || !location || !parentName || !childName) {
+    if (!vaccineType || !location || !parentName || !selectedChildId) {
       Alert.alert("Error", "Semua data harus diisi.");
       return false;
     }
@@ -131,17 +130,16 @@ const AppointmentForm = () => {
         location: location,
         dateTime: combinedDateTime,
         parentName: parentName,
-        childName: childName,
         childId: childId,
-        status: 'Aktif',
+        childName: selectedChildName // Include child name
       };
-  
+
       // Add to child -> appointments collection
       addDoc(collection(db, 'profiles', profileId, 'child', childId, 'appointments'), appointmentData)
         .then((docRef) => {
           const appRefId = docRef.id;
           console.log('Appointment added to child appointments successfully with ID:', appRefId);
-          
+
           // Add to allappointments collection with the same ID
           const allAppointmentRef = doc(db, 'profiles', profileId, 'allAppointment', appRefId);
           console.log('allAppointmentRef:', allAppointmentRef.id);
@@ -167,7 +165,7 @@ const AppointmentForm = () => {
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={vaccineType}
-            onValueChange={(itemValue, itemIndex) => setVaccineType(itemValue)}
+            onValueChange={(itemValue) => setVaccineType(itemValue)}
           >
             <Picker.Item label="Pilih Jenis Vaksin" value="" />
             {vaccineTypes.map((type, index) => (
@@ -175,12 +173,12 @@ const AppointmentForm = () => {
             ))}
           </Picker>
         </View>
-        
+
         <Text style={styles.label}>Pilih Lokasi Vaksinasi</Text>
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={location}
-            onValueChange={(itemValue, itemIndex) => setLocation(itemValue)}
+            onValueChange={(itemValue) => setLocation(itemValue)}
           >
             <Picker.Item label="Pilih Lokasi Vaksinasi" value="" />
             {locations.map((loc, index) => (
@@ -242,12 +240,16 @@ const AppointmentForm = () => {
         <Text style={styles.label}>Nama Anak</Text>
         <View style={styles.pickerContainer}>
           <Picker
-            selectedValue={childName}
-            onValueChange={(itemValue, itemIndex) => setChildName(itemValue)}
+            selectedValue={selectedChildId}
+            onValueChange={(itemValue, itemIndex) => {
+              setSelectedChildId(itemValue);
+              const selectedChild = children.find(child => child.id === itemValue);
+              setSelectedChildName(selectedChild ? selectedChild.name : '');
+            }}
           >
             <Picker.Item label="Pilih Nama Anak" value="" />
             {children.map((child, index) => (
-              <Picker.Item key={index} label={child.name} value={child.name} />
+              <Picker.Item key={index} label={child.name} value={child.id} />
             ))}
           </Picker>
         </View>
@@ -255,7 +257,7 @@ const AppointmentForm = () => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.confirmButton}
-            onPress={() => submitConfirm(userID, childID)}
+            onPress={() => submitConfirm(userID, selectedChildId)}
           >
             <Text style={styles.confirmButtonText}>Konfirmasi</Text>
           </TouchableOpacity>

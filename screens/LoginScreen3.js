@@ -45,16 +45,11 @@ const RegisterScreen = ({ navigation, route }) => {
 
       <View style={styles.container1}>
 
-        <Text style={styles.title}>Daftar</Text>
-
-        <TouchableOpacity style={styles.googleButton}>
-          <Text style={styles.googleButtonText}>Daftar dengan akun Google</Text>
-          <Image source={require('../assets/googleLogo.png')} style={styles.googleIcon} />
-        </TouchableOpacity>
+        <Text style={styles.title}>Masuk</Text>
 
         <View style = {styles.container2}>
           <View style={styles.line}/>
-          <Text style={styles.separator}>Atau lanjut dengan Email</Text>
+          <Text style={styles.separator}>Masukan akun anda</Text>
           <View style={styles.line}/>
         </View>
         
@@ -106,30 +101,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  googleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#000',
-    borderRadius: 25,
-    height: 50,
-    width: (dw/2) + 55,
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  googleButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 15,
-    marginLeft: 10,
-    height: 25,
-    marginRight: 10,
-  },
-  googleIcon: {
-    marginLeft: 5,
-    marginRight: 10,
-    width: 20,
-    height: 20,
-  },
   separator: {
     fontSize: 14,
     fontWeight: 'bold',
@@ -153,10 +124,10 @@ const styles = StyleSheet.create({
     height: 35,
   },
   image: {
-    width: 320,
-    height: 320,
+    width: 400,
+    height: 400,
     resizeMode: 'contain',
-    top: (dh/-20) + 50,
+    top: (dh/-20) + 40,
     right: 80,
   },
   background: {
@@ -172,7 +143,7 @@ const styles = StyleSheet.create({
     right: (dw/-20) - 30,
     height: 150,
     width: 120,
-    top: (dh/3) + 75,
+    top: (dh/3) - 10,
     resizeMode: 'contain',
   },
 });
