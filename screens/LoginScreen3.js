@@ -19,6 +19,7 @@ const RegisterScreen = ({ navigation, route }) => {
   const {profiles} = useProfiles();
   const {userID, setUserID} = useUser();
   const {childID, setChildID} = useChild();
+  const {viewChild} = useViewChild();
 
   const validateForm = () => {
     if (!email || !password) {
@@ -33,6 +34,7 @@ const RegisterScreen = ({ navigation, route }) => {
       // console.log("ID "+sameProfile[0].id);
       // console.log("Email "+sameProfile[0].email);
       setUserID(sameProfile[0].id);
+      setChildID(viewChild[0].id);
       return true;
     }
     Alert.alert("Error", "Kredensial salah atau email belum terdaftar");

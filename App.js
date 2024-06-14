@@ -28,18 +28,21 @@ import { CompletedAppointmentsProvider } from './CompletedAppointmentsContext';
 import { MissedAppointmentsProvider } from './MissedAppointmentsContext';
 import { ProfilesProvider, useProfiles } from './ProfilesContext';
 import { UserProvider, useUser } from './UserContext';
-import { ChildProvider } from './ChildContext';
+import { ChildProvider, useChild } from './ChildContext';
 import { ViewAppointmentsProvider } from './ViewAppointmentsContext';
-import { ViewChildProvider } from './ViewChildContext';
+import { ViewChildProvider, useViewChild } from './ViewChildContext';
 
 const Stack = createNativeStackNavigator();
 
 const AppContent = () =>{
   const {userID} = useUser();
+  const {childID, setChildID} = useChild();
   const {profiles} = useProfiles();
+  const {viewChild} = useViewChild();
   const sameProfile = profiles.filter(profile =>
     profile.id === userID
   );
+  // setChildID(viewChild[0].id);
   return(
     <Stack.Navigator>
       <Stack.Screen

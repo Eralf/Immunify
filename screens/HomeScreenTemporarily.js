@@ -17,8 +17,8 @@ const HomeScreenTemporarily = () => {
   const {viewChild} = useViewChild();
   const {childID, setChildID} = useChild();
   const {userID, setUserID} = useUser();
-  setChildID(viewChild[0].id);
-  console.log('Current child ID:'+viewChild[0].id);
+  // setChildID(viewChild[0].id);
+  console.log('Current child ID:'+childID);
   console.log('Current parent ID:'+userID);
   return (
     <ScrollView>

@@ -12,6 +12,8 @@ import { useProfiles } from '../ProfilesContext';
 // import { useSelectedProfile } from '../SelectedProfileContext';
 
 import ImageDisplay from '../ImageViewer';
+import { useChild } from '../ChildContext';
+import { useUser } from '../UserContext';
 
 const English = require('../languages/English.json');
 
@@ -45,6 +47,8 @@ const ProfileScreen = ({ route }) => {
   // const { profile } = route.params;
 
   const { profiles } = useProfiles();
+  const {childID, setChildID} = useChild();
+  const {userID, setUserID} = useUser();
 
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [parentProfile, setParentProfile] = useState(null);
@@ -170,9 +174,9 @@ const ProfileScreen = ({ route }) => {
   };
 
 
-
-  const [selectedChild, setSelectedChild] = useState('1');
+  const [selectedChild, setSelectedChild] = useState(childID);
   const handleSelectChild = async (childId) => {
+    // console.log("Child id from card:"+childId);
     // fetchChildrenProfiles(parentProfile.id);
 
     try {
@@ -185,6 +189,7 @@ const ProfileScreen = ({ route }) => {
       setChildrenProfiles(childrenData);
       if (childrenData.length > 0) {
         setSelectedProfile(childrenData[selectedChild]);
+        setChildID(childId);
       }
     } catch (error) {
       console.error("Error fetching children profiles: ", error);
