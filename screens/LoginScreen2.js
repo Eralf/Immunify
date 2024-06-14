@@ -1,5 +1,5 @@
 import React,  { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions, Alert, ScrollView, ActivityIndicator} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions, Alert, ScrollView, ActivityIndicator, ImageBackground} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Checkbox from 'expo-checkbox';
 import { collection, addDoc } from 'firebase/firestore';
@@ -10,6 +10,9 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
+import { Colors } from '../colors';
+import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const dw = Dimensions.get('window').width;
 const dh = Dimensions.get('window').height;
@@ -171,27 +174,48 @@ const RegisterScreen = ({ navigation, route }) => {
     }
   };
 
+  const [scrollY, setScrollY] = useState(0); // State to track scroll position
+  const maxScrollY = 350; // 60% of the height of the image
+
   return (
-    
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={{width:dw, alignItems:'center', justifyContent:'center'}}>
+      
+      <ScrollView contentContainerStyle={{width:dw, alignItems:'center', justifyContent:'center'}}
+       onScroll={(event) => {
+        const y = event.nativeEvent.contentOffset.y;
+        if (y > maxScrollY) {
+          setScrollY(maxScrollY);
+        } else {
+          setScrollY(y);
+        }
+      }}
+      scrollEnabled={scrollY < maxScrollY} // Limit scroll
+      scrollEventThrottle={5}
+      >
+      
       <LinearGradient
         colors={['#FFFFFF', '#CFF0FF']}
         style={styles.background}
       />
 
+      <ImageBackground>
+        <Image source = {require('../assets/Cloud5.png')} style ={styles.cloud1}/>
+        <Image source = {require('../assets/cloud2.png')} style ={styles.cloud2}/>
+        <Image source = {require('../assets/cloud3.png')} style ={styles.cloud3}/>
+      </ImageBackground>
+
       <View style={styles.container1}>
 
         <Text style={styles.title}>Daftar</Text>
 
-        <TouchableOpacity style={styles.googleButton}>
+        {/* <TouchableOpacity style={styles.googleButton}>
           <Text style={styles.googleButtonText}>Daftar dengan akun Google</Text>
           <Image source={require('../assets/googleLogo.png')} style={styles.googleIcon} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <View style = {styles.container2}>
           <View style={styles.line}/>
-          <Text style={styles.separator}>Atau lanjut dengan Email</Text>
+          <Text style={styles.separator}>Masukan data diri anda</Text>
           <View style={styles.line}/>
         </View>
         
@@ -220,17 +244,26 @@ const RegisterScreen = ({ navigation, route }) => {
         <Picker
             selectedValue={sex}
             onValueChange={(itemValue) => setSex(itemValue)}
+            itemStyle={{fontSize: 5}}
           >
             <Picker.Item label="Laki-laki" value={false}/>
             <Picker.Item label="Perempuan" value={true}/>
           </Picker>
         </View>
-        <TouchableOpacity style={styles.input} onPress={selectImage}>
-          <Text style={styles.pickImageText}>Pilih Gambar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.input} onPress={takePhoto}>
-          <Text style={styles.pickImageText}>Ambil Foto</Text>
-        </TouchableOpacity>
+
+        <View style = {styles.joshua}>
+          <TouchableOpacity style={styles.delemJoshua} onPress={selectImage}>
+            <Ionicons name="image" size={22} color = {Colors.black}/>
+          </TouchableOpacity>
+
+          <View style={styles.line2}/>
+
+          <TouchableOpacity style={styles.delemJoshua} onPress={takePhoto}>
+            <Ionicons name="camera" size={22} color = {Colors.black}/>
+          </TouchableOpacity>
+        </View>
+
+        
         {imageUri && (
           <>
             <Image source={{ uri: imageUri }} style={styles.image} />
@@ -259,6 +292,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#CFF0FF',
   },
+  joshua: {
+    flexDirection: 'row',
+    alignContent: 'space-evenly',
+    marginBottom: 20,
+    height: 40,
+  },
+  delemJoshua: {
+    width: 140,
+    padding: 10,
+    borderRadius: 25,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    elevation: 3,
+  },
+  line2: {
+    borderLeftWidth: 2,
+    borderRightWidth: 2,
+    width: 10,
+    marginHorizontal: 20,
+  },
   container1: {
     width: dw * 0.8,
     alignItems: 'center',
@@ -286,29 +339,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  googleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#000',
-    borderRadius: 25,
-    height: 50,
-    width: (dw/2) + 55,
-    justifyContent: 'center',
-    marginBottom: 20,
+  cloud1: {
+    position: 'absolute',
+    top: 200,
+    height: 400,
+    width:100,
+    right: (dw/-2) + 320,
+    resizeMode: 'contain'
   },
-  googleButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 15,
-    marginLeft: 10,
-    height: 25,
-    marginRight: 10,
+  cloud2: {
+    position: 'absolute',
+    right: (dw/-10) + 150,
+    height: 100,
+    width: 100,
+    top: 10,
   },
-  googleIcon: {
-    marginLeft: 5,
-    marginRight: 10,
-    width: 20,
-    height: 20,
+  cloud3: {
+    position: 'absolute',
+    right: (dw/-2) - 15,
+    height: 150,
+    width: 100,
+    top: 180,
+    resizeMode: 'contain',
   },
   separator: {
     fontSize: 14,
@@ -330,6 +382,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginBottom: 20,
     elevation: 3,
+    height: 40,
+    justifyContent: 'center',
+    resizeMode: 'contain',
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -346,34 +401,22 @@ const styles = StyleSheet.create({
   checkboxText: {
     fontSize: 14,
   },
-  registerButton: {
-    backgroundColor: '#01A2FF',
-    borderRadius: 25,
-    padding: 15,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  registerButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
   image: {
-    width: 230,
-    height: 230,
+    width: 530,
+    height: 530,
     resizeMode: 'contain',
-    top: dh/-20
+    top: (dh/-20) - 50
   },
   background: {
     position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
-    height: dh,
+    height: dh/2,
   },
   pickImageText:{
-    fontSize:16,
+    fontSize:14,
+    color: '#727272'
   },
 });
 
