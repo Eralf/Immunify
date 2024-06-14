@@ -5,6 +5,10 @@ import Checkbox from 'expo-checkbox';
 import { collection } from 'firebase/firestore';
 import { db } from '../firebasecfg';
 import { useProfiles } from '../ProfilesContext';
+import { useViewChild } from '../ViewChildContext';
+import { useUser } from '../UserContext';
+import { useChild } from '../ChildContext';
+
 
 const dw = Dimensions.get('window').width;
 const dh = Dimensions.get('window').height;
@@ -13,6 +17,8 @@ const RegisterScreen = ({ navigation, route }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const {profiles} = useProfiles();
+  const {userID, setUserID} = useUser();
+  const {childID, setChildID} = useChild();
 
   const validateForm = () => {
     if (!email || !password) {
@@ -20,9 +26,13 @@ const RegisterScreen = ({ navigation, route }) => {
       return false;
     }
     const sameProfile = profiles.filter(profile =>
-      profile.emailAddress === email && profile.password === password
+      profile.email === email && profile.password === password
     );
     if(sameProfile && sameProfile.length){
+      // console.log(sameProfile);
+      // console.log("ID "+sameProfile[0].id);
+      // console.log("Email "+sameProfile[0].email);
+      setUserID(sameProfile[0].id);
       return true;
     }
     Alert.alert("Error", "Kredensial salah atau email belum terdaftar");
@@ -31,7 +41,7 @@ const RegisterScreen = ({ navigation, route }) => {
 
   const submitConfirm = () => {
     if (validateForm()) {
-      navigation.navigate('Home');
+      navigation.navigate('HomeTemporarily');
     }
   };
 
