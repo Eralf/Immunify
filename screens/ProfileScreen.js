@@ -50,8 +50,26 @@ const ProfileScreen = ({ route }) => {
 
   const [selectedChild, setSelectedChild] = useState('1');
   const handleSelectChild = async (childId) => {
+    // fetchChildrenProfiles(parentProfile.id);
+
+    try {
+      const childrenCollectionRef = collection(db, 'profiles', parentProfile.id, 'children');
+      const childrenCollection = await getDocs(childrenCollectionRef);
+      const childrenData = childrenCollection.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setChildrenProfiles(childrenData);
+      if (childrenData.length > 0) {
+        setSelectedProfile(childrenData[selectedChild]);
+      }
+    } catch (error) {
+      console.error("Error fetching children profiles: ", error);
+    }
+
+
     setSelectedChild(childId);
-    setSelectedProfile(childrenProfiles[selectedChild]);
+    setSelectedProfile(childrenProfiles[childId]);
   };
 
 
