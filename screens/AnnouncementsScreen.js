@@ -6,9 +6,12 @@ import { useMissedAppointments } from '../MissedAppointmentsContext';
 import { useViewAppointments } from '../ViewAppointmentsContext';
 import { db } from '../firebasecfg';
 import { collection, addDoc, doc, setDoc, updateDoc } from "firebase/firestore";
-const AnnouncementsScreen = ({ navigation, route }) => {
+import { useUser } from '../UserContext';
+import { useChild } from '../ChildContext';
+const AnnouncementsScreen = ({ navigation, route, reads, setReads }) => {
   const [selectedMenu, setSelectedMenu] = useState("semua");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  
   const animations = {
     semua: useRef(new Animated.Value(0)).current,
     mendatang: useRef(new Animated.Value(0)).current,
@@ -19,6 +22,8 @@ const AnnouncementsScreen = ({ navigation, route }) => {
   const { completedAppointments } = useCompletedAppointments();
   const { missedAppointments } = useMissedAppointments();
   const {viewAppointments} = useViewAppointments();
+  const { userID } = useUser();
+  const {childID} = useChild();
   useEffect(() => {
     Object.keys(animations).forEach(menu => {
       Animated.timing(animations[menu], {
@@ -92,7 +97,8 @@ const AnnouncementsScreen = ({ navigation, route }) => {
     try {
       
 
-      const appointmentRef = doc(db, 'profiles','P5d9T710ztSinYGg9k9a','child','7IzFkFYdUYARwHemOmuV','appointments',appointment.id);
+      const appointmentRef = doc(db, 'profiles',userID,'child',childID,'appointments',appointment.id);
+      console.log(appointmentRef)
       await updateDoc(appointmentRef, { isRead: true });
 
       if (appointment.status === 'Selesai') {
