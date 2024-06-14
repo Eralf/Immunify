@@ -45,10 +45,10 @@ const AppointmentListScreen = () => {
               <View style={styles.appointmentContent}>
                 <View style={styles.appointmentText}>
                   <Text style={styles.title}>{appointment.vaccineType}</Text>
-                  <Text style={styles.detailText}><Text style={styles.label}>Nama:</Text> {appointment.childName}</Text>
-                  <Text style={styles.detailText}><Text style={styles.label}>Tanggal:</Text> {formattedDate}</Text>
-                  <Text style={styles.detailText}><Text style={styles.label}>Waktu:</Text> {formattedTime}</Text>
-                  <Text style={styles.detailText}><Text style={styles.label}>Lokasi:</Text> {appointment.location}</Text>
+                  <Text style={styles.detailText}><Text style={styles.label}>Nama      :</Text> {appointment.childName}</Text>
+                  <Text style={styles.detailText}><Text style={styles.label}>Tanggal  :</Text> {formattedDate}</Text>
+                  <Text style={styles.detailText}><Text style={styles.label}>Waktu     :</Text> {formattedTime}</Text>
+                  <Text style={styles.detailText}><Text style={styles.label}>Lokasi    :</Text> {appointment.location}</Text>
                 </View>
                 <Ionicons name="chevron-forward" size={24} color="black" />
               </View>

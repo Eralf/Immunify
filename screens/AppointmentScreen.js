@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Text, TextInput, StyleSheet, TouchableOpacity, Modal, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { db } from '../firebasecfg';
-import { collection, addDoc, doc, setDoc } from "firebase/firestore";
+import { collection, addDoc, doc, setDoc, getDocs } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../UserContext';
 import { useChild } from '../ChildContext';
@@ -18,9 +18,25 @@ const AppointmentForm = () => {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [parentName, setParentName] = useState('');
   const [childName, setChildName] = useState('');
+  const [children, setChildren] = useState([]); // State to store children list
   const [modalVisible, setModalVisible] = useState(false);
-  const {userID} = useUser();
-  const {childID} = useChild();
+  const { userID } = useUser();
+  const { childID } = useChild();
+
+  useEffect(() => {
+    // Fetch the children from Firestore
+    const fetchChildren = async () => {
+      try {
+        const childrenSnapshot = await getDocs(collection(db, 'profiles', userID, 'child'));
+        const childrenList = childrenSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setChildren(childrenList);
+      } catch (error) {
+        console.error('Error fetching children:', error);
+      }
+    };
+
+    fetchChildren();
+  }, [userID]);
 
   const locations = [
     "RSUP Dr. Cipto Mangunkusumo",
@@ -117,6 +133,7 @@ const AppointmentForm = () => {
         parentName: parentName,
         childName: childName,
         childId: childId,
+        status: 'Aktif',
       };
   
       // Add to child -> appointments collection
@@ -139,7 +156,7 @@ const AppointmentForm = () => {
         });
     }
   };
-  
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <Text style={styles.greeting}>Halo, Douglas</Text>
@@ -223,12 +240,17 @@ const AppointmentForm = () => {
         />
 
         <Text style={styles.label}>Nama Anak</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Nama Anak"
-          value={childName}
-          onChangeText={setChildName}
-        />
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={childName}
+            onValueChange={(itemValue, itemIndex) => setChildName(itemValue)}
+          >
+            <Picker.Item label="Pilih Nama Anak" value="" />
+            {children.map((child, index) => (
+              <Picker.Item key={index} label={child.name} value={child.name} />
+            ))}
+          </Picker>
+        </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity

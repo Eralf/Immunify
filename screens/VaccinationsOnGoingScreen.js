@@ -34,7 +34,7 @@ const VaccinationsOnGoingScreen = ({ navigation, route }) => {
           <Text style={styles.appointmentText(fontScale)}>
             Hepatitis B
           </Text>
-          <Text style={styles.appointmentText(fontScale)}>
+          <Text style={styles.appointmentTextDate(fontScale)}>
             11/02/2022
           </Text>
           <View style={styles.appointmentContainerGradient}>
@@ -49,7 +49,7 @@ const VaccinationsOnGoingScreen = ({ navigation, route }) => {
           <Text style={styles.appointmentText(fontScale)}>
             Polio
           </Text>
-          <Text style={styles.appointmentText(fontScale)}>
+          <Text style={styles.appointmentTextDate(fontScale)}>
             12/03/2022
           </Text>
           <View style={styles.appointmentContainerGradient}>
@@ -81,7 +81,14 @@ const styles = StyleSheet.create({
   },
   appointmentText: (fontScale) => [{
     fontSize: 20/fontScale,
-    fontFamily: 'NunitoSans-Light',
+    fontFamily: 'NunitoSans-Medium',
+    marginBottom: 4,
+    left:25,
+    top:3,
+  }],
+  appointmentTextDate: (fontScale) => [{
+    fontSize: 16/fontScale,
+    fontFamily: 'NunitoSans-Medium',
     marginBottom: 4,
     left:25,
     top:3,
