@@ -34,8 +34,9 @@ const HomeScreenTemporarily = () => {
         flexDirection:'row',justifyContent:'space-between'}}>
         <View style={{justifyContent:'center',position:'relative',overflow:'hidden'}}>
           <Text style={{color:'white', fontFamily: 'NunitoSans-SemiBold', fontSize:16, marginLeft:20}}>Vaksin kamu ada yang {'\n'}bolong? <Text style={{fontWeight:'bold',fontFamily:'NunitoSans-Bold'}}>Cek sekarang</Text></Text>
-          <View style={{backgroundColor:'#F99797', width:100, height:100,position:'absolute',
-            borderRadius:50, transform: [{ scaleX: 3 }],zIndex:-1,bottom:-70,left:35}}></View>
+          {/* <View style={{backgroundColor:'#F99797', width:100, height:100,position:'absolute',
+            borderRadius:50, transform: [{ scaleX: 3 }],zIndex:-1,bottom:-70,left:35}}>
+            </View> */}
         </View>
         <View style={{backgroundColor:'white',width:100,
           height:100,
