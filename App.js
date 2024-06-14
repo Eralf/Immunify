@@ -32,6 +32,7 @@ import { ChildProvider } from './ChildContext';
 import {ImageViewer} from './ImageViewer';
 import HomeScreenTemporarily from './screens/HomeScreenTemporarily';
 import { ViewAppointmentsProvider } from './ViewAppointmentsContext';
+import { ViewChildProvider } from './ViewChildContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -87,6 +88,7 @@ export default function App() {
     <UserProvider initialUserID={'0'}>
     <ChildProvider initialChildID={'0'}>
     <ProfilesProvider>
+    <ViewChildProvider>
     <AppointmentsProvider>
     <ViewAppointmentsProvider>
     <CompletedAppointmentsProvider>
@@ -421,6 +423,7 @@ export default function App() {
     </CompletedAppointmentsProvider>
     </ViewAppointmentsProvider>
     </AppointmentsProvider>
+    </ViewChildProvider>
     </ProfilesProvider>
     </ChildProvider>
     </UserProvider>
