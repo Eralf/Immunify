@@ -174,24 +174,10 @@ const RegisterScreen = ({ navigation, route }) => {
     }
   };
 
-  const [scrollY, setScrollY] = useState(0); // State to track scroll position
-  const maxScrollY = 350; // 60% of the height of the image
-
   return (
     <View style={styles.container}>
       
-      <ScrollView contentContainerStyle={{width:dw, alignItems:'center', justifyContent:'center'}}
-       onScroll={(event) => {
-        const y = event.nativeEvent.contentOffset.y;
-        if (y > maxScrollY) {
-          setScrollY(maxScrollY);
-        } else {
-          setScrollY(y);
-        }
-      }}
-      scrollEnabled={scrollY < maxScrollY} // Limit scroll
-      scrollEventThrottle={5}
-      >
+      <ScrollView contentContainerStyle={{width:dw, alignItems:'center', justifyContent:'center'}}>
       
       <LinearGradient
         colors={['#FFFFFF', '#CFF0FF']}
@@ -208,18 +194,12 @@ const RegisterScreen = ({ navigation, route }) => {
 
         <Text style={styles.title}>Daftar</Text>
 
-        {/* <TouchableOpacity style={styles.googleButton}>
-          <Text style={styles.googleButtonText}>Daftar dengan akun Google</Text>
-          <Image source={require('../assets/googleLogo.png')} style={styles.googleIcon} />
-        </TouchableOpacity> */}
-
         <View style = {styles.container2}>
           <View style={styles.line}/>
           <Text style={styles.separator}>Masukan data diri anda</Text>
           <View style={styles.line}/>
         </View>
         
-
         <TextInput placeholder="Masukkan nama" style={styles.input} value={name} onChangeText={setName}/>
         <TextInput placeholder="Masukkan email" style={styles.input} value={email} onChangeText={setEmail}/>
         <TextInput placeholder="Masukkan password" style={styles.input} secureTextEntry value={password} onChangeText={setPassword}/>
@@ -275,6 +255,14 @@ const RegisterScreen = ({ navigation, route }) => {
           <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked}/>
           <Text style={styles.checkboxText}>Saya setuju dengan Syarat dan Ketentuan yang berlaku</Text>
         </View>
+        
+        <View style = {styles.container3}>
+          <Text style = {styles.container3.text1}>Sudah punya akun?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('EnterScreen')}>
+           <Text style = {styles.container3.text2}>Masuk</Text>
+          </TouchableOpacity>
+        </View>
+
         <TouchableOpacity style = {styles.buttonContainer} onPress={submitConfirm}>   
           <Text style = {styles.buttonText}>Daftar</Text>
         </TouchableOpacity>
@@ -291,6 +279,23 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#CFF0FF',
+  },
+  container3: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginBottom: 10,
+    zIndex:10,
+      text1: {
+        color: '#867F7F',
+        fontSize: 15,
+        fontWeight: 'bold',
+        margin: 5,
+      },
+      text2: {
+        color: '#01A2FF',
+        fontSize: 15,
+        fontWeight: 'bold',
+      }
   },
   joshua: {
     flexDirection: 'row',
@@ -327,7 +332,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#A9E5FF',
     borderRadius: 50,
     width: 200,
-    height: 50
+    height: 50,
+    zIndex:10,
   },
   buttonText: {
     color: '#000000',
@@ -367,6 +373,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 40,
+    fontFamily: 'NunitoSans-Bold'
   },
   line :{
     borderBottomColor: 'black', 
@@ -389,7 +396,7 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   checkbox: {
     width: 20,
@@ -402,10 +409,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   image: {
-    width: 530,
-    height: 530,
+    marginTop: 80,
+    width: 400,
+    height: 400,
     resizeMode: 'contain',
-    top: (dh/-20) - 50
+    top: (dh/-20) - 20,
   },
   background: {
     position: 'absolute',

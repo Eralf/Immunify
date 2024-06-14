@@ -60,7 +60,7 @@ const AppointmentForm = () => {
     "Chickenpox",
     "Hepatitis A",
     "Hepatitis B",
-    "Human Papillomavirus (HPV)",
+    "HPV",
     "Influenza (Flu)",
     "Measles",
     "Mumps",
@@ -128,10 +128,13 @@ const AppointmentForm = () => {
       const appointmentData = {
         vaccineType: vaccineType,
         location: location,
-        dateTime: combinedDateTime,
+        date: combinedDateTime,
         parentName: parentName,
         childId: childId,
-        childName: selectedChildName // Include child name
+        childName: selectedChildName, // Include child name
+        status: 'Aktif', // Add status field
+        announcementDate: new Date(), // Add announcement date field
+        isRead: false,
       };
 
       // Add to child -> appointments collection

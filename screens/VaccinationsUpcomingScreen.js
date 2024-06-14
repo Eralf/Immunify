@@ -7,6 +7,31 @@ import { useViewAppointments } from '../ViewAppointmentsContext';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+const vaccineTypes = [
+  "COVID-19",
+  "Chickenpox",
+  "Hepatitis A",
+  "Hepatitis B",
+  "HPV",
+  "Influenza (Flu)",
+  "Measles",
+  "Mumps",
+  "Rubella",
+  "Meningococcal",
+  "Pneumococcal",
+  "Polio",
+  "Rabies",
+  "Tetanus",
+  "Tuberculosis (BCG)",
+  "Yellow Fever",
+  "Japanese Encephalitis",
+  "Typhoid",
+  "Cholera",
+];
+
+const availableVaccines = [];
+let upcomingVaccines = [];
+
 const VaccinationsUpcomingScreen = ({ navigation, route }) => {
   const [menu] = useState();
   const {fontScale} = useWindowDimensions();
@@ -40,25 +65,31 @@ const VaccinationsUpcomingScreen = ({ navigation, route }) => {
               appointmentDate = new Date(appointment.date);
             }
             const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-            if(appointment.status === 'Mendatang'){
-              return (
-                <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType})}>
-                      <View style={styles.appointmentLine}></View>
-                      <Text style={styles.appointmentText(fontScale)}>{appointment.vaccineType}</Text>
-                      {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
-                      <Text style={styles.appointmentTextDate(fontScale)}>{formattedDate}</Text>
-                      <View style={styles.appointmentContainerGradient}></View>
-                      <View style={styles.infoIconContainer}>
-                        <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
-                      </View>
-                </TouchableOpacity>
-              );
-            };
+            availableVaccines.push(appointment.vaccineType);
+            upcomingVaccines = vaccineTypes.filter((element) => !availableVaccines.includes(element));
+            {/* console.log(availableVaccines); */}
+            {/* console.log(upcomingVaccines); */}
+          })}
+      {upcomingVaccines.map((vaccines, index) => {
+            {/* console.log("Vaccine:"+vaccines); */}
+            return(
+              <TouchableOpacity key={index} style={styles.appointmentContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:vaccines})}>
+                <View style={styles.appointmentContainerGradient}></View>
+                <View style={styles.appointmentLine}></View>
+                <Text style={styles.appointmentText(fontScale)}>{vaccines}</Text>
+                {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
+                {/* <Text style={styles.appointmentTextDate(fontScale)}>{formattedDate}</Text> */}
+                <View style={styles.infoIconContainer}>
+                    <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
+                </View>
+            </TouchableOpacity>
+            );
           })}
       </ScrollView>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   scrollContainer: {

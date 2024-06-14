@@ -5,6 +5,10 @@ import Checkbox from 'expo-checkbox';
 import { collection } from 'firebase/firestore';
 import { db } from '../firebasecfg';
 import { useProfiles } from '../ProfilesContext';
+import { useViewChild } from '../ViewChildContext';
+import { useUser } from '../UserContext';
+import { useChild } from '../ChildContext';
+
 
 const dw = Dimensions.get('window').width;
 const dh = Dimensions.get('window').height;
@@ -13,6 +17,8 @@ const RegisterScreen = ({ navigation, route }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const {profiles} = useProfiles();
+  const {userID, setUserID} = useUser();
+  const {childID, setChildID} = useChild();
 
   const validateForm = () => {
     if (!email || !password) {
@@ -20,9 +26,13 @@ const RegisterScreen = ({ navigation, route }) => {
       return false;
     }
     const sameProfile = profiles.filter(profile =>
-      profile.emailAddress === email && profile.password === password
+      profile.email === email && profile.password === password
     );
     if(sameProfile && sameProfile.length){
+      // console.log(sameProfile);
+      // console.log("ID "+sameProfile[0].id);
+      // console.log("Email "+sameProfile[0].email);
+      setUserID(sameProfile[0].id);
       return true;
     }
     Alert.alert("Error", "Kredensial salah atau email belum terdaftar");
@@ -31,7 +41,7 @@ const RegisterScreen = ({ navigation, route }) => {
 
   const submitConfirm = () => {
     if (validateForm()) {
-      navigation.navigate('Home');
+      navigation.navigate('HomeTemporarily');
     }
   };
 
@@ -56,7 +66,12 @@ const RegisterScreen = ({ navigation, route }) => {
 
         <TextInput placeholder="Enter Username or Email" style={styles.input} value={email} onChangeText={setEmail}/>
         <TextInput placeholder="Enter password" style={styles.input} secureTextEntry value={password} onChangeText={setPassword}/>
-
+        <View  style = {styles.container3}>
+          <Text style = {styles.container3.text1}>Belum punya akun?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
+           <Text style = {styles.container3.text2}>Daftar</Text>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity style = {styles.buttonContainer} onPress={submitConfirm}>   
           <Text style = {styles.buttonText}>Masuk</Text>
         </TouchableOpacity>
@@ -72,6 +87,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#CFF0FF',
+  },
+  container3: {
+    alignItems: 'center',
+    flexDirection: 'row',
+      text1: {
+        color: '#867F7F',
+        fontSize: 15,
+        fontWeight: 'bold',
+        margin: 5,
+      },
+      text2: {
+        color: '#01A2FF',
+        fontSize: 15,
+        fontWeight: 'bold',
+      }
   },
   container1: {
     width: dw * 0.8,
