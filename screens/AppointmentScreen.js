@@ -17,6 +17,7 @@ const AppointmentForm = () => {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [parentName, setParentName] = useState('');
   const [selectedChildId, setSelectedChildId] = useState(''); // State for selected child ID
+  const [selectedChildName, setSelectedChildName] = useState(''); // State for selected child name
   const [modalVisible, setModalVisible] = useState(false);
   const { userID } = useUser();
   const [children, setChildren] = useState([]); // State to store children list
@@ -130,6 +131,7 @@ const AppointmentForm = () => {
         dateTime: combinedDateTime,
         parentName: parentName,
         childId: childId,
+        childName: selectedChildName // Include child name
       };
 
       // Add to child -> appointments collection
@@ -163,7 +165,7 @@ const AppointmentForm = () => {
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={vaccineType}
-            onValueChange={(itemValue, itemIndex) => setVaccineType(itemValue)}
+            onValueChange={(itemValue) => setVaccineType(itemValue)}
           >
             <Picker.Item label="Pilih Jenis Vaksin" value="" />
             {vaccineTypes.map((type, index) => (
@@ -176,7 +178,7 @@ const AppointmentForm = () => {
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={location}
-            onValueChange={(itemValue, itemIndex) => setLocation(itemValue)}
+            onValueChange={(itemValue) => setLocation(itemValue)}
           >
             <Picker.Item label="Pilih Lokasi Vaksinasi" value="" />
             {locations.map((loc, index) => (
@@ -239,7 +241,11 @@ const AppointmentForm = () => {
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={selectedChildId}
-            onValueChange={(itemValue, itemIndex) => setSelectedChildId(itemValue)}
+            onValueChange={(itemValue, itemIndex) => {
+              setSelectedChildId(itemValue);
+              const selectedChild = children.find(child => child.id === itemValue);
+              setSelectedChildName(selectedChild ? selectedChild.name : '');
+            }}
           >
             <Picker.Item label="Pilih Nama Anak" value="" />
             {children.map((child, index) => (
