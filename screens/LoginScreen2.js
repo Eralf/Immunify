@@ -409,11 +409,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   image: {
-    // marginTop: 300,
-    width: 530,
-    height: 530,
+    marginTop: 80,
+    width: 400,
+    height: 400,
     resizeMode: 'contain',
-    top: (dh/-20) - 50,
+    top: (dh/-20) - 20,
   },
   background: {
     position: 'absolute',
