@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { db } from './firebasecfg'; 
-import { collection, onSnapshot, doc, deleteDoc, addDoc } from 'firebase/firestore';
+import { collection, onSnapshot, doc, deleteDoc, addDoc, setDoc } from 'firebase/firestore';
 
 const AppointmentsContext = createContext();
 
@@ -33,19 +33,21 @@ export const AppointmentsProvider = ({ children }) => {
 
   const addAppointment = async (profileId, childId, appointmentData) => {
     try {
-      // Add to child appointments
+      // Add to child appointments and get the document reference
       const childCollectionRef = collection(db, 'profiles', profileId, 'child', childId, 'appointments');
-      await addDoc(childCollectionRef, appointmentData);
+      const childDocRef = await addDoc(childCollectionRef, appointmentData);
 
-      // Add to allAppointment
-      const allAppointmentsCollectionRef = collection(db, 'profiles', profileId, 'allAppointment');
-      await addDoc(allAppointmentsCollectionRef, { ...appointmentData, childId });
+      // Use the same ID for the allAppointment collection
+      const allAppointmentDocRef = doc(db, 'profiles', profileId, 'allAppointment', childDocRef.id);
+      await setDoc(allAppointmentDocRef, { ...appointmentData, childId });
 
-      // Update local state if needed
+      // Update local state
       setAppointments((prevAppointments) => [
         ...prevAppointments,
-        { id: 'new-id', profileId, childId, ...appointmentData },
+        { id: childDocRef.id, profileId, childId, ...appointmentData },
       ]);
+
+      console.log('Appointment added successfully');
     } catch (error) {
       console.error('Error adding appointment:', error);
     }
@@ -54,26 +56,32 @@ export const AppointmentsProvider = ({ children }) => {
   const deleteAppointment = async (appointmentId) => {
     try {
       const profileId = 'profileIdExample'; // Replace with dynamic profile ID if necessary
-
+  
       // Find the appointment to get the childId
+      console.log(appointments);
       const appointmentToDelete = appointments.find(appt => appt.id === appointmentId);
+      console.log('appointmentToDelete:', appointmentToDelete);
       if (!appointmentToDelete) {
         throw new Error('Appointment not found');
       }
-      const { childId } = appointmentToDelete;
+  
+      const  childId  = appointmentToDelete.childId; // Ensure childId is extracted correctly
       console.log('childId:', childId);
       // Delete from child appointments
-      // await deleteDoc(doc(db, 'profiles', profileId, 'child', childId, 'appointments', appointmentId));
-
+      await deleteDoc(doc(db, 'profiles', profileId, 'child', childId, 'appointments', appointmentId));
+  
       // Delete from allAppointment
       await deleteDoc(doc(db, 'profiles', profileId, 'allAppointment', appointmentId));
-
+  
       // Update local state
       setAppointments(appointments.filter(appointment => appointment.id !== appointmentId));
+  
+      console.log('Appointment deleted successfully');
     } catch (error) {
       console.error('Error deleting appointment:', error);
     }
   };
+  
 
   return (
     <AppointmentsContext.Provider value={{ appointments, addAppointment, deleteAppointment }}>

@@ -3,7 +3,7 @@ import { ScrollView, View, Text, TextInput, StyleSheet, TouchableOpacity, Modal,
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { db } from '../firebasecfg';
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
 
 const AppointmentForm = () => {
@@ -112,29 +112,30 @@ const AppointmentForm = () => {
         dateTime: combinedDateTime,
         parentName: parentName,
         childName: childName,
+        childId: childId,
       };
-
+  
       // Add to child -> appointments collection
       addDoc(collection(db, 'profiles', profileId, 'child', childId, 'appointments'), appointmentData)
-        .then(() => {
-          console.log('Appointment added to child appointments successfully');
+        .then((docRef) => {
+          const appRefId = docRef.id;
+          console.log('Appointment added to child appointments successfully with ID:', appRefId);
+          
+          // Add to allappointments collection with the same ID
+          const allAppointmentRef = doc(db, 'profiles', profileId, 'allAppointment', appRefId);
+          console.log('allAppointmentRef:', allAppointmentRef.id);
+          return setDoc(allAppointmentRef, appointmentData);
         })
-        .catch((error) => {
-          console.error('Error adding appointment to child appointments: ', error);
-        });
-
-      // Add to allappointments collection
-      addDoc(collection(db, 'profiles', profileId, 'allAppointment'), appointmentData)
         .then(() => {
           console.log('Appointment added to allappointments successfully');
           setModalVisible(true);
         })
         .catch((error) => {
-          console.error('Error adding appointment to allappointments: ', error);
+          console.error('Error adding appointment:', error);
         });
     }
   };
-
+  
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <Text style={styles.greeting}>Halo, Douglas</Text>

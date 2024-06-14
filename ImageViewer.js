@@ -3,7 +3,7 @@ import { View, Image, ActivityIndicator, Text } from 'react-native';
 import { storage } from './firebasecfg';// Adjust the path to your Firebase configuration
 import { getDownloadURL, ref } from 'firebase/storage';
 
-const ImageDisplay = ({imagePath, height=300, width=200}) => {
+const ImageDisplay = ({imagePath, height=300, width=200, scaleMode='contain'}) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -39,7 +39,7 @@ const ImageDisplay = ({imagePath, height=300, width=200}) => {
         <Image
           source={{ uri: imageUrl }}
           style={{ width: width, height: height }}
-          resizeMode="contain"
+          resizeMode={scaleMode}
         />
       )}
     </View>

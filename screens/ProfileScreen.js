@@ -3,7 +3,7 @@ import { View, Text, Button, TouchableOpacity, Image, StyleSheet, Dimensions, Sc
 import { useNavigation } from '@react-navigation/native';
 import { db, collection, doc, getDocs } from '../firebasecfg';
 
-import { useProfiles } from '../ProfileContext';
+import { useProfiles } from '../ProfilesContext';
 
 import ImageDisplay from '../ImageViewer';
 
@@ -15,6 +15,8 @@ var bgImage = '../assets/mainprofile-bg.png';
 
 const pfp_main_temp = '../assets/pfp/mainpfptemp.png';
 const pfp_parent_temp = '../assets/pfp/parentpfptemp.jpg';
+
+var addchild_button = '../assets/addchild_button.png';
 
 var selectedProfile_index = 0;
 var parentProfile_index = 0;
@@ -69,8 +71,8 @@ const ProfileScreen = ({ route }) => {
     return <Text>Loading...</Text>;
   };
 
-  var pfp_main = '../assets/pfp/' + selectedProfile.picture;
-  var pfp_parent = '../assets/pfp/' + parentProfile.picture;
+  var pfp_main = selectedProfile.picture;
+  var pfp_parent = parentProfile.picture;
   // var pfp_main = pfp_main_temp;
   // var pfp_parent = pfp_parent_temp;
 
@@ -122,6 +124,44 @@ const ProfileScreen = ({ route }) => {
     return "Female";
   }
 
+  // const [showAddChildPopup, setShowAddChildPopup] = useState(false);
+  // const handleAddChildPress = () => {
+  //   setShowAddChildPopup(true);
+  // };
+  // const handleAddChildSubmit = () => {
+  //   // Handle form submission logic here
+  //   console.log("Form submitted");
+  // };
+  // if (showAddChildPopup) {
+  //   return (
+  //     <View style={styles.addChildPopupContainer}>
+  //       {/* Background */}
+  //       <Image source={require(addChildPopupBgImage)} style={styles.addChildPopupBackground} />
+
+  //       {/* Title */}
+  //       <Text style={styles.addChildPopupTitle}>Add Child</Text>
+
+  //       {/* Image */}
+  //       <Image source={require(childImage)} style={styles.addChildPopupImage} />
+
+  //       {/* Form */}
+  //       <View style={styles.addChildPopupForm}>
+  //         {/* Form fields */}
+  //         <TextInput style={styles.addChildPopupFormField} placeholder="Name" />
+  //         <TextInput style={styles.addChildPopupFormField} placeholder="Date of Birth" />
+  //         <TextInput style={styles.addChildPopupFormField} placeholder="Sex" />
+  //         <TextInput style={styles.addChildPopupFormField} placeholder="NIK" />
+
+  //         {/* Submit button */}
+  //         <TouchableOpacity style={styles.addChildPopupSubmitButton} onPress={handleAddChildSubmit}>
+  //           <Text style={styles.addChildPopupSubmitButtonText}>Submit</Text>
+  //         </TouchableOpacity>
+  //       </View>
+  //     </View>
+  //   );
+  // }
+
+
   return (
     <View style={styles.container}>
 
@@ -139,13 +179,27 @@ const ProfileScreen = ({ route }) => {
         <Image source={require(bgImage)} style={{position: 'absolute', width: boxWidth, height: height_mainProfileCard, resizeMode: 'cover'}}/>
         
         {/* Profile Image */}
-        <Image source = {{uri:pfp_main}} style={{
+        {/* <Image source = {{uri:pfp_main}} style={{
           position: 'absolute',
           width: 90,
           height: height_mainProfileCard-2*margin_inside,
           marginLeft: margin_inside,
           borderRadius: br_bigCard,
-        }}/>
+        }}/> */}
+        
+        <View style={{
+            position: 'absolute',
+            width: 90,
+            height: height_mainProfileCard-2*margin_inside,
+            marginLeft: margin_inside,
+            borderRadius: br_bigCard,
+
+            display: 'flex',
+            justifyContent: 'center',
+            overflow: 'hidden',
+          }}>
+            <ImageDisplay imagePath={selectedProfile.picture} height={height_mainProfileCard-2*margin_inside} width={90} scaleMode={'fill'}/>
+          </View>
         
         {/* Container for profile details */}
         <View style={{
@@ -243,7 +297,7 @@ const ProfileScreen = ({ route }) => {
           </Text>
 
           {/* Parent Profile Image */}
-          <Image source = {{uri:pfp_parent}} style={{
+          {/* <Image source = {{uri:pfp_parent}} style={{
             width: 90,
             height: height_mainProfileCard-2*margin_inside,
             borderRadius: br_bigCard,
@@ -251,7 +305,24 @@ const ProfileScreen = ({ route }) => {
             position: 'absolute',
             top: 48,
             left: margin_inside,
-          }}/>
+          }}/> */}
+          <View style={{
+            width: 90,
+            height: height_mainProfileCard-2*margin_inside,
+            borderRadius: br_bigCard,
+            resizeMode: 'cover',
+
+            position: 'absolute',
+            top: 48,
+            left: margin_inside,
+
+            display: 'flex',
+            justifyContent: 'center',
+            overflow: 'hidden',
+          }}>
+            <ImageDisplay imagePath={parentProfile.picture} height={height_mainProfileCard-2*margin_inside} width={90} scaleMode={'fill'}/>
+          </View>
+
 
           {/* Container for profile details */}
           <View style={{
@@ -352,13 +423,37 @@ const ProfileScreen = ({ route }) => {
             top: 48,
             left: margin_inside,
           }}>
-            <ChildCard child={selectedProfile} isSelected={false}/>
+            {/* <ChildCard child={selectedProfile} isSelected={false}/>
             <ChildCard child={parentProfile} isSelected={true}/>
             <ChildCard child={selectedProfile} isSelected={false}/>
             <ChildCard child={parentProfile} isSelected={false}/>
             <ChildCard child={selectedProfile} isSelected={false}/>
             <ChildCard child={parentProfile} isSelected={false}/>
-            <ChildCard child={selectedProfile} isSelected={false}/>
+            <ChildCard child={selectedProfile} isSelected={false}/> */}
+
+
+
+            {/* Add Child */}
+            {childrenProfiles.map((child, index) => (
+              <ChildCard key={index} child={child} isSelected={index===selectedProfile_index} />
+            ))}
+            <View style={{
+              width: 70,
+              height: 70+40,
+              borderRadius: br_bigCard,
+              overflow: 'hidden',
+            }}>
+              <TouchableOpacity style={{width: 70, height: 70, borderRadius: br_bigCard, overflow: 'hidden'}}>
+                <Image source={require(addchild_button)} style={{width: 70, height: 70}}/>
+              </TouchableOpacity>
+              <Text style={{
+                fontFamily: 'NunitoSans-Bold',
+                fontSize: 12,
+                textAlign: 'center',
+              }}>
+                Add Child
+              </Text>
+            </View>
 
             {/* spacer */}
             <View style={{width: margin_inside}}></View>
@@ -388,21 +483,29 @@ const ChildCard = ({child, isSelected}) => {
       marginRight: margin_inside,
       alignItems: 'center',
     }}>
-      <Image source = {require(pfp_main_temp)} style={{
+      <TouchableOpacity style={{
         width: boxWidth,
         height: boxWidth,
         borderRadius: br_bigCard,
 
         position: 'absolute',
-        top: 0
-      }}/>
+        top: 0,
+        
+        overflow: 'hidden',
+        display: 'flex',
+        justifyContent: 'center',
+      }}>
+        <ImageDisplay imagePath={child.picture} height={boxWidth} width={boxWidth} scaleMode={'fill'}/>
+      </TouchableOpacity>
+
+        
       <Text numberOfLines={2} ellipsizeMode="clip" style={{
         fontFamily: 'NunitoSans-Bold',
         fontSize: 12,
         color: 'black',
         position: 'absolute',
         textAlign: 'center',
-        bottom: 0
+        top: boxWidth + 5,
       }}>
         {child.name}
       </Text>
