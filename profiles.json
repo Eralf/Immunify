@@ -2,7 +2,7 @@
   {
     "id": 0,
     "name": "Steven Soeseno",
-    "picture": "",
+    "picture": "mainpfptemp.png",
 
     "sex": 0, // 0 = male, 1 = female
     "dob": [2004, 3, 22], // yyyy mm dd
@@ -16,8 +16,8 @@
   },
   {
     "id": 1,
-    "name": "Joshua Pieter Oroh wrwekrnwejkrewjrnkjew",
-    "picture": "",
+    "name": "Joshua Pieter Oroh",
+    "picture": "mainpfptemp.png",
 
     "sex": 0,
     "dob": [2005, 9, 11],
@@ -31,8 +31,8 @@
   },
   {
     "id": 2,
-    "name": "Dominick albert setiawan",
-    "picture": "",
+    "name": "Dominick Albert Setiawan",
+    "picture": "parentpfptemp.jpg",
 
     "sex": 0,
     "dob": [2005, 9, 11],

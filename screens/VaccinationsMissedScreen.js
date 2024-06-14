@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { ScrollView, View, Text, Button, TouchableOpacity, StyleSheet, useWindowDimensions, Dimensions } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Foundation } from '@expo/vector-icons';
-import { useMissedAppointments } from '../MissedAppointmentsContext';
+import { useViewAppointments } from '../ViewAppointmentsContext';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const VaccinationsMissedScreen = ({ navigation, route }) => {
   const [menu] = useState();
-  const {missedAppointments} = useMissedAppointments();
+  const {viewAppointments} = useViewAppointments();
   const {fontScale} = useWindowDimensions();
   return (
     <View>
@@ -30,7 +30,7 @@ const VaccinationsMissedScreen = ({ navigation, route }) => {
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-          {missedAppointments.map(appointment => {
+          {viewAppointments.map(appointment => {
               let appointmentDate;
             if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
               // Firestore Timestamp object
@@ -40,18 +40,20 @@ const VaccinationsMissedScreen = ({ navigation, route }) => {
               appointmentDate = new Date(appointment.date);
             }
             const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-            return (
-              <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType})}>
-                    <View style={styles.appointmentLine}></View>
-                    <Text style={styles.appointmentText(fontScale)}>{appointment.childName}, {appointment.vaccineType}</Text>
-                    {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
-                    <Text style={styles.appointmentText(fontScale)}>{formattedDate}</Text>
-                    <View style={styles.appointmentContainerGradient}></View>
-                    <View style={styles.infoIconContainer}>
-                      <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
-                    </View>
-              </TouchableOpacity>
-            );
+            if(appointment.status === 'Terlewatkan'){
+              return (
+                <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType})}>
+                      <View style={styles.appointmentLine}></View>
+                      <Text style={styles.appointmentText(fontScale)}>{appointment.childName}, {appointment.vaccineType}</Text>
+                      {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
+                      <Text style={styles.appointmentText(fontScale)}>{formattedDate}</Text>
+                      <View style={styles.appointmentContainerGradient}></View>
+                      <View style={styles.infoIconContainer}>
+                        <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
+                      </View>
+                </TouchableOpacity>
+              );
+            };
           })}
       </ScrollView>
     </View>

@@ -26,8 +26,12 @@ import NavBar from './components/NavBar';
 import { AppointmentsProvider } from './AppointmentsContext'; // Import the AppointmentsProvider
 import { CompletedAppointmentsProvider } from './CompletedAppointmentsContext';
 import { MissedAppointmentsProvider } from './MissedAppointmentsContext';
+import { ProfilesProvider } from './ProfilesContext';
+import { UserProvider } from './UserContext';
+import { ChildProvider } from './ChildContext';
 import {ImageViewer} from './ImageViewer';
 import HomeScreenTemporarily from './screens/HomeScreenTemporarily';
+import { ViewAppointmentsProvider } from './ViewAppointmentsContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -74,18 +78,21 @@ export default function App() {
     if (!fontsLoaded) {
       return null;
   }
-
+  // const parentID = 'P5d9T710ztSinYGg9k9a';
+  // const childID = '7IzFkFYdUYARwHemOmuV';
 
   const profiles = require(profiles_dir);
 
   return (
+    <UserProvider initialUserID={'P5d9T710ztSinYGg9k9a'}>
+    <ChildProvider initialChildID={'7IzFkFYdUYARwHemOmuV'}>
+    <ProfilesProvider>
     <AppointmentsProvider>
+    <ViewAppointmentsProvider>
     <CompletedAppointmentsProvider>
     <MissedAppointmentsProvider>
+    <ProfilesProvider>
     <NavigationContainer>
-      {/* <View>
-        <ImageViewer path={"immunify-5c493.appspot.com/sertifikat_polio.png"}/>
-      </View> */}
       <Stack.Navigator >
 
         <Stack.Screen
@@ -96,7 +103,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -114,7 +121,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -130,10 +137,10 @@ export default function App() {
           options={{
               title:'',
             // title: ' Halo, Dominick',
-            // headerBackVisible: false,
+            headerBackVisible: false,
             // headerLeft: () => (
             //   <Image
-            //     source={require('./assets/parentpfptemp.jpg')}
+            //     source={require('./assets/pfp/parentpfptemp.jpg')}
             //     style={styles.profPict}
             //   />
             // ), 
@@ -148,17 +155,17 @@ export default function App() {
           name='EnterScreen'
           component={EnterScreen}
           options={{
-            title: ' Halo, Dominick',
+            title: '',
             headerBackVisible: false,
-            headerLeft: () => (
-              <Image
-                source={require('./assets/parentpfptemp.jpg')}
-                style={styles.profPict}
-              />
-            ), 
-            headerRight:() => (
-              <Ionicons name="settings" size={24} color="black" />
-            ),
+            // headerLeft: () => (
+            //   <Image
+            //     source={require('./assets/parentpfptemp.jpg')}
+            //     style={styles.profPict}
+            //   />
+            // ), 
+            // headerRight:() => (
+            //   <Ionicons name="settings" size={24} color="black" />
+            // ),
             animation:'fade',
           }}
           initialParams={{ profile: profiles }}
@@ -177,7 +184,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -196,7 +203,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -212,10 +219,10 @@ export default function App() {
           options={{
             title:'',
             // title: 'Login',
-            // headerBackVisible: false,
+            headerBackVisible: false,
             // headerLeft: () => (
             //   <Image
-            //     source={require('./assets/parentpfptemp.jpg')}
+            //     source={require('./assets/pfp/parentpfptemp.jpg')}
             //     style={styles.profPict}
             //   />
             // ), 
@@ -234,7 +241,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -252,7 +259,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -270,7 +277,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -288,7 +295,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -306,7 +313,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -324,7 +331,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -342,7 +349,7 @@ export default function App() {
             headerBackVisible: false,
             headerLeft: () => (
               <Image
-                source={require('./assets/parentpfptemp.jpg')}
+                source={require('./assets/pfp/parentpfptemp.jpg')}
                 style={styles.profPict}
               />
             ), 
@@ -357,9 +364,14 @@ export default function App() {
       <NavBar/>
 
     </NavigationContainer>
+    </ProfilesProvider>
     </MissedAppointmentsProvider>
     </CompletedAppointmentsProvider>
+    </ViewAppointmentsProvider>
     </AppointmentsProvider>
+    </ProfilesProvider>
+    </ChildProvider>
+    </UserProvider>
   );
 }
 
