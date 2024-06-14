@@ -61,7 +61,7 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
                     <View style={styles.appointmentContainerGradient}></View>
                         <View style={styles.appointmentLine}></View>
                         <View style={styles.appointmentTextContainer}>
-                          <Text style={styles.appointmentText(fontScale)}>{appointment.name}, {appointment.vaccineType}</Text>
+                          <Text style={styles.appointmentText(fontScale)}>{appointment.vaccineType}</Text>
                         </View>
                         {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
                         <Text style={styles.appointmentTextDate(fontScale)}>{formattedDate}</Text>

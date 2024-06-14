@@ -44,7 +44,7 @@ const VaccinationsMissedScreen = ({ navigation, route }) => {
               return (
                 <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType})}>
                       <View style={styles.appointmentLine}></View>
-                      <Text style={styles.appointmentText(fontScale)}>{appointment.childName}, {appointment.vaccineType}</Text>
+                      <Text style={styles.appointmentText(fontScale)}>{appointment.vaccineType}</Text>
                       {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
                       <Text style={styles.appointmentTextDate(fontScale)}>{formattedDate}</Text>
                       <View style={styles.appointmentContainerGradient}></View>
