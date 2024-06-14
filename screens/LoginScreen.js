@@ -35,8 +35,6 @@ const LoginScreen = ({navigation, route }) => {
           <TouchableOpacity onPress={() => navigation.navigate('EnterScreen')}>
            <Text style = {styles.container2.text2}>Masuk</Text>
           </TouchableOpacity>
-            
-          
         </View>
 
         <Image source = {require('../assets/growth.png')} style ={styles.image}/> 

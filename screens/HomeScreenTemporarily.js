@@ -23,9 +23,9 @@ const HomeScreenTemporarily = () => {
     <SafeAreaView style={{backgroundColor:'white'}}>
       <View style={styles.welcoming}>
         <View style={{flexDirection: 'column', justifyContent:'center'}}>
-          <Text style={{fontFamily: 'NunitoSans-Regular'}}>Selamat Datang di <Text style={{fontWeight:'bold'}}>Immunify </Text></Text>
-          <Text style={{fontFamily: 'NunitoSans-Regular'}}>Kelola vaksinmu di <Text style={{fontWeight:'bold'}}>satu aplikasi{'\n\n'}</Text></Text>
-          <Text>Mau ngapain hari ini?</Text>
+          <Text style={{fontFamily: 'NunitoSans-Regular', fontSize: 18}}>Selamat Datang di <Text style={{fontWeight:'bold'}}>Immunify </Text></Text>
+          <Text style={{fontFamily: 'NunitoSans-Regular', fontSize: 18}}>Kelola vaksinmu di <Text style={{fontWeight:'bold'}}>satu aplikasi{'\n\n'}</Text></Text>
+          <Text style={{fontFamily: 'NunitoSans-Regular', fontSize: 18}}>Mau ngapain hari ini?</Text>
         </View>
         <View>
           <Image source = {require(pfp_main_temp)} style={{
@@ -42,7 +42,7 @@ const HomeScreenTemporarily = () => {
         
         flexDirection:'row',justifyContent:'space-between'}}>
         <View style={{justifyContent:'center',position:'relative',overflow:'hidden'}}>
-          <Text style={{color:'white', fontFamily: 'NunitoSans-SemiBold', fontSize:16, marginLeft:20}}>Vaksin kamu ada yang {'\n'}bolong? <Text style={{fontWeight:'bold',fontFamily:'NunitoSans-Bold'}}>Cek sekarang</Text></Text>
+          <Text style={{color:'white', fontFamily: 'NunitoSans-SemiBold', fontSize:20, marginLeft:20}}>Vaksin kamu ada yang {'\n'}bolong? <Text style={{fontWeight:'bold',fontFamily:'NunitoSans-Bold'}}>Cek sekarang</Text></Text>
           {/* <View style={{backgroundColor:'#F99797', width:100, height:100,position:'absolute',
             borderRadius:50, transform: [{ scaleX: 3 }],zIndex:-1,bottom:-70,left:35}}>
             </View> */}
@@ -58,7 +58,7 @@ const HomeScreenTemporarily = () => {
 
       </TouchableOpacity>
       <View style={{backgroundColor:'#A9E5FF',borderTopLeftRadius:20,borderTopRightRadius:20, position:'relative', overflow:'hidden'}}>
-          <Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular',marginTop:10}}>Servis</Text>
+          <Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular',marginTop:10,fontSize: 18}}>Servis</Text>
           <View style={{backgroundColor:'#D4F4F9', width:150, height:150,position:'absolute',
             borderRadius:75,  transform: [
               {scaleX: 5},{scaleY:2},
@@ -78,14 +78,18 @@ const HomeScreenTemporarily = () => {
               }}/>
             </View>
             <View style={{justifyContent:'center'}}>
-              <Text style={{fontFamily: 'NunitoSans-Regular'}}>Mau Daftar Vaksin?</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('EnterScreen')} style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10}}><Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular'}}>Daftar Disini!</Text></TouchableOpacity>
+              <Text style={{fontFamily: 'NunitoSans-Regular', fontSize: 20}}>Mau Daftar Vaksin?</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('EnterScreen')} style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10}}>
+                <Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular', fontSize:18}}>Daftar Disini!</Text>
+                </TouchableOpacity>
             </View>
           </View>
           <View style={{flexDirection:'row', justifyContent:'space-between',marginTop:10,marginBottom:50, marginHorizontal:20,backgroundColor:'white',padding:20,borderRadius:10}}>
             <View style={{justifyContent:'center'}}>
-              <Text style={{fontFamily: 'NunitoSans-Regular'}}>Mau Cek Sertifikat Vaksin?</Text>
-              <TouchableOpacity onPress={() => {navigation.navigate('VaccinationsCompleted')}} style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10,width:150}}><Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular'}}>Cek Disini!</Text></TouchableOpacity>
+              <Text style={{fontFamily: 'NunitoSans-Regular', fontSize: 20}}>Mau Cek Sertifikat Vaksin?</Text>
+              <TouchableOpacity onPress={() => {navigation.navigate('VaccinationsCompleted')}} style={{backgroundColor:'#E7FCFF',paddingVertical:15, borderRadius:10, marginTop:10,width:180}}>
+                <Text style={{textAlign:'center',fontFamily: 'NunitoSans-Regular', fontSize:18}}>Cek Disini!</Text>
+              </TouchableOpacity>
             </View>
 
             <View>
