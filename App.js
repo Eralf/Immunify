@@ -101,7 +101,7 @@ export default function App() {
           name='Home'
           component={HomeScreen}
           options={({ navigation }) => ({
-            title: 'Halo, Dominick',
+            title: 'Halo, Timothee',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -143,7 +143,7 @@ export default function App() {
           name='HomeTemporarily'
           component={HomeScreenTemporarily}
           options={({ navigation }) => ({
-            title: 'Halo, Dominick',
+            title: 'Halo, Timothee',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -171,7 +171,7 @@ export default function App() {
           component={RegisterScreen}
           options={{
               title:'',
-            // title: ' Halo, Dominick',
+            // title: ' Halo, Timothee',
             headerBackVisible: false,
             // headerLeft: () => (
             //   <Image
@@ -209,7 +209,7 @@ export default function App() {
           name='Profile'
           component={ProfileScreen}
           options={({ navigation }) => ({
-            title: 'Halo, Dominick',
+            title: 'Halo, Timothee',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -236,7 +236,7 @@ export default function App() {
           name='Screen_3'
           component={Screen_3}
           options={({ navigation }) => ({
-            title: 'Halo, Dominick',
+            title: 'Halo, Timothee',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -263,7 +263,7 @@ export default function App() {
           name='Announcements'
           component={AnnouncementsScreen}
           options={({ navigation }) => ({
-            title: 'Halo, Dominick',
+            title: 'Halo, Timothee',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -289,7 +289,7 @@ export default function App() {
           name='Appointment'
           component={AppointmentScreen}
           options={({ navigation }) => ({
-            title: 'Halo, Dominick',
+            title: 'Halo, Timothee',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -315,7 +315,7 @@ export default function App() {
           name='VaccinationsCompleted'
           component={VaccinationsCompletedScreen}
           options={({ navigation }) => ({
-            title: 'Halo, Dominick',
+            title: 'Halo, Timothee',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -341,7 +341,7 @@ export default function App() {
           name='VaccinationsMissed'
           component={VaccinationsMissedScreen}
           options={({ navigation }) => ({
-            title: 'Halo, Dominick',
+            title: 'Halo, Timothee',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -367,7 +367,7 @@ export default function App() {
           name='VaccinationsUpcoming'
           component={VaccinationsUpcomingScreen}
           options={({ navigation }) => ({
-            title: 'Halo, Dominick',
+            title: 'Halo, Timothee',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -393,7 +393,7 @@ export default function App() {
           name='VaccinationsOnGoing'
           component={VaccinationsOnGoingScreen}
           options={({ navigation }) => ({
-            title: 'Halo, Dominick',
+            title: 'Halo, Timothee',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
@@ -419,7 +419,7 @@ export default function App() {
           name='VaccineDetails'
           component={VaccineDetailsScreen}
           options={({ navigation }) => ({
-            title: 'Halo, Dominick',
+            title: 'Halo, Timothee',
             headerBackVisible: false,
             headerLeft: () => (
               <Image
