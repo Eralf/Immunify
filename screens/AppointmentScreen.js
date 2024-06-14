@@ -5,6 +5,8 @@ import { Picker } from '@react-native-picker/picker';
 import { db } from '../firebasecfg';
 import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
+import { useUser } from '../UserContext';
+import { useChild } from '../ChildContext';
 
 const AppointmentForm = () => {
   const navigation = useNavigation();
@@ -17,6 +19,8 @@ const AppointmentForm = () => {
   const [parentName, setParentName] = useState('');
   const [childName, setChildName] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const {userID} = useUser();
+  const {childID} = useChild();
 
   const locations = [
     "RSUP Dr. Cipto Mangunkusumo",
@@ -229,7 +233,7 @@ const AppointmentForm = () => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.confirmButton}
-            onPress={() => submitConfirm('profileIdExample', 'childIdExample')}
+            onPress={() => submitConfirm(userID, childID)}
           >
             <Text style={styles.confirmButtonText}>Konfirmasi</Text>
           </TouchableOpacity>
