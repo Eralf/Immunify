@@ -60,7 +60,7 @@ const AppointmentForm = () => {
     "Chickenpox",
     "Hepatitis A",
     "Hepatitis B",
-    "Human Papillomavirus (HPV)",
+    "HPV",
     "Influenza (Flu)",
     "Measles",
     "Mumps",
