@@ -64,7 +64,7 @@ const VaccinationsCompletedScreen = ({ navigation, route }) => {
                           <Text style={styles.appointmentText(fontScale)}>{appointment.name}, {appointment.vaccineType}</Text>
                         </View>
                         {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
-                        <Text style={styles.appointmentText(fontScale)}>{formattedDate}</Text>
+                        <Text style={styles.appointmentTextDate(fontScale)}>{formattedDate}</Text>
                         <TouchableOpacity style={styles.infoIconContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType, notCompleted:false})}>
                           <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
                         </TouchableOpacity>
@@ -119,11 +119,17 @@ const styles = StyleSheet.create({
   },
   appointmentText: (fontScale) => [{
     fontSize: 20/fontScale,
-    fontFamily: 'NunitoSans-Light',
+    fontFamily: 'NunitoSans-Medium',
     marginBottom: 4,
     left:25,
     top:3,
-    zindex:10,
+  }],
+  appointmentTextDate: (fontScale) => [{
+    fontSize: 16/fontScale,
+    fontFamily: 'NunitoSans-Medium',
+    marginBottom: 4,
+    left:25,
+    top:3,
   }],
   button: {
     alignItems: 'center',

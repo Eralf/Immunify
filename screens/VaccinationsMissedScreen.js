@@ -46,7 +46,7 @@ const VaccinationsMissedScreen = ({ navigation, route }) => {
                       <View style={styles.appointmentLine}></View>
                       <Text style={styles.appointmentText(fontScale)}>{appointment.childName}, {appointment.vaccineType}</Text>
                       {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
-                      <Text style={styles.appointmentText(fontScale)}>{formattedDate}</Text>
+                      <Text style={styles.appointmentTextDate(fontScale)}>{formattedDate}</Text>
                       <View style={styles.appointmentContainerGradient}></View>
                       <View style={styles.infoIconContainer}>
                         <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
@@ -78,7 +78,14 @@ const styles = StyleSheet.create({
   },
   appointmentText: (fontScale) => [{
     fontSize: 20/fontScale,
-    fontFamily: 'NunitoSans-Light',
+    fontFamily: 'NunitoSans-Medium',
+    marginBottom: 4,
+    left:25,
+    top:3,
+  }],
+  appointmentTextDate: (fontScale) => [{
+    fontSize: 16/fontScale,
+    fontFamily: 'NunitoSans-Medium',
     marginBottom: 4,
     left:25,
     top:3,
