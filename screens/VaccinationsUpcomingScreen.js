@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ScrollView, View, Text, Button, TouchableOpacity, StyleSheet, useWindowDimensions, Dimensions } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Foundation } from '@expo/vector-icons';
+import { useViewAppointments } from '../ViewAppointmentsContext';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -9,6 +10,7 @@ const windowHeight = Dimensions.get('window').height;
 const VaccinationsUpcomingScreen = ({ navigation, route }) => {
   const [menu] = useState();
   const {fontScale} = useWindowDimensions();
+  const {viewAppointments} = useViewAppointments();
   return (
     <View>
       <View style={styles.pickerFrame}>
@@ -28,36 +30,31 @@ const VaccinationsUpcomingScreen = ({ navigation, route }) => {
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.appointmentContainer}>
-          <View style={styles.appointmentLine}>
-          </View>
-          <Text style={styles.appointmentText(fontScale)}>
-            Hepatitis B
-          </Text>
-          <Text style={styles.appointmentTextDate(fontScale)}>
-            11/02/2022
-          </Text>
-          <View style={styles.appointmentContainerGradient}>
-          </View>
-          <View style={styles.infoIconContainer}>
-            <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}/>
-          </View>
-        </View>
-        <View style={styles.appointmentContainer}>
-          <View style={styles.appointmentLine}>
-          </View>
-          <Text style={styles.appointmentText(fontScale)}>
-            Polio
-          </Text>
-          <Text style={styles.appointmentTextDate(fontScale)}>
-            12/03/2022
-          </Text>
-          <View style={styles.appointmentContainerGradient}>
-          </View>
-          <View style={styles.infoIconContainer}>
-            <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}/>
-          </View>
-        </View>
+      {viewAppointments.map(appointment => {
+              let appointmentDate;
+            if (appointment.date && typeof appointment.date === 'object' && 'seconds' in appointment.date) {
+              // Firestore Timestamp object
+              appointmentDate = new Date(appointment.date.seconds * 1000);
+            } else {
+              // Attempt to parse it directly
+              appointmentDate = new Date(appointment.date);
+            }
+            const formattedDate = appointmentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            if(appointment.status === 'Mendatang'){
+              return (
+                <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType})}>
+                      <View style={styles.appointmentLine}></View>
+                      <Text style={styles.appointmentText(fontScale)}>{appointment.vaccineType}</Text>
+                      {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
+                      <Text style={styles.appointmentTextDate(fontScale)}>{formattedDate}</Text>
+                      <View style={styles.appointmentContainerGradient}></View>
+                      <View style={styles.infoIconContainer}>
+                        <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
+                      </View>
+                </TouchableOpacity>
+              );
+            };
+          })}
       </ScrollView>
     </View>
   );
