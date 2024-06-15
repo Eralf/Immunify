@@ -175,7 +175,7 @@ const RegisterScreen = ({ navigation, route }) => {
   };
 
   const [scrollY, setScrollY] = useState(0); // State to track scroll position
-  const maxScrollY = 350; // 60% of the height of the image
+  const maxScrollY = 550; // 60% of the height of the image
 
   return (
     <View style={styles.container}>
@@ -402,10 +402,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   image: {
-    width: 130,
-    height: 330,
+    width: 200,
+    height: 130,
+    marginTop: 10,
     resizeMode: 'contain',
-    top: (dh/-20) - 50
+    // top: (dh/-20) - 50
   },
   background: {
     position: 'absolute',
