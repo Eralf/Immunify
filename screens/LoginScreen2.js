@@ -65,7 +65,7 @@ const RegisterScreen = ({ navigation, route }) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [5, 3],
       quality: 1,
     });
 
@@ -82,7 +82,7 @@ const RegisterScreen = ({ navigation, route }) => {
 
     let result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [5, 3],
       quality: 1,
     });
 
@@ -165,7 +165,7 @@ const RegisterScreen = ({ navigation, route }) => {
           sex:sex,
           nik:NIK,
         }).then(() => {
-          navigation.navigate('HomeTemporary');
+          navigation.navigate('LoginScreen');
           console.log('Profile added successfully');
         }).catch((error) => {
           console.error('Error adding appointment: ', error);
@@ -402,8 +402,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   image: {
-    width: 530,
-    height: 530,
+    width: 130,
+    height: 330,
     resizeMode: 'contain',
     top: (dh/-20) - 50
   },
