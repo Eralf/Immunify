@@ -165,7 +165,7 @@ const RegisterScreen = ({ navigation, route }) => {
           sex:sex,
           nik:NIK,
         }).then(() => {
-          navigation.navigate('LoginScreen');
+          navigation.navigate('EnterScreen');
           console.log('Profile added successfully');
         }).catch((error) => {
           console.error('Error adding appointment: ', error);
