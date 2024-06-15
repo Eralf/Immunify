@@ -609,7 +609,6 @@ const ProfileScreen = ({ route }) => {
           
           
 
-
           {/* POPUP */}
           <Modal
             animationType="slide"
@@ -625,110 +624,139 @@ const ProfileScreen = ({ route }) => {
                 padding: 35,
                 alignItems: 'center',
                 shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.25,
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.3,
                 shadowRadius: 4,
                 elevation: 5,
+                width: '80%',
+                maxWidth: 400,
               }}>
-                <Text style={{ marginBottom: 15, textAlign: 'center' }}>Add a New Child</Text>
+                <Text style={{ marginBottom: 20, textAlign: 'center', fontFamily: 'NunitoSans-SemiBold', fontSize: 20 }}>Tambahkan Anak</Text>
                 <TextInput
-                  placeholder="Child's Name"
+                  placeholder="Nama Anak"
                   value={childName}
                   onChangeText={setChildName}
                   style={{
-                    height: 40,
-                    borderColor: 'gray',
+                    height: 45,
+                    borderColor: '#ddd',
                     borderWidth: 1,
-                    marginBottom: 10,
-                    paddingLeft: 8,
-                    width: 200,
+                    marginBottom: 15,
+                    paddingLeft: 10,
+                    width: '100%',
+                    borderRadius: 10,
+                    fontFamily: 'NunitoSans-SemiBold',
                   }}
                 />
-                {/* <TextInput
-                  placeholder="Child's Date of Birth"
-                  value={childDOB}
-                  onChangeText={setChildDOB}
-                  style={{
-                    height: 40,
-                    borderColor: 'gray',
-                    borderWidth: 1,
-                    marginBottom: 10,
-                    paddingLeft: 8,
-                    width: 200,
-                  }}
-                  // keyboardType="numeric"
-                /> */}
-
-
-                <TouchableOpacity onPress={() => setShowDatePicker(true)} style={{width:'100%', alignItems:'center', justifyContent:'center'}}>
-                  <TextInput
-                    style={[styles.input, {fontWeight:'condensedBold'}]}
-                    placeholder="Tanggal Lahir"
-                    value={"Masukkan DOB: " + childDOB.toLocaleDateString()}
-                    editable={false}
-                  />
-                </TouchableOpacity>
-                {showDatePicker && (
-                  <DateTimePicker
-                    value={childDOB}
-                    mode="date"
-                    display="default"
-                    onChange={onDateChange}
-                  />
-                )}
-
 
                 <View style={{
-                  overflow:'hidden',
-                  height: 40,
-                  borderColor: 'gray',
+                  width: '100%',
+                  height: 45,
+                  borderColor: '#ddd',
                   borderWidth: 1,
-                  marginBottom: 10,
-                  paddingLeft: 8,
-                  width: 200,
+                  marginBottom: 15,
+                  paddingLeft: 10,
+                  justifyContent: 'center',
+                  borderRadius: 10,
                 }}>
-                <Picker
+                  <TouchableOpacity onPress={() => setShowDatePicker(true)} style={{ width: '100%', alignItems: 'baseline', justifyContent: 'center' }}>
+                    <TextInput
+                      style={{
+                        fontFamily: 'NunitoSans-SemiBold',
+                        fontSize: 16,
+                        color: '#333',
+                      }}
+                      placeholder="Tanggal Lahir"
+                      value={"Masukkan DOB: " + childDOB.toLocaleDateString()}
+                      editable={false}
+                    />
+                  </TouchableOpacity>
+                  {showDatePicker && (
+                    <DateTimePicker
+                      value={childDOB}
+                      mode="date"
+                      display="default"
+                      onChange={onDateChange}
+                    />
+                  )}
+                </View>
+
+                <View style={{
+                  width: '100%',
+                  height: 45,
+                  borderColor: '#ddd',
+                  borderWidth: 1,
+                  marginBottom: 15,
+                  paddingLeft: 10,
+                  borderRadius: 10,
+                  justifyContent: 'center',
+                }}>
+                  <Picker
                     selectedValue={childGender}
                     onValueChange={(itemValue) => setChildGender(itemValue)}
-                    itemStyle={{fontSize: 5}}
+                    style={{ height: '100%' }}
                   >
-                    <Picker.Item label="Laki-laki" value={false}/>
-                    <Picker.Item label="Perempuan" value={true}/>
+                    <Picker.Item label="Laki-laki" value={false} />
+                    <Picker.Item label="Perempuan" value={true} />
                   </Picker>
                 </View>
+
                 <TouchableOpacity
                   onPress={selectImage}
                   style={{
-                    height: 40,
-                    borderColor: 'gray',
+                    height: 45,
+                    borderColor: '#ddd',
                     borderWidth: 1,
-                    marginBottom: 10,
-                    paddingLeft: 8,
-                    width: 200,
+                    marginBottom: 15,
+                    // paddingLeft: 10,
+                    width: '100%',
+                    borderRadius: 10,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: '#f9f9f9',
                   }}
-                  // keyboardType="numeric"
                 >
-                  <Text>Pilih Foto Profil</Text>
+                  <Text style={{ fontFamily: 'NunitoSans-Medium', color: '#333' }}>Pilih Foto Profil</Text>
                 </TouchableOpacity>
+
                 <TextInput
-                  placeholder="Child's NIK"
+                  placeholder="NIK Anak"
                   value={childNIK}
                   onChangeText={setChildNIK}
                   style={{
-                    height: 40,
-                    borderColor: 'gray',
+                    height: 45,
+                    borderColor: '#ddd',
                     borderWidth: 1,
-                    marginBottom: 10,
-                    paddingLeft: 8,
-                    width: 200,
+                    marginBottom: 20,
+                    paddingLeft: 10,
+                    width: '100%',
+                    borderRadius: 10,
+                    fontFamily: 'NunitoSans-Medium',
                   }}
                   keyboardType="numeric"
                 />
-                <Button title="Add Child" onPress={handleAddChild} />
-                <Button title="Cancel" onPress={() => {setChildDOB(new Date); setModalVisible(false);}} />
+                
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+                  <TouchableOpacity style={{ marginRight: 10, flex: 1 }} onPress={handleAddChild}>
+                    <View style={{
+                      backgroundColor: '#3399ff',
+                      padding: 10,
+                      alignItems: 'center',
+                      borderRadius: 10,
+                    }}>
+                      <Text style={{ color: 'white', fontFamily: 'NunitoSans-Bold' }}>Add Child</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ marginLeft: 10, flex: 1 }} onPress={() => { setChildDOB(new Date()); setModalVisible(false); }}>
+                    <View style={{
+                      backgroundColor: '#f44336',
+                      padding: 10,
+                      alignItems: 'center',
+                      borderRadius: 10,
+                    }}>
+                      <Text style={{ color: 'white', fontFamily: 'NunitoSans-Bold' }}>Cancel</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </Modal>
@@ -747,7 +775,8 @@ const ProfileScreen = ({ route }) => {
         width: boxWidth,
         height: boxHeight - height_mainProfileCard - height_yourAccountCard - 3*margin_outside - 20 - 70*2 - 24,
         marginTop: 20,
-        alignItems: 'center',
+        borderRadius: br_bigCard,
+        alignItems: 'baseline',
         backgroundColor: 'white',
       }}>
         <Text style={{
@@ -755,22 +784,26 @@ const ProfileScreen = ({ route }) => {
           fontSize: 20,
           marginTop: 20,
           color: 'black',
+          // marginLeft: margin_inside,
+          width: boxWidth,
+          textAlign: 'center',
         }}>
           Pengaturan
         </Text>
-        {/* <View style={{
+        <View style={{
           flexDirection: 'row',
           alignItems: 'center',
           marginTop: 20,
+          marginLeft: margin_inside,
         }}>
-          <Image source={require('path/to/english_icon.png')} style={{ width: 24, height: 24 }} />
+          <Image source={require('../assets/language logo_black.png')} style={{ width: 24, height: 24 }} />
           <Text style={{
             fontFamily: 'NunitoSans-Bold',
             fontSize: 16,
             marginLeft: 10,
             color: 'black',
           }}>
-            English
+            Bahasa Indonesia
           </Text>
         </View>
 
@@ -778,8 +811,9 @@ const ProfileScreen = ({ route }) => {
           flexDirection: 'row',
           alignItems: 'center',
           marginTop: 10,
+          marginLeft: margin_inside,
         }}>
-          <Image source={require('../assest/customer_service_icon.png')} style={{ width: 24, height: 24 }} />
+          <Image source={require('../assets/customer_service_icon.png')} style={{ width: 24, height: 24 }} />
           <Text style={{
             fontFamily: 'NunitoSans-Bold',
             fontSize: 16,
@@ -788,8 +822,33 @@ const ProfileScreen = ({ route }) => {
           }}>
             Customer Service
           </Text>
-        </View> */}
+        </View>
+        
 
+        <View style={{
+            position: 'absolute',
+            bottom: margin_inside,
+            right: margin_inside,
+
+            backgroundColor: '#aa0000',
+            borderRadius: 10,
+        }}>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')} style={{
+            width: 90,
+            height: 40,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <Text style={{
+            fontFamily: 'NunitoSans-Bold',
+            fontSize: 16,
+            color: 'white',
+            }}>
+              Log Out
+            </Text>
+          </TouchableOpacity>
+        </View>
+        
       </View>
 
     </View>
