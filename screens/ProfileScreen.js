@@ -128,50 +128,104 @@ const ProfileScreen = ({ route }) => {
       });
   };
 
+  // const handleAddChild = async () => {
+  //   if (childName && childDOB) {
+  //     setChildren([...children, { name: childName, age: childDOB }]);
+  //     setChildName('');
+  //     setChildDOB(childDOB);
+  //     setChildNIK('');
+  //     setChildGender('');
+  //     setModalVisible(false);
+  //   } else {
+      
+  //   }
+  //   uploadImage();
+  //   if(!uploading){
+  //     addDoc(collection(db, "profiles", parentProfile.id, "child"), {
+  //       name: childName,
+  //       picture: 'gs://immunify-5c493.appspot.com/images/profilePictures/childPFP/'+childName+'_'+childNIK+'_PFP',
+  //       dob:childDOB,
+  //       sex:childGender,
+  //       nik:childNIK,
+  //     }).then(() => {
+  //       navigation.navigate('Profile');
+  //       console.log('Profile added successfully');
+  //     }).catch((error) => {
+  //       console.error('Error adding child: ', error);
+  //     });
+  //   }
+
+
+
+  //   try {
+  //     const childrenCollectionRef = collection(db, 'profiles', parentProfile.id, 'child');
+  //     const childrenCollection = await getDocs(childrenCollectionRef);
+  //     const childrenData = childrenCollection.docs.map(doc => ({
+  //       id: doc.id,
+  //       ...doc.data()
+  //     }));
+  //     setChildrenProfiles(childrenData);
+  //     if (childrenData.length > 0) {
+  //       setSelectedProfile(childrenData[selectedChild]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching children profiles: ", error);
+  //   }
+  // };
+
   const handleAddChild = async () => {
     if (childName && childDOB) {
       setChildren([...children, { name: childName, age: childDOB }]);
+      // clear input
       setChildName('');
-      setChildDOB(childDOB);
+      setChildDOB(new Date);
       setChildNIK('');
-      setChildGender('');
+      setChildGender(false);
       setModalVisible(false);
-    } else {
-      
-    }
-    uploadImage();
-    if(!uploading){
-      addDoc(collection(db, "profiles", parentProfile.id, "child"), {
-        name: childName,
-        picture: 'gs://immunify-5c493.appspot.com/images/profilePictures/childPFP/'+childName+'_'+childNIK+'_PFP',
-        dob:childDOB,
-        sex:childGender,
-        nik:childNIK,
-      }).then(() => {
-        navigation.navigate('Profile');
-        console.log('Profile added successfully');
-      }).catch((error) => {
+  
+      try {
+        const imageUrl = await uploadImage();
+  
+        if (!uploading) {
+          await addDoc(collection(db, "profiles", parentProfile.id, "child"), {
+            name: childName,
+            picture: `gs://immunify-5c493.appspot.com/images/profilePictures/childPFP/${childName}_${childNIK}_PFP`,
+            dob: childDOB,
+            sex: childGender,
+            nik: childNIK,
+          });
+          
+          console.log('Profile added successfully');
+  
+          const childrenCollectionRef = collection(db, 'profiles', parentProfile.id, 'child');
+          const childrenCollection = await getDocs(childrenCollectionRef);
+          const childrenData = childrenCollection.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+  
+          setChildrenProfiles(childrenData);
+  
+          if (childrenData.length > 0) {
+            for (var i = 0; i < childrenData.length; i++) {
+              if (childrenData[i].id === childID) {
+                setSelectedProfile(childrenData[i]);
+                break;
+              }
+            }
+            // setSelectedProfile(childrenData[selectedChild]);
+          }
+  
+          navigation.navigate('Profile');
+        }
+      } catch (error) {
         console.error('Error adding child: ', error);
-      });
-    }
-
-
-
-    try {
-      const childrenCollectionRef = collection(db, 'profiles', parentProfile.id, 'child');
-      const childrenCollection = await getDocs(childrenCollectionRef);
-      const childrenData = childrenCollection.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setChildrenProfiles(childrenData);
-      if (childrenData.length > 0) {
-        setSelectedProfile(childrenData[selectedChild]);
       }
-    } catch (error) {
-      console.error("Error fetching children profiles: ", error);
+    } else {
+      console.error('Child name and date of birth are required.');
     }
   };
+  
 
 
   const [selectedChild, setSelectedChild] = useState(childID);
@@ -188,8 +242,20 @@ const ProfileScreen = ({ route }) => {
       }));
       setChildrenProfiles(childrenData);
       if (childrenData.length > 0) {
-        setSelectedProfile(childrenData[selectedChild]);
-        setChildID(childId);
+        for(var i=0; i<childrenData.length; i++) {
+
+          if(childrenData[i].id === childId){
+            setSelectedProfile(childrenData[i]);
+            setSelectedChild(childId);
+            setChildID(childrenData[i].id);
+            // console.log("theo ganteng");
+            // console.log(childrenData[i]);
+            break;
+          }
+        }
+        // setSelectedProfile(childrenData[selectedChild]);
+        // setChildID(childID);
+        // console.log(childrenData);
       }
     } catch (error) {
       console.error("Error fetching children profiles: ", error);
@@ -197,7 +263,13 @@ const ProfileScreen = ({ route }) => {
 
 
     setSelectedChild(childId);
-    setSelectedProfile(childrenProfiles[childId]);
+    for(var i=0; i<childrenProfiles.length; i++) {
+      if(childrenProfiles[i].id === childId){
+        setSelectedProfile(childrenProfiles[i]);
+        break;
+      }
+    };
+    // setSelectedProfile(childrenProfiles[childID]);
   };
 
 
@@ -222,7 +294,13 @@ const ProfileScreen = ({ route }) => {
       }));
       setChildrenProfiles(childrenData);
       if (childrenData.length > 0) {
-        setSelectedProfile(childrenData[selectedChild]);
+        for (var i = 0; i < childrenData.length; i++) {
+          if (childrenData[i].id === childID) {
+            setSelectedProfile(childrenData[i]);
+            break;
+          }
+        }
+        // setSelectedProfile(childrenData[selectedChild]);
       }
     } catch (error) {
       console.error("Error fetching children profiles: ", error);
@@ -230,6 +308,14 @@ const ProfileScreen = ({ route }) => {
   };
 
   if (!profiles || profiles.length === 0 || !selectedProfile || !parentProfile) {
+    
+    console.log("AAA")
+    console.log(!profiles);
+    console.log(profiles.length);
+    console.log("selectedprofile:", selectedProfile);
+    console.log("selectedchild:"+ selectedChild+"...");
+    console.log(!parentProfile);
+    console.log("BBB")
     return <Text>Loading...</Text>;
   };
 
@@ -303,6 +389,7 @@ const ProfileScreen = ({ route }) => {
 
 
   return (
+    <ScrollView>
     <View style={styles.container}>
 
       {/* MAIN PROFILE CARD */}
@@ -436,7 +523,7 @@ const ProfileScreen = ({ route }) => {
             left: margin_inside,
           }}>
             {/* {English[0].parent} */}
-            Orangtua
+            Orang tua
           </Text>
 
           {/* Parent Profile Image */}
@@ -575,8 +662,8 @@ const ProfileScreen = ({ route }) => {
               <ChildCard
                 key={index}
                 child={child}
-                selected={selectedChild}
                 onSelect={() => handleSelectChild(child.id)}
+                selected={childID}
               />
             ))}
 
@@ -584,6 +671,7 @@ const ProfileScreen = ({ route }) => {
             <View style={{
               width: 70,
               height: 70+40,
+              marginRight: margin_inside,
               borderRadius: br_bigCard,
               overflow: 'hidden',
             }}>
@@ -773,7 +861,8 @@ const ProfileScreen = ({ route }) => {
       {/* erm what the sigma */}
       <View style={{
         width: boxWidth,
-        height: boxHeight - height_mainProfileCard - height_yourAccountCard - 3*margin_outside - 20 - 70*2 - 24,
+        // height: boxHeight - height_mainProfileCard - height_yourAccountCard - 3*margin_outside - 20 - 70*2 - 24,
+        height: 200,
         marginTop: 20,
         borderRadius: br_bigCard,
         alignItems: 'baseline',
@@ -852,13 +941,23 @@ const ProfileScreen = ({ route }) => {
       </View>
 
     </View>
+
+    <View style={{height: margin_outside}}></View>
+
+    </ScrollView>
   );
 }
 
 const ChildCard = ({child, selected, onSelect}) => {
   var boxWidth;
-  if(child.id === selected) boxWidth = 90;
-  else boxWidth = 70;
+  // console.log("childID:", child.id);
+  // console.log("selected:", selected);
+  if(child.id === selected) {
+    boxWidth = 90;
+  }
+  else {
+    boxWidth = 70;
+  }
 
   return (
     <View style={{

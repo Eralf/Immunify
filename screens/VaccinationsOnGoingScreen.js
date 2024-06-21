@@ -43,7 +43,7 @@ const VaccinationsOnGoingScreen = ({ navigation, route }) => {
             {/* const formattedTime = appointmentDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); */}
                 if(appointment.status === 'Berlangsung'){
                   return (
-                    <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => openModal(appointment)}>
+                    <TouchableOpacity key={appointment.id} style={styles.appointmentContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType})}>
                     <View style={styles.appointmentContainerGradient}></View>
                         <View style={styles.appointmentLine}></View>
                         <View style={styles.appointmentTextContainer}>
