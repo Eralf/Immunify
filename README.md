@@ -22,3 +22,7 @@ go the Users/{User name}/AppData/Local/Android/Sdk/platform-tools
 open the cmd terminal there (or cd to there)
 type adb connect {IP address of ADB or android debugger from the emulator}
 then press a on the vscode terminal to open it on the emulator
+
+Login Information For demo purposes (use this account for login)
+Email : timotheechalamet@hotmail.com
+Password : imsohandsomeomg123
