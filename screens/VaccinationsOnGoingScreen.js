@@ -51,7 +51,7 @@ const VaccinationsOnGoingScreen = ({ navigation, route }) => {
                         </View>
                         {/* <Text style={styles.appointmentText}>{appointment.vaccineType}</Text> */}
                         <Text style={styles.appointmentTextDate(fontScale)}>{formattedDate}</Text>
-                        <TouchableOpacity style={styles.infoIconContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType, notCompleted:false})}>
+                        <TouchableOpacity style={styles.infoIconContainer} onPress={() => navigation.navigate("VaccineDetails", {selectedVaccine:appointment.vaccineType})}>
                           <Foundation name="info" size={windowWidth*0.067} color="black" style={styles.infoIcon}></Foundation>
                         </TouchableOpacity>
                     </TouchableOpacity>
