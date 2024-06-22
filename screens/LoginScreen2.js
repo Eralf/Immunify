@@ -156,7 +156,7 @@ const RegisterScreen = ({ navigation, route }) => {
       uploadImage();
       if(!uploading){
         addDoc(collection(db, "profiles"), {
-          emailAddress: email,
+          email: email,
           name: name,
           password: password,
           profilePictureFile: "gs://immunify-5c493.appspot.com/images/profilePictures/parentPFP/default_PFP.jpg",

@@ -29,7 +29,7 @@ const pfp_parent_temp = '../assets/pfp/parentpfptemp.jpg';
 var addchild_button = '../assets/addchild_button.png';
 
 // var selectedProfile_index = 0;
-var parentProfile_index = 0;
+// var parentProfile_index = 0;
 
 const margin_outside = 17;
 const margin_inside = 12;
@@ -91,7 +91,7 @@ const ProfileScreen = ({ route }) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [3, 3],
       quality: 1,
     });
 
@@ -277,6 +277,12 @@ const ProfileScreen = ({ route }) => {
 
   useEffect(() => {
     if (profiles && profiles.length > 0) {
+      for (var i = 0; i<profiles.length; i++) {
+        if (profiles[i].id === userID) {
+          parentProfile_index = i;
+          break;
+        }
+      }
       const parent = profiles[parentProfile_index];
       setParentProfile(parent);
       fetchChildrenProfiles(parent.id);

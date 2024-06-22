@@ -29,12 +29,18 @@ const RegisterScreen = ({ navigation, route }) => {
     const sameProfile = profiles.filter(profile =>
       profile.email === email && profile.password === password
     );
+    console.log(profiles);
+    console.log(email);
+    console.log(password);
+    console.log(sameProfile);
     if(sameProfile && sameProfile.length){
-      // console.log(sameProfile);
-      // console.log("ID "+sameProfile[0].id);
-      // console.log("Email "+sameProfile[0].email);
+      console.log(sameProfile);
+      console.log("ID "+sameProfile[0].id);
+      console.log("Email "+sameProfile[0].email);
       setUserID(sameProfile[0].id);
       setChildID(viewChild[0].id);
+      console.log("view "+viewChild)
+      console.log("viewlength "+viewChild.length)
       return true;
     }
     Alert.alert("Error", "Kredensial salah atau email belum terdaftar");
