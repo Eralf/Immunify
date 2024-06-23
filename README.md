@@ -1,5 +1,11 @@
 # Immunify
 
+KanBan Software Model Using Trello:
+https://trello.com/b/cuNPayC9/kanban-software-engineering
+
+Prototype:
+https://www.figma.com/design/SCTrzLooCwdRIBe3cxoLYQ/Immunify?node-id=78-2&t=bYUw4V0qoi9abK2P-1
+
 List of dependencies to install:
 node.js
 expo
